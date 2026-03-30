@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Shared Library — Aditi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & TOKENS ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg:     #f5f0e8;
+  --ink:    #1a1a1a;
+  --mid:    #6b6560;
+  --rule:   #ddd8ce;
+  --yellow: #e8c84a;
+  --sage:   #b5c4b1;
+  --warm:   #d4c5b0;
+  --clay:   #c9a898;
+  --white:  #ffffff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ───────────────────────────────────────────────────────── */
+nav {
+  padding: 28px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 50;
+}
+.nav-name { font-family: 'Lora', serif; font-size: 16px; color: var(--ink); text-decoration: none; }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
+.nav-links a:hover { color: var(--ink); }
+
+/* ─── HERO ──────────────────────────────────────────────────────── */
+.hero { padding: 80px 60px 60px; max-width: 1100px; margin: 0 auto; }
+.hero-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--mid);
+  margin-bottom: 16px;
+}
+.hero-title {
+  font-family: 'Lora', serif;
+  font-size: clamp(40px, 6vw, 68px);
+  line-height: 1.08;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  max-width: 700px;
+  margin-bottom: 20px;
+}
+.hero-desc {
+  font-size: 15px;
+  color: var(--mid);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 40px;
+}
+.hero-meta {
+  display: flex;
+  gap: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+.meta-block { display: flex; flex-direction: column; gap: 4px; }
+.meta-block dt { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); }
+.meta-block dd { font-size: 14px; font-weight: 500; color: var(--ink); }
+
+/* ─── HERO IMAGE ────────────────────────────────────────────────── */
+.hero-image-wrap { max-width: 1100px; margin: 0 auto; padding: 0 60px 80px; }
+.hero-image-card {
+  background: var(--yellow);
+  border-radius: 8px;
+  padding: 40px 40px 0;
+  overflow: hidden;
+}
+.hero-image-card .img-slot { aspect-ratio: 15/7; }
+
+/* ─── IMAGE SLOTS ───────────────────────────────────────────────── */
+.img-slot {
+  background: transparent;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.img-slot input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.img-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.upload-hint { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #aaa; font-size: 12px; pointer-events: none; text-align: center; }
+.upload-hint .plus { font-size: 28px; font-weight: 300; line-height: 1; color: #ccc; }
+.img-caption { font-size: 11px; color: var(--mid); letter-spacing: 0.04em; margin-top: 10px; padding: 0 2px; line-height: 1.5; }
+
+/* ─── CONTENT ───────────────────────────────────────────────────── */
+.content { max-width: 1100px; margin: 0 auto; padding: 0 60px; }
+
+/* ─── SECTION ROW ───────────────────────────────────────────────── */
+.section-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+  padding: 80px 0;
+  border-top: 1px solid var(--rule);
+}
+.section-row.reverse { direction: rtl; }
+.section-row.reverse > * { direction: ltr; }
+.section-row.single { grid-template-columns: 1fr; max-width: 640px; }
+
+/* ─── SECTION IMAGE CARDS ───────────────────────────────────────── */
+.section-image-card { border-radius: 8px; padding: 32px 32px 0; overflow: hidden; }
+.section-image-card.yellow { background: var(--yellow); }
+.section-image-card.sage   { background: var(--sage); }
+.section-image-card.warm   { background: var(--warm); }
+.section-image-card.clay   { background: var(--clay); }
+.section-image-card .img-slot { aspect-ratio: 7/5; }
+
+/* ─── SECTION TEXT ──────────────────────────────────────────────── */
+.section-text { padding-top: 8px; }
+.section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 12px; }
+.section-title {
+  font-family: 'Lora', serif;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+.section-body { font-size: 14px; color: var(--mid); line-height: 1.75; max-width: 440px; }
+.section-body p + p { margin-top: 12px; }
+
+/* ─── INSIGHT CALLOUT ───────────────────────────────────────────── */
+.insight {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: rgba(0,0,0,0.04);
+  border-radius: 6px;
+  border-left: 2px solid var(--ink);
+}
+.insight .i-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 6px; }
+.insight p { font-size: 13px; color: var(--ink); line-height: 1.6; max-width: none; }
+
+/* ─── APPROACH CHAIN ────────────────────────────────────────────── */
+.approach-chain { margin-top: 24px; }
+.approach-item {
+  display: flex;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: flex-start;
+}
+.approach-item:last-child { border-bottom: none; }
+.approach-num { font-size: 11px; color: var(--mid); font-weight: 400; flex-shrink: 0; padding-top: 2px; width: 20px; }
+.approach-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+.approach-text p  { font-size: 13px; color: var(--mid); line-height: 1.55; }
+
+/* ─── NEEDS GRID ────────────────────────────────────────────────── */
+.needs-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--rule);
+}
+.needs-header {
+  display: flex;
+  gap: 64px;
+  margin-bottom: 48px;
+}
+.needs-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 12px; }
+.needs-title {
+  font-family: 'Lora', serif;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.needs-intro { font-size: 14px; color: var(--mid); line-height: 1.75; max-width: 480px; }
+.needs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.need-card {
+  background: rgba(0,0,0,0.03);
+  border-radius: 6px;
+  padding: 28px 28px 28px 32px;
+  position: relative;
+}
+.need-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 6px 0 0 6px;
+  background: var(--rule);
+}
+.need-card.highlight::before { background: var(--ink); }
+.need-tier { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 8px; }
+.need-card h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+.need-card p  { font-size: 13px; color: var(--mid); line-height: 1.55; }
+
+/* ─── BUILD STEPS ───────────────────────────────────────────────── */
+.build-steps { margin-top: 28px; }
+.build-step {
+  display: flex;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: flex-start;
+}
+.build-step:first-child { border-top: 1px solid var(--rule); }
+.step-tool {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mid);
+  flex-shrink: 0;
+  width: 60px;
+  padding-top: 2px;
+}
+.step-body h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+.step-body p  { font-size: 13px; color: var(--mid); line-height: 1.55; }
+
+/* ─── TAKEAWAYS ─────────────────────────────────────────────────── */
+.takeaway-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--rule);
+}
+.takeaway-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 40px;
+}
+.takeaway-card {
+  background: rgba(0,0,0,0.03);
+  padding: 32px;
+  border-radius: 6px;
+}
+.t-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 16px; }
+.t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
+.t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+
+/* ─── FOOTER ────────────────────────────────────────────────────── */
+footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 60px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-name { font-family: 'Lora', serif; font-size: 15px; color: var(--ink); text-decoration: none; }
+.footer-back { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
+.footer-back:hover { color: var(--ink); }
+
+/* ─── FADE ──────────────────────────────────────────────────────── */
+.fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── RESPONSIVE ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding-left: 24px; padding-right: 24px; }
+  .hero, .hero-image-wrap, .content { padding-left: 24px; padding-right: 24px; }
+  .section-row { grid-template-columns: 1fr; gap: 40px; }
+  .section-row.reverse { direction: ltr; }
+  .needs-header { flex-direction: column; gap: 24px; }
+  .needs-grid { grid-template-columns: 1fr; }
+  .takeaway-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 16px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-name" href="aditi-portfolio-home.html" style="font-family:'Inter',sans-serif; font-size:13px; color:var(--mid); font-weight:400;">← Back</a>
+  <ul class="nav-links">
+    <li><a href="aditi-portfolio-home.html">Work</a></li>
+    <li><a href="aditi-portfolio-home.html#about">About</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero fade-in">
+  <div class="hero-tag">Personal Project · Vibe-coded</div>
+  <h1 class="hero-title">Our Shared Library</h1>
+  <p class="hero-desc">A book catalogue app I built for our home — because after 1,000+ books and two failed attempts at tracking them, the only solution that fit our lives was one designed for an audience of exactly two.</p>
+  <dl class="hero-meta">
+    <div class="meta-block"><dt>My Role</dt><dd>Product Designer + Builder</dd></div>
+    <div class="meta-block"><dt>Tools</dt><dd>Claude, Cursor, Supabase</dd></div>
+    <div class="meta-block"><dt>Type</dt><dd>Personal project</dd></div>
+    <div class="meta-block"><dt>Status</dt><dd>Live</dd></div>
+  </dl>
+</div>
+
+<!-- HERO IMAGE -->
+<div class="hero-image-wrap fade-in">
+  <div class="hero-image-card">
+    <div class="img-slot">
+      <input type="file" accept="image/*" onchange="loadImage(this)">
+      <div class="upload-hint">
+        <span class="plus">+</span>
+        <span>Click to add a screenshot of the app</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ── PROBLEM ─────────────────────────────────────────────── -->
+  <div class="section-row fade-in">
+    <div class="section-text">
+      <div class="section-label">01 · The Problem</div>
+      <h2 class="section-title">We kept buying books we already owned</h2>
+      <div class="section-body">
+        <p>My husband and I are serious book people. Over the years, we built a library of 1,000+ books — and with it, a surprisingly frustrating problem. We'd be at a used bookstore, spot something on our radar, and completely blank on whether we already owned it. Did we buy this last year? Is it on the shelf at home? We had no idea.</p>
+        <p>So we tried to fix it.</p>
+      </div>
+    </div>
+    <div class="section-image-card yellow">
+      <div class="img-slot">
+        <input type="file" accept="image/*" onchange="loadImage(this)">
+        <div class="upload-hint">
+          <span class="plus">+</span>
+          <span>Problem slide</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── APPROACH 1 ───────────────────────────────────────────── -->
+  <div class="section-row reverse fade-in">
+    <div class="section-text">
+      <div class="section-label">02 · Attempt One · 2020</div>
+      <h2 class="section-title">Scanning barcodes, one book at a time</h2>
+      <div class="section-body">
+        <p>We downloaded Libib, a solid library cataloguing app, and started scanning. Each book, one by one. It was going to be great. We made it to book fifty before we quietly gave up and never opened the app again.</p>
+        <div class="insight">
+          <div class="i-label">Why it failed</div>
+          <p>Slow and tedious for a large collection. The effort to get 1,000 books in was too high to ever finish.</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-image-card warm">
+      <div class="img-slot">
+        <input type="file" accept="image/*" onchange="loadImage(this)">
+        <div class="upload-hint">
+          <span class="plus">+</span>
+          <span>Approach 1 slide</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── APPROACH 2 ───────────────────────────────────────────── -->
+  <div class="section-row fade-in">
+    <div class="section-text">
+      <div class="section-label">03 · Attempt Two · 2023</div>
+      <h2 class="section-title">AI + a spreadsheet: fast to create, hard to use</h2>
+      <div class="section-body">
+        <p>We leveled up. Using ChatGPT's image processing, we photographed our shelves and pulled book titles and authors straight into a spreadsheet. Getting the data in was actually easy — 1,000 rows, done.</p>
+        <p>But a spreadsheet with 1,000 rows is not something either of us wanted to open on a Saturday afternoon at a used bookstore. The data existed. We never looked at it.</p>
+        <div class="insight">
+          <div class="i-label">Why it failed</div>
+          <p>Fast to build but not accessible in the moment. The solution didn't fit how we actually behave.</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-image-card sage">
+      <div class="img-slot">
+        <input type="file" accept="image/*" onchange="loadImage(this)">
+        <div class="upload-hint">
+          <span class="plus">+</span>
+          <span>Approach 2 slide</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- ── WHAT WE ACTUALLY NEEDED ──────────────────────────────────── -->
+<div class="content">
+  <div class="needs-section fade-in">
+    <div class="needs-header">
+      <div>
+        <div class="needs-label">04 · The Requirements</div>
+        <h2 class="needs-title">What we actually needed</h2>
+      </div>
+      <p class="needs-intro">Two failed attempts. Same root cause: the solution didn't fit our actual lives. Instead of finding an app that was good enough, I decided to build exactly what we needed. No compromises, no workarounds — just our catalogue, designed around how we actually think and behave.</p>
+    </div>
+    <div class="needs-grid">
+      <div class="need-card">
+        <div class="need-tier">Must have</div>
+        <h4>Low-effort bulk entry</h4>
+        <p>Getting 1,000 books in without losing our minds — using image processing to import the existing collection fast.</p>
+      </div>
+      <div class="need-card">
+        <div class="need-tier">Must have</div>
+        <h4>Search and filter from anywhere</h4>
+        <p>A clean, fast interface we'd actually open mid-bookstore. Not a spreadsheet, not a slow app — something that fits in your hand.</p>
+      </div>
+      <div class="need-card">
+        <div class="need-tier">Must have</div>
+        <h4>Easy way to add new books</h4>
+        <p>After the initial import, adding a single book should take seconds — no barcode scanner required.</p>
+      </div>
+      <div class="need-card highlight">
+        <div class="need-tier">Nice to have</div>
+        <h4>Per-person read/unread status</h4>
+        <p>We read very differently — one of us tears through books, the other re-reads slowly. Tracking status per person is something no off-the-shelf app bothered with. We could build it in.</p>
+      </div>
+      <div class="need-card highlight" style="grid-column: span 2;">
+        <div class="need-tier">The feature I'm most proud of</div>
+        <h4>Time to Survey — an AI recommendation ritual</h4>
+        <p>We have this ritual when one of us finishes a book: we walk the shelves together and talk about what to read next. Fiction or non-fiction? Something easy or a real commitment? It's one of our favourite things. Time to Survey mirrors that conversation — it asks you those same questions and suggests something from your own library. It's not meant to be useful. It's meant to be delightful.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HOW IT WAS BUILT ─────────────────────────────────────────── -->
+<div class="content">
+  <div class="section-row fade-in">
+    <div class="section-text">
+      <div class="section-label">05 · Approach Three · Vibe-coding</div>
+      <h2 class="section-title">From HTML prototype to a live, deployed app</h2>
+      <div class="section-body">
+        <p>This is where everything changed. Instead of searching for something close enough, I built it.</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step">
+          <div class="step-tool">Claude</div>
+          <div class="step-body">
+            <h4>HTML prototype with random books</h4>
+            <p>Started with a working proof of concept — search, filter, a book grid. Enough to know the idea was right.</p>
+          </div>
+        </div>
+        <div class="build-step">
+          <div class="step-tool">Cursor</div>
+          <div class="step-body">
+            <h4>React app with real features</h4>
+            <p>Turned the prototype into a proper React app. Added bulk editing to mark books as read, and wired up the Open Library API so adding a new book feels instant — no manual metadata.</p>
+          </div>
+        </div>
+        <div class="build-step">
+          <div class="step-tool">Figma</div>
+          <div class="step-body">
+            <h4>Visual language and layout</h4>
+            <p>Designed the layout and look properly before bringing it into code — the part that made it feel like an app we'd actually want to open.</p>
+          </div>
+        </div>
+        <div class="build-step">
+          <div class="step-tool">Supabase</div>
+          <div class="step-body">
+            <h4>Database, auth, and deployment</h4>
+            <p>Set up a real database, added authentication, and deployed. Household members share the same book list; each person tracks their own read/unread status. The part that would have stopped me cold before vibe-coding made it approachable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-image-card yellow" style="margin-bottom: 16px;">
+        <div class="img-slot" style="aspect-ratio: 5/3;">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint">
+            <span class="plus">+</span>
+            <span>App screenshot — mobile</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-image-card sage">
+        <div class="img-slot" style="aspect-ratio: 5/3;">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint">
+            <span class="plus">+</span>
+            <span>App screenshot — desktop / Supabase</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAKEAWAYS ────────────────────────────────────────────────── -->
+<div class="content">
+  <div class="takeaway-section fade-in">
+    <div class="section-label">06 · What I Took Away</div>
+    <h2 class="section-title" style="font-family:'Lora',serif; font-size:clamp(22px,2.8vw,34px); font-weight:400; line-height:1.2; letter-spacing:-0.01em; margin-bottom: 4px;">The thing that struck me wasn't the app — it's what became possible.</h2>
+    <div class="takeaway-grid" style="margin-top: 40px;">
+      <div class="takeaway-card">
+        <div class="t-num">01</div>
+        <h3 class="t-title">Products built for everyone work perfectly for almost no one</h3>
+        <p class="t-body">Mass-market apps have to generalize. They make choices that work for most people, which means they work perfectly for almost no one. When you can build for an audience of exactly two, you can be hyper-specific in ways that just aren't viable otherwise. The per-person read status, the Time to Survey ritual, the way search works — none of it would exist in a product designed for the mass market.</p>
+      </div>
+      <div class="takeaway-card">
+        <div class="t-num">02</div>
+        <h3 class="t-title">Lowering the cost to build opens a whole new category of solutions</h3>
+        <p class="t-body">It doesn't just make things faster. It opens the door to solutions that were never worth building before — things too personal, too niche, or too small for any company to invest in. Vibe-coding made it possible for me to be both the PM and the builder, which meant every decision was grounded in deep user knowledge. Because my users were us.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a class="footer-name" href="aditi-portfolio-home.html">Aditi</a>
+  <a class="footer-back" href="aditi-portfolio-home.html">← Back to work</a>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  fadeEls.forEach(el => io.observe(el));
+
+  // Stagger hero
+  document.querySelectorAll('.fade-in').forEach((el, i) => {
+    el.style.transitionDelay = `${Math.min(i * 0.08, 0.3)}s`;
+  });
+
+  // Image upload
+  function loadImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const slot = input.closest('.img-slot');
+      const hint = slot.querySelector('.upload-hint');
+      if (hint) hint.style.display = 'none';
+      let img = slot.querySelector('img');
+      if (!img) { img = document.createElement('img'); slot.appendChild(img); }
+      img.src = ev.target.result;
+      slot.style.border = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aditi — Product Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* HERO */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 96px 60px 40px;
+  }
+
+  .hero h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(42px, 7vw, 76px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--mid);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 420px;
+  }
+
+  /* SECTION LABEL */
+  .section-label-row {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+
+  .projects-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mid);
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* PROJECT LIST */
+  .projects {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+
+  /* PROJECT ROW */
+  .project-row {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 64px;
+    align-items: center;
+    padding: 72px 0;
+    border-bottom: 1px solid var(--rule);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+
+  .project-row.visible { opacity: 1; transform: translateY(0); }
+
+  /* IMAGE CARD */
+  .project-card {
+    border-radius: 8px;
+    /*padding: 32px 32px 0;*/
+    overflow: hidden;
+    position: relative;
+  }
+  .project-card.orange { background: var(--orange); }
+  .project-card.lilac  { background: var(--lilac); }
+  .project-card.yellow { background: var(--yellow); }
+
+  .project-card .img-slot {
+    background: transparent;
+    border-radius: 8px 8px 0 0;
+    aspect-ratio: 5/4;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .project-card .img-slot input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .project-card .img-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+  /* PROJECT TEXT */
+  .project-text { padding: 8px 0; }
+
+  .project-year {
+    font-size: 12px;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .project-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mid);
+    margin-bottom: 8px;
+  }
+
+  .project-title {
+    font-family: 'Lora', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+
+  .project-desc {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.75;
+    max-width: 380px;
+    margin-bottom: 24px;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .link-primary {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+    transition: opacity 0.15s;
+  }
+  .link-primary:hover { opacity: 0.5; }
+
+  .link-secondary {
+    font-size: 14px;
+    color: var(--mid);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .link-secondary:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ABOUT */
+  .about-strip {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    border-bottom: 1px solid var(--rule);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .about-strip.visible { opacity: 1; transform: translateY(0); }
+
+  .about-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mid);
+    margin-bottom: 16px;
+  }
+
+  .about-title {
+    font-family: 'Lora', serif;
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .about-body {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.75;
+    max-width: 400px;
+  }
+
+  .about-body p + p { margin-top: 12px; }
+
+  /* CONTACT */
+  .contact-col { padding-top: 36px; }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .contact-item:first-child { border-top: 1px solid var(--rule); }
+
+  .contact-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mid);
+  }
+
+  .contact-value {
+    font-size: 14px;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 400;
+    transition: opacity 0.15s;
+  }
+
+  .contact-value:hover { opacity: 0.5; }
+
+  /* FOOTER */
+  footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--mid);
+  }
+
+  .footer-name {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  /* HERO FADE */
+  .hero-fade {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .hero-fade.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .hero, .section-label-row, .projects, .about-strip, footer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .project-row { grid-template-columns: 1fr; gap: 32px; }
+    .about-strip { grid-template-columns: 1fr; gap: 48px; }
+    .hero h1 { font-size: 42px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-name" href="#">Aditi Singh</a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Work</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero hero-fade">
+  <h1>Hi! I am Aditi</h1>
+  <p class="hero-sub">I am a product designer based in Ottawa, Canada with 7+ years of experience in B2B SaaS.</p>
+</div>
+
+<!-- PROJECTS LABEL -->
+<div class="section-label-row hero-fade" style="transition-delay: 0.1s;">
+  <div class="projects-label">Projects</div>
+</div>
+
+<!-- PROJECTS -->
+<div class="projects">
+
+  <!-- PROJECT 1: GTM Initiatives -->
+  <div class="project-row">
+    <div class="project-card orange">
+      <div class="img-slot" style="border: none;">
+        <input type="file" accept="image/*" onchange="loadImage(this)">
+      
+        <img src="Images/Cover_Initiative.png" alt="Go to market with Initiatives">
+      </div>
+    </div>
+    <div class="project-text">
+      <div class="project-year">2025</div>
+      <h2 class="project-title">Go to market with Initiatives</h2>
+      <p class="project-desc">Enablement teams can manage, execute, and measure Go-To-Market strategies. They can connect rep activities like content usage and training to business outcomes such as pipeline and revenue. Identifying what practices to amplify.</p>
+      <div class="project-links">
+        <a href="gtm-oversight-portfolio_1.html" class="link-primary">Read more</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 2: Agentic Data Design -->
+  <div class="project-row">
+    <div class="project-card lilac">
+      <div class="img-slot">
+        <img src="Images/Cover_ADD.png" alt="Agentic Data Design">
+          <span style="font-size:11px;">Agentic Data Design</span>
+      </div>
+    </div>
+    <div class="project-text">
+      <div class="project-year">2025</div>
+      <h2 class="project-title">Agentic design for data</h2>
+      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">
+        <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;"><rect x="1" y="5" width="8" height="6" rx="1" fill="currentColor" opacity="0.7"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
+        Confidential
+      </span>
+      <p class="project-desc">When an AI agent answers a question with data, the design challenge isn't just what to show — it's how to present it, build trust, and help users understand exactly where the answer came from.</p>
+    </div>
+  </div>
+
+  <!-- PROJECT 3: Scoped Search -->
+  <div class="project-row">
+    <div class="project-card lilac">
+      <div class="img-slot">
+        <img src="Images/Cover_SS.png" alt="Scoped Search">
+
+      </div>
+    </div>
+    <div class="project-text">
+      <div class="project-year">2023</div>
+      <h2 class="project-title">Scoped search</h2>
+      <p class="project-desc">Scoped Search addresses a productivity problem for sales reps in large organizations: when reps have open access to nearly all data in Highspot, they end up spending more time searching for content than actually selling. This hurts both the rep and the organization.</p>
+      <div class="project-links">
+        <a href="scoped-search-portfolio.html" class="link-primary">Read more</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 3: Our Shared Library -->
+  <div class="project-row">
+    <div class="project-card yellow">
+      <div class="img-slot">
+        <img src="Images/Cover_OSL.png" alt="Our Shared Library">
+      
+      </div>
+    </div>
+    <div class="project-text">
+      <div class="project-year"></div>
+      <div class="project-tag">Vibe coded personal project</div>
+      <h2 class="project-title">Our shared library</h2>
+      <p class="project-desc">A personal book catalogue app I vibe-coded for our home — because after 1000+ books and two failed attempts at tracking them, the only solution that fit our lives was one hyper-personalized for us.</p>
+      <div class="project-links">
+        <a href="library-app-case-study.html" class="link-primary">Read more</a>
+        <a href="https://our-library-nu.vercel.app/" class="link-secondary" target="_blank" rel="noopener noreferrer">See it live</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ABOUT -->
+<div class="about-strip" id="about">
+  <div>
+    <div class="about-label">About</div>
+    <h2 class="about-title">Product Designer, B2B SaaS, Ottawa</h2>
+    <div class="about-body">
+      <p>I build products at the intersection of sales behavior and business outcomes — helping GTM teams see what's actually working and act on it.</p>
+      <p>My work spans zero-to-one capabilities, configuration UX, and data storytelling. I care about reducing friction and surfacing the signal that matters.</p>
+      <p>7+ years in B2B SaaS, most recently at Highspot.</p>
+    </div>
+  </div>
+  <div class="contact-col">
+    <div class="about-label">Contact</div>
+    <div class="contact-item">
+      <span class="contact-label">Email</span>
+      <a href="mailto:hello@aditi.com" class="contact-value">aditis.2788@gmail.com</a>
+    </div>
+    <div class="contact-item">
+      <span class="contact-label">LinkedIn</span>
+      <a href="#" class="contact-value">linkedin.com/in/aditi</a>
+    </div>
+    <div class="contact-item">
+      <span class="contact-label">Based in</span>
+      <span class="contact-value">Ontario, Canada</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a class="footer-name" href="#">Back to top</a>
+  <span class="footer-copy">Product Designer · Builder · Maker</span>
+</footer>
+
+<script>
+  // Intersection observer for fade-ins
+  const fadeEls = document.querySelectorAll('.hero-fade, .project-row, .about-strip');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  fadeEls.forEach(el => io.observe(el));
+
+  // Stagger hero elements slightly
+  document.querySelectorAll('.hero-fade').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.08}s`;
+  });
+
+  // Image upload
+  function loadImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const slot = input.closest('.img-slot');
+      const hint = slot.querySelector('.upload-hint');
+      if (hint) hint.style.display = 'none';
+      let img = slot.querySelector('img');
+      if (!img) { img = document.createElement('img'); slot.appendChild(img); }
+      img.src = ev.target.result;
+      slot.style.border = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+</body>
+</html>
