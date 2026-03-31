@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scoped Search — Aditi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="case-study.css">
+<style>
+  /* HERO */
+  .hero-title { margin-bottom: 24px; }
+  .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
+  .hero-image-card { background: var(--lilac); }
+
+  /* DUAL IMAGE */
+  .dual-image { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .dual-image .section-image-card .img-slot { height: 220px; }
+
+  /* STATE GRID */
+  .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  .state-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 16px 18px; }
+  .state-card .s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 6px; }
+  .state-card .s-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .state-card .s-body { font-size: 12px; color: var(--mid); line-height: 1.5; }
+
+  /* FINDING CALLOUT */
+  .finding { margin-top: 20px; padding: 20px 24px; background: var(--lilac); border-radius: 6px; }
+  .finding .f-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(0,0,0,0.45); margin-bottom: 8px; }
+  .finding p { font-size: 14px; color: var(--ink); line-height: 1.65; font-weight: 500; }
+
+  /* PRINCIPLE LIST */
+  .principle-list { margin-top: 20px; display: flex; flex-direction: column; gap: 0; }
+  .principle-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+  .principle-item:last-child { border-bottom: none; }
+  .principle-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); flex-shrink: 0; margin-top: 6px; }
+  .principle-text { font-size: 13px; color: var(--mid); line-height: 1.55; }
+  .principle-text strong { color: var(--ink); font-weight: 500; }
+
+  /* CHAIN */
+  .chain { margin-top: 20px; }
+  .chain-item { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+  .chain-item:last-child { border-bottom: none; }
+  .chain-num { font-size: 11px; color: var(--mid); font-weight: 400; flex-shrink: 0; padding-top: 2px; width: 20px; }
+  .chain-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .chain-text p { font-size: 13px; color: var(--mid); line-height: 1.5; max-width: none; }
+
+  /* TAKEAWAYS */
+  .takeaway-section { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .takeaway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+  .takeaway-card { background: rgba(0,0,0,0.03); padding: 32px; border-radius: 6px; }
+  .t-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 16px; }
+  .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
+  .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+
+  /* PROTOTYPE */
+  .proto-embed { width: 100%; }
+  .proto-wrap { background: #f0ebe2; border-radius: 10px; overflow: hidden; font-family: 'Inter', sans-serif; }
+  .proto-stage { display: flex; min-height: 460px; align-items: stretch; }
+  .proto-label-col { width: 120px; flex-shrink: 0; display: flex; flex-direction: column; padding: 36px 0 36px 20px; gap: 0; }
+  .state-label-item { display: flex; flex-direction: column; gap: 2px; opacity: 0.3; transition: opacity 0.5s ease; flex: 1; justify-content: center; }
+  .state-label-item.active { opacity: 1; }
+  .state-label-item .l-tag { font-size: 10px; font-style: italic; color: var(--mid); font-family: 'Lora', serif; line-height: 1.3; }
+  .state-label-item .l-name { font-size: 12px; font-weight: 500; color: var(--ink); line-height: 1.2; }
+  .proto-divider { width: 1px; background: var(--rule); flex-shrink: 0; }
+  .proto-ui-col { flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px 24px; position: relative; }
+  .search-shell { width: 100%; max-width: 380px; position: relative; }
+  .search-bar { display: flex; align-items: center; background: #fff; border: 1px solid var(--rule); border-radius: 8px; padding: 0 12px; height: 40px; gap: 8px; transition: box-shadow 0.25s ease, border-color 0.25s ease; }
+  .search-bar.active { border-color: #b0aab8; box-shadow: 0 0 0 3px rgba(197,192,224,0.35); }
+  .search-icon { color: #bbb; flex-shrink: 0; width: 15px; height: 15px; }
+  .search-text { flex: 1; font-size: 12px; color: var(--ink); font-family: 'Inter', sans-serif; }
+  .search-text.placeholder { color: #bbb; }
+  .cursor { display: inline-block; width: 1.5px; height: 12px; background: var(--ink); margin-left: 1px; vertical-align: middle; opacity: 0; transition: opacity 0.15s; }
+  .cursor.blink { animation: p-blink 0.9s step-end infinite; }
+  @keyframes p-blink { 0%,100%{opacity:1}50%{opacity:0} }
+  .clear-btn { width: 15px; height: 15px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity 0.2s; flex-shrink: 0; }
+  .clear-btn.visible { opacity: 1; }
+  .dropdown { position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: #fff; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.07); transform-origin: top center; transform: scaleY(0.92) translateY(-6px); opacity: 0; transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1), opacity 0.25s ease; pointer-events: none; }
+  .dropdown.open { transform: scaleY(1) translateY(0); opacity: 1; pointer-events: auto; }
+  .dd-section { overflow: hidden; max-height: 0; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease; opacity: 0; }
+  .dd-section.visible { max-height: 300px; opacity: 1; }
+  .dd-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #bbb; padding: 9px 12px 3px; }
+  .dd-current-spot { display: flex; align-items: center; gap: 8px; padding: 5px 12px 7px; }
+  .spot-icon { width: 20px; height: 20px; border-radius: 4px; background: var(--lilac); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .spot-name { font-size: 12px; font-weight: 500; color: var(--ink); }
+  .collection-chips { display: flex; gap: 5px; padding: 3px 12px 9px; flex-wrap: wrap; }
+  .chip { font-size: 11px; padding: 3px 9px; border-radius: 20px; border: 1px solid var(--rule); color: var(--ink); background: var(--bg); cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+  .chip:hover, .chip.selected { background: var(--lilac); border-color: #b0aab8; }
+  .dd-divider { height: 1px; background: #f0ebe2; margin: 0 12px; }
+  .recent-item { display: flex; align-items: center; gap: 7px; padding: 6px 12px; transition: background 0.12s; cursor: pointer; }
+  .recent-item:hover { background: #f8f5f0; }
+  .recent-item svg { width: 12px; height: 12px; color: #ccc; flex-shrink: 0; }
+  .recent-item span { font-size: 12px; color: #4a4540; }
+  .suggest-item { display: flex; align-items: center; gap: 7px; padding: 6px 12px; cursor: pointer; transition: background 0.12s; }
+  .suggest-item:hover { background: #f8f5f0; }
+  .s-icon { color: #ccc; flex-shrink: 0; display:flex; align-items:center; }
+  .s-icon svg { width: 12px; height: 12px; }
+  .s-text { font-size: 12px; color: #4a4540; flex: 1; line-height: 1.4; }
+  .s-text strong { color: var(--ink); font-weight: 500; }
+  .s-count { font-size: 11px; color: #bbb; }
+  .suggest-item.skeleton .s-text { height: 10px; border-radius: 4px; background: linear-gradient(90deg,#ece8e0 25%,#f5f0e8 50%,#ece8e0 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; color: transparent; }
+  @keyframes shimmer { 0%{background-position:200% 0}100%{background-position:-200% 0} }
+  .suggest-group-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #bbb; padding: 7px 12px 2px; }
+  .end-bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: #f0ebe2; border-top: 1px solid #ece8e0; }
+  .end-bar span { font-size: 11px; color: #aaa; flex: 1; }
+  .end-action { font-size: 11px; color: var(--mid); border-bottom: 1px solid var(--rule); cursor: pointer; padding-bottom: 1px; }
+  .end-action:hover { color: var(--ink); border-color: var(--ink); }
+  .replay-btn { display: flex; align-items: center; gap: 6px; padding: 7px 18px; font-size: 11px; font-family: 'Inter', sans-serif; color: var(--mid); background: transparent; border: 1px solid var(--rule); border-radius: 20px; cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+  .replay-btn:hover { color: var(--ink); border-color: var(--mid); }
+
+  /* INTERACTIVE PROTOTYPE v2 */
+  .pw2 { background: #ece7df; border-radius: 10px; overflow: hidden; }
+  .state-strip2 { display: flex; border-bottom: 1px solid #ddd8ce; background: #f5f0e8; }
+  .ss-item2 { flex: 1; padding: 12px 14px; border-right: 1px solid #ddd8ce; transition: background 0.25s; }
+  .ss-item2:last-child { border-right: none; }
+  .ss-item2.active { background: #fff; }
+  .ss-tag2 { font-size: 9px; font-style: italic; color: #9a9490; font-family: 'Lora', serif; display: block; margin-bottom: 2px; transition: color 0.25s; }
+  .ss-name2 { font-size: 11px; font-weight: 500; color: #c5bfbb; transition: color 0.25s; }
+  .ss-item2.active .ss-tag2 { color: #6b6560; }
+  .ss-item2.active .ss-name2 { color: #1a1a1a; }
+  .ui-area2 { padding: 28px 28px 0; display: flex; justify-content: center; min-height: 340px; align-items: flex-start; }
+  .search-shell2 { width: 100%; max-width: 400px; position: relative; }
+  .sbar2 { display: flex; align-items: center; background: #fff; border: 1px solid #DFDFDF; border-radius: 6px; padding: 0 12px; height: 40px; gap: 8px; transition: box-shadow 0.25s, border-color 0.25s; }
+  .sbar2.focused2 { border-color: #AFAFAF; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+  .si2 { color: #bbb; flex-shrink: 0; display: flex; }
+  .scope-pill2 { display: flex; align-items: center; gap: 4px; background: #c5c0e0; border-radius: 4px; padding: 2px 5px 2px 7px; flex-shrink: 0; }
+  .scope-pill2 span { font-size: 11px; font-weight: 500; color: #3a3560; white-space: nowrap; }
+  .pill-x2 { width: 14px; height: 14px; border-radius: 50%; background: rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+  .pill-x2:hover { background: rgba(0,0,0,0.22); }
+  .squery2 { flex: 1; font-size: 12px; color: #1a1a1a; font-family: 'Inter', sans-serif; min-width: 0; }
+  .squery2.ph2 { color: #bbb; }
+  .scursor2 { display: inline-block; width: 1.5px; height: 12px; background: #1a1a1a; margin-left: 1px; vertical-align: middle; }
+  .scursor2.blink2 { animation: bl2 0.9s step-end infinite; }
+  @keyframes bl2 { 0%,100%{opacity:1}50%{opacity:0} }
+  .xclear2 { width: 16px; height: 16px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: background 0.15s; }
+  .xclear2:hover { background: #aaa; }
+
+  /* DROPDOWN — Figma spec */
+  .dropdown2 {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border-radius: 6px;
+    border: 1px solid #DFDFDF;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+    transform-origin: top;
+    transform: scaleY(0.94) translateY(-4px);
+    opacity: 0;
+    transition: transform 0.28s cubic-bezier(0.34,1.15,0.64,1), opacity 0.2s ease;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .dropdown2.open2 { transform: scaleY(1) translateY(0); opacity: 1; pointer-events: auto; }
+
+  /* Sections — each is full width */
+  .dd-sec2 { width: 100%; overflow: hidden; max-height: 0; opacity: 0; transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease; }
+  .dd-sec2.show2 { max-height: 400px; opacity: 1; }
+
+  /* Section label */
+  .ddlbl2 {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9E9E9E;
+    padding: 4px 0 6px;
+  }
+
+  /* Divider */
+  .ddhr2 { width: 100%; height: 1px; background: #DFDFDF; margin: 4px 0; }
+
+  /* Collection chips */
+  .chips2 { display: flex; gap: 6px; padding: 2px 0 4px; flex-wrap: wrap; }
+  .chip2 {
+    display: flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 4px;
+    border: 1px solid #DFDFDF;
+    background: #FAFAFA;
+    font-size: 12px;
+    font-weight: 400;
+    color: #1A1A1A;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+  .chip2:hover { background: #F0EFFF; border-color: #B0AAD8; }
+  .chip2.selected2 { background: #EEEEFF; border-color: #B0AAD8; font-weight: 500; }
+
+  /* Recent rows */
+  .ri2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.12s;
+    border-radius: 4px;
+  }
+  .ri2:hover { background: #F5F5F5; padding-left: 4px; padding-right: 4px; }
+  .ri2 span { font-size: 13px; color: #3D3D3D; font-family: 'Inter', sans-serif; }
+
+  /* Suggestion rows */
+  .sugg2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 4px;
+    transition: background 0.12s;
+  }
+  .sugg2:hover { background: #F5F5F5; padding-left: 4px; padding-right: 4px; }
+  .st2 { font-size: 13px; color: #3D3D3D; flex: 1; font-family: 'Inter', sans-serif; line-height: 1.4; }
+  .st2 strong { color: #1A1A1A; font-weight: 500; }
+  .sc2 { font-size: 12px; color: #9E9E9E; font-family: 'Inter', sans-serif; }
+
+  /* Skeleton shimmer */
+  .sugg2.skel2 .st2 { height: 11px; border-radius: 3px; background: linear-gradient(90deg,#EFEFEF 25%,#FAFAFA 50%,#EFEFEF 75%); background-size: 200%; animation: sh2 1.2s infinite; color: transparent; }
+  @keyframes sh2 { 0%{background-position:200% 0}100%{background-position:-200% 0} }
+
+  /* Sub-group label (Items, Spots) */
+  .sg-lbl2 {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9E9E9E;
+    padding: 8px 0 4px;
+    width: 100%;
+  }
+
+  /* End bar */
+  .end-bar2 { display: flex; align-items: center; gap: 8px; padding: 6px 0; width: 100%; }
+  .eb-q2 { font-size: 13px; color: #9E9E9E; flex: 1; font-family: 'Inter', sans-serif; }
+  .eb-q2 strong { color: #1A1A1A; }
+  .end-act2 { font-size: 12px; color: #5B5B5B; border-bottom: 1px solid #DFDFDF; cursor: pointer; font-family: 'Inter', sans-serif; padding-bottom: 1px; transition: color 0.15s; }
+  .end-act2:hover { color: #1A1A1A; border-color: #1A1A1A; }
+  .hint-strip2 { display: flex; gap: 8px; align-items: center; justify-content: center; padding: 18px 24px 20px; flex-wrap: wrap; }
+  .hint2 { font-size: 11px; color: #6b6560; background: rgba(255,255,255,0.6); border-radius: 20px; padding: 5px 12px; cursor: pointer; transition: background 0.15s, color 0.15s; border: 1px solid #ddd8ce; }
+  .hint2:hover { background: #fff; color: #1a1a1a; }
+  .serp-results2 { width: 100%; max-width: 400px; margin: 14px 0 0; background: #fff; border: 1px solid #ddd8ce; border-radius: 8px; padding: 12px 14px; }
+
+  @media (max-width: 768px) {
+    .state-strip2 { flex-wrap: wrap; }
+    .ss-item2 { min-width: 50%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="#">Aditi</a>
+  <ul class="nav-links">
+    <li><a href="#">Work</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+</nav>
+
+<div class="hero fade-in">
+  <div class="hero-year">2025</div>
+  <h1 class="hero-title">Scoped Search</h1>
+  <p class="hero-desc">Sales reps in large organizations spend more time finding content than selling. Scoped Search gives reps a fast, low-friction way to search within the content that's relevant to them — not all of Highspot.</p>
+  <dl class="hero-meta">
+    <div class="meta-block"><dt>Role</dt><dd>Lead Product Designer</dd></div>
+    <div class="meta-block"><dt>Stage</dt><dd>Zero to One</dd></div>
+    <div class="meta-block"><dt>Domain</dt><dd>Sales Enablement</dd></div>
+    <div class="meta-block"><dt>Timeline</dt><dd>2025</dd></div>
+  </dl>
+</div>
+
+<div class="hero-image-wrap fade-in">
+  <div class="hero-image-card">
+    <div class="img-slot">
+      <input type="file" accept="image/*" onchange="loadImage(this)">
+      <div class="upload-hint">
+        <span class="plus">+</span>
+        <span>Click to add hero image</span>
+        <span style="font-size:11px;">Full product view or search UI overview</span>
+      </div>
+    </div>
+  </div>
+  <p class="img-caption">Scoped Search — search UI with collection scope selector</p>
+</div>
+
+<div class="content">
+
+  <!-- PROBLEM -->
+  <div class="section-row fade-in">
+    <div>
+      <div class="section-image-card lilac">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><span class="plus">+</span><span>Problem / context visual</span></div>
+        </div>
+      </div>
+      <p class="img-caption">Open access at scale — content sprawl in Highspot</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">Open access to everything means finding nothing fast</h2>
+      <div class="section-body">
+        <p>In large organizations, Highspot gives sales reps access to almost all content in the platform. Paradoxically, this abundance creates friction — reps spend more time searching for the right content and less time selling.</p>
+        <p>Open access at scale doesn't serve the rep or the org. The problem isn't a lack of content. It's that relevance is buried inside volume.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOUNDATION -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="section-image-card orange">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><span class="plus">+</span><span>Spots & Collections diagram</span></div>
+        </div>
+      </div>
+      <p class="img-caption">From spots to content collections — the organizational layer</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">The Foundation</div>
+      <h2 class="section-title">Content Collections: grouping spots into a searchable scope</h2>
+      <div class="section-body">
+        <p>Content in Highspot lives in spots — folder-like constructs with individual access control. Every item added requires a manual decision about which spot it belongs to.</p>
+        <p>To make scoped search possible, we first introduced <strong>content collections</strong> — an admin-defined grouping of related spots. Once a collection is configured, item-to-collection association becomes automatic.</p>
+        <p>Collections map naturally to how large orgs already think: by sub-org, product line, or region. They don't replace spots — they aggregate them into a meaningful scope.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN CHALLENGE -->
+  <div class="section-row fade-in">
+    <div>
+      <div class="dual-image">
+        <div>
+          <div class="section-image-card warm">
+            <div class="img-slot">
+              <input type="file" accept="image/*" onchange="loadImage(this)">
+              <div class="upload-hint"><span class="plus">+</span><span>Early exploration — wide</span></div>
+            </div>
+          </div>
+          <p class="img-caption">Early exploration — broad scope selector</p>
+        </div>
+        <div>
+          <div class="section-image-card sage">
+            <div class="img-slot">
+              <input type="file" accept="image/*" onchange="loadImage(this)">
+              <div class="upload-hint"><span class="plus">+</span><span>Simplified iteration</span></div>
+            </div>
+          </div>
+          <p class="img-caption">Simplified iteration — 1 to 3 collections</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-text">
+      <div class="section-label">The Design Challenge</div>
+      <h2 class="section-title">The more you can scope, the harder it is to scope</h2>
+      <div class="section-body">
+        <p>The first iteration went wide — exploring every way a user might select a collection scope before or during a search. The exploration surfaced a core tension: more collections meant more complex interaction patterns in the search dropdown.</p>
+        <p>The search dropdown is not a place for complexity. It needs to be fast and instinctive. Every additional option in that surface is friction.</p>
+      </div>
+      <div class="discovery">
+        <div class="d-label">The Insight</div>
+        <p>We went back to customers and studied actual usage. Users either have access to 1–3 collections, or they have access to more but realistically only care about 1–3. The design problem collapsed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING -->
+  <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
+      <div>
+        <div class="section-label">The Research Finding</div>
+        <h2 class="section-title">Users have access to many. They care about a few.</h2>
+        <div class="section-body">
+          <p>We went back to customers with a focused question: how many Collections do users actually have access to, and how many do they realistically use?</p>
+          <p>Users had access to many collections — but would consistently engage with only 1–3. This grounded a core design principle: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
+        </div>
+        <div class="finding" style="margin-top: 20px;">
+          <div class="f-label">Key Finding</div>
+          <p>Users had access to many collections but functionally used 1–3. Surfacing every collection equally in the search dropdown would optimize for a scenario that rarely happens.</p>
+        </div>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom: 20px;">How this shaped the design</div>
+        <div style="display: flex; flex-direction: column; gap: 0;">
+          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--rule); align-items: start;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding-top: 2px;">Frequent</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Promoted collections in the search dropdown</div>
+              <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">A small set of relevant collections appear directly in the dropdown — letting users scope before submitting. Fast, contextual, zero friction.</div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; padding: 20px 0; align-items: start;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding-top: 2px;">Possible</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Collection filter in the results sidebar</div>
+              <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">For less frequent cross-collection searches, the sidebar filter handles it — exactly like any other facet. The dropdown stays clean. The sidebar scales to edge cases.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN PRINCIPLES -->
+  <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start;">
+      <div>
+        <div class="section-label">Design Principles</div>
+        <h2 class="section-title">Search is a dynamic surface. Design every state, not just the default.</h2>
+        <div class="section-body">
+          <p>Interacting with search is not a single action — it's a sequence. Every keystroke, pause, and click changes what the dropdown should show. If transitions aren't fluid, the perception of speed breaks down even when results are fast.</p>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden;">
+        <div style="background: var(--bg); padding: 24px 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">01</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Optimize for simplicity</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Scoping should feel quick, not like a configuration step. Every extra decision in the dropdown is friction.</div>
+        </div>
+        <div style="background: var(--bg); padding: 24px 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">02</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Fluid transitions</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">The perception of speed matters as much as actual speed. State changes should feel invisible.</div>
+        </div>
+        <div style="background: var(--bg); padding: 24px 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">03</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Dropdown is prime real estate</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Keep it clean and fast. Rely on sidebar filters for scalability — don't let edge cases crowd the common case.</div>
+        </div>
+        <div style="background: var(--bg); padding: 24px 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">04</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Bring the collection to the user</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Don't make users hunt for their scope. Surface the 1–3 relevant collections — promoted, not buried in a list.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH STATES — full width -->
+  <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
+    <div class="section-label" style="margin-bottom: 12px;">The State Model</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-bottom: 40px;">
+      <div>
+        <h2 class="section-title">Five states. Each with a distinct job.</h2>
+        <div class="section-body">
+          <p>We redesigned each state of the search surface from scratch — deciding what's important at each stage and how to arrange it. The transitions between them became as important as the states themselves.</p>
+          <p>The scoped variants (Scope + Zero, Scope + Auto-suggest) mirror their unscoped counterparts with a collection pill added to the bar. Removing the pill always takes you back to the plain version of that state.</p>
+        </div>
+      </div>
+      <div class="state-grid">
+        <div class="state-card"><div class="s-label">State 01</div><div class="s-title">Zero</div><div class="s-body">User clicks in. Show recent history and promoted collections.</div></div>
+        <div class="state-card"><div class="s-label">State 02</div><div class="s-title">Scope + Zero</div><div class="s-body">User has scoped, but not typed. Same history, pill in bar.</div></div>
+        <div class="state-card"><div class="s-label">State 03</div><div class="s-title">Auto-suggest</div><div class="s-body">User is typing. Keyword and entity suggestions, fast and fluid.</div></div>
+        <div class="state-card"><div class="s-label">State 04</div><div class="s-title">Scope + Auto-suggest</div><div class="s-body">Scoped suggestions — filtered to the selected collection.</div></div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE PROTOTYPE -->
+    <div class="pw2">
+      <div class="state-strip2">
+        <div class="ss-item2 active" id="sl0"><span class="ss-tag2">State 01</span><span class="ss-name2">Zero</span></div>
+        <div class="ss-item2" id="sl1"><span class="ss-tag2">State 02</span><span class="ss-name2">Scope + Zero</span></div>
+        <div class="ss-item2" id="sl2"><span class="ss-tag2">State 03</span><span class="ss-name2">Auto-suggest</span></div>
+        <div class="ss-item2" id="sl3"><span class="ss-tag2">State 04</span><span class="ss-name2">Scope + Auto-suggest</span></div>
+        <div class="ss-item2" id="sl4"><span class="ss-tag2">State 05</span><span class="ss-name2">SERP</span></div>
+      </div>
+      <div class="ui-area2">
+        <div class="search-shell2">
+          <div class="sbar2 focused2" id="sbar2">
+            <div class="si2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div>
+            <div class="scope-pill2" id="scopePill2" style="display:none">
+              <span id="scopePillText2">Compete Materials</span>
+              <div class="pill-x2" id="pillX2"><svg viewBox="0 0 8 8" fill="none" stroke="#3a3560" stroke-width="1.5" width="7" height="7"><path d="M1 1l6 6M7 1l-6 6"/></svg></div>
+            </div>
+            <span class="squery2 ph2" id="sqtext2">Search for content</span>
+            <span class="scursor2 blink2" id="scur2"></span>
+            <div class="xclear2" id="xclear2" style="display:none"><svg viewBox="0 0 8 8" fill="none" stroke="#fff" stroke-width="1.5" width="8" height="8"><path d="M1 1l6 6M7 1l-6 6"/></svg></div>
+          </div>
+          <div class="dropdown2 open2" id="dd2">
+            <div class="dd-sec2 show2" id="s2-colls">
+              <div class="ddlbl2">Search in content collections</div>
+              <div class="chips2">
+                <div class="chip2" data-coll="Official">Official</div>
+                <div class="chip2" data-coll="APAC">APAC</div>
+                <div class="chip2" data-coll="EMEA">EMEA</div>
+                <div class="chip2" data-coll="North America">North America</div>
+              </div>
+            </div>
+            <div class="dd-sec2 show2" id="s2-recent">
+              <div class="ddhr2"></div>
+              <div class="ddlbl2">Recent</div>
+              <div class="ri2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" width="12" height="12"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg><span>Nexuspath Compete</span></div>
+              <div class="ri2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" width="12" height="12"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg><span>Sales Strategy Nexuspath</span></div>
+              <div class="ri2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" width="12" height="12"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg><span>Technitouch pricing</span></div>
+              <div class="ri2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" width="12" height="12"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg><span>Nexuspath overview</span></div>
+              <div class="ri2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" width="12" height="12"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg><span>Product info</span></div>
+            </div>
+            <div class="dd-sec2" id="s2-skel">
+              <div class="ddlbl2">Suggestions</div>
+              <div class="sugg2 skel2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2" style="width:58%"></div></div>
+              <div class="sugg2 skel2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2" style="width:73%"></div></div>
+              <div class="sugg2 skel2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2" style="width:44%"></div></div>
+            </div>
+            <div class="dd-sec2" id="s2-sugg">
+              <div class="ddlbl2">Suggestions</div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong></div><span class="sc2">732</span></div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong> in Cloud PBX Marketing</div><span class="sc2">12</span></div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong> in Customer Stories</div><span class="sc2">6</span></div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2">Introduction to <strong>Cloud PBX</strong></div><span class="sc2">12k+</span></div>
+              <div class="sg-lbl2">Items</div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#e07a50" stroke-width="1.4" width="12" height="12"><rect x="2" y="2" width="10" height="10" rx="1.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong> Product Pricing</div></div>
+              <div class="sg-lbl2">Spots</div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#7a74b0" stroke-width="1.4" width="12" height="12"><rect x="2" y="2" width="10" height="10" rx="2"/></svg></div><div class="st2"><strong>Cloud PBX</strong> Customer Stories</div></div>
+            </div>
+            <div class="dd-sec2" id="s2-sugg-scoped">
+              <div class="ddlbl2">Suggestions</div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong></div><span class="sc2">+</span></div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong> compete</div><span class="sc2">+</span></div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong> Nexuspath</div><span class="sc2">8</span></div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#ccc" stroke-width="1.4" width="12" height="12"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong> manual</div><span class="sc2">3</span></div>
+              <div class="sg-lbl2">Items</div>
+              <div class="sugg2"><div><svg viewBox="0 0 14 14" fill="none" stroke="#e07a50" stroke-width="1.4" width="12" height="12"><rect x="2" y="2" width="10" height="10" rx="1.5"/></svg></div><div class="st2"><strong>Cloud PBX</strong> Product Pricing</div></div>
+            </div>
+            <div class="dd-sec2" id="s2-end">
+              <div class="end-bar2"><span class="eb-q2">Results for <strong>Cloud PBX</strong></span><span class="end-act2" id="newSearch2">New search</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hint-strip2" id="hintStrip2"></div>
+    </div>
+    <p class="img-caption" style="text-align:center; margin-top: 12px;">Interactive prototype — click the hints to move through states</p>
+  </div>
+
+  <!-- TAKEAWAYS -->
+  <div class="takeaway-section fade-in">
+    <div class="section-label">Key Learnings</div>
+    <h2 class="section-title">What this product taught me</h2>
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <div class="t-num">Learning 01</div>
+        <div class="t-title">The right scope is smaller than you think</div>
+        <div class="t-body">Building for the full range of possibilities produces complexity nobody asked for. Users self-limit in predictable ways. The best design honors that — and optimizes hard for the common case rather than softly covering every case.</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="t-num">Learning 02</div>
+        <div class="t-title">Transitions are a design deliverable, not an afterthought</div>
+        <div class="t-body">Search is a dynamic surface — every action changes what the user sees. If the transition between states isn't deliberate, the interaction feels broken even when the logic is correct. Designing the states and the motion between them are equally important.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-name" href="#">Aditi</a>
+  <a class="footer-back" href="#">← Back to work</a>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.fade-in');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  els.forEach(el => io.observe(el));
+
+  // Interactive prototype v2
+  (function() {
+    var state2 = 'zero', scope2 = '';
+    var allSecs2 = ['s2-colls','s2-recent','s2-skel','s2-sugg','s2-sugg-scoped','s2-end'];
+    var allLbls2 = ['sl0','sl1','sl2','sl3','sl4'];
+
+    function show2(ids) {
+      allSecs2.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.toggle('show2', ids.indexOf(id) > -1);
+      });
+    }
+    function setLbl2(i) {
+      allLbls2.forEach(function(id, idx) {
+        var el = document.getElementById(id);
+        if (el) el.classList.toggle('active', idx === i);
+      });
+    }
+    function render2() {
+      var pill = document.getElementById('scopePill2');
+      var pillTxt = document.getElementById('scopePillText2');
+      var sqt = document.getElementById('sqtext2');
+      var xcl = document.getElementById('xclear2');
+      var scur = document.getElementById('scur2');
+      var dd = document.getElementById('dd2');
+      var sbar = document.getElementById('sbar2');
+      var uiArea = document.querySelector('.ui-area2');
+
+      var hasScope = (state2 === 'scope-zero' || state2 === 'scope-auto-suggest' || state2 === 'serp-scoped');
+      var hasQuery = (state2 === 'auto-suggest' || state2 === 'scope-auto-suggest' || state2 === 'serp' || state2 === 'serp-scoped');
+      var isSerp = (state2 === 'serp' || state2 === 'serp-scoped');
+
+      if (pill) { pill.style.display = hasScope ? 'flex' : 'none'; if (pillTxt) pillTxt.textContent = scope2; }
+      if (sqt) { sqt.textContent = hasQuery ? 'Cloud PBX' : 'Search for content'; sqt.classList.toggle('ph2', !hasQuery); }
+      if (scur) scur.classList.toggle('blink2', !isSerp);
+      if (xcl) xcl.style.display = (hasQuery || hasScope) ? 'flex' : 'none';
+      if (dd) dd.classList.toggle('open2', !isSerp);
+
+      if (state2 === 'zero') { show2(['s2-colls','s2-recent']); setLbl2(0); }
+      else if (state2 === 'scope-zero') { show2(['s2-colls','s2-recent']); setLbl2(1); }
+      else if (state2 === 'auto-suggest') {
+        show2(['s2-colls','s2-skel']); setLbl2(2);
+        setTimeout(function(){ if(state2==='auto-suggest') show2(['s2-colls','s2-sugg']); }, 600);
+      } else if (state2 === 'scope-auto-suggest') {
+        show2(['s2-colls','s2-skel']); setLbl2(3);
+        setTimeout(function(){ if(state2==='scope-auto-suggest') show2(['s2-colls','s2-sugg-scoped']); }, 600);
+      } else if (isSerp) { show2([]); setLbl2(4); }
+
+      // remove old serp
+      var old = uiArea ? uiArea.querySelector('.serp-results2') : null;
+      if (old) old.remove();
+
+      if (isSerp) {
+        var serp = document.createElement('div');
+        serp.className = 'serp-results2';
+        serp.innerHTML = '<div style="font-size:9.5px;text-transform:uppercase;letter-spacing:0.1em;color:#bbb;margin-bottom:8px;">Results — Cloud PBX' + (state2==='serp-scoped' ? ' · '+scope2 : '') + '</div>'
+          + ['Cloud PBX Product Overview','Cloud PBX Competitive Battle Card','Cloud PBX Pricing Sheet','Cloud PBX Customer Story'].map(function(t){
+            return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0ebe2;"><div style="width:26px;height:26px;border-radius:4px;background:#f0ebe2;flex-shrink:0;"></div><div><div style="font-size:12px;font-weight:500;color:#1a1a1a;">'+t+'</div><div style="font-size:10px;color:#bbb;">Compete Materials</div></div></div>';
+          }).join('')
+          + '<div style="font-size:11px;color:#bbb;padding-top:6px;">Showing 4 of 732 results</div>';
+        if (uiArea) uiArea.appendChild(serp);
+      }
+
+      updateHints2();
+    }
+
+    function updateHints2() {
+      var strip = document.getElementById('hintStrip2');
+      if (!strip) return;
+      strip.innerHTML = '';
+      var hints = [];
+      if (state2 === 'zero') {
+        hints = [['Scope to APAC', function(){ scope2='APAC'; state2='scope-zero'; render2(); }],
+                 ['Scope to EMEA', function(){ scope2='EMEA'; state2='scope-zero'; render2(); }],
+                 ['Start typing', function(){ state2='auto-suggest'; render2(); }]];
+      } else if (state2 === 'scope-zero') {
+        hints = [['Start typing', function(){ state2='scope-auto-suggest'; render2(); }],
+                 ['Remove scope → Zero', function(){ state2='zero'; scope2=''; render2(); }]];
+      } else if (state2 === 'auto-suggest') {
+        hints = [['Scope to APAC', function(){ scope2='APAC'; state2='scope-auto-suggest'; render2(); }],
+                 ['Submit → SERP', function(){ state2='serp'; render2(); }],
+                 ['Clear → Zero', function(){ state2='zero'; render2(); }]];
+      } else if (state2 === 'scope-auto-suggest') {
+        hints = [['Submit → Scoped SERP', function(){ state2='serp-scoped'; render2(); }],
+                 ['Remove scope → Auto-suggest', function(){ state2='auto-suggest'; scope2=''; render2(); }],
+                 ['Clear → Zero', function(){ state2='zero'; scope2=''; render2(); }]];
+      } else if (state2 === 'serp') {
+        hints = [['New search → Zero', function(){ state2='zero'; scope2=''; render2(); }],
+                 ['Scope result', function(){ scope2='APAC'; state2='serp-scoped'; render2(); }]];
+      } else if (state2 === 'serp-scoped') {
+        hints = [['New search → Zero', function(){ state2='zero'; scope2=''; render2(); }],
+                 ['Remove scope → SERP', function(){ state2='serp'; scope2=''; render2(); }]];
+      }
+      hints.forEach(function(h) {
+        var el = document.createElement('span');
+        el.className = 'hint2';
+        el.textContent = h[0];
+        el.addEventListener('click', h[1]);
+        strip.appendChild(el);
+      });
+    }
+
+    var px2 = document.getElementById('pillX2');
+    if (px2) px2.addEventListener('click', function() {
+      if (state2==='scope-zero') { state2='zero'; scope2=''; render2(); }
+      else if (state2==='scope-auto-suggest') { state2='auto-suggest'; scope2=''; render2(); }
+      else if (state2==='serp-scoped') { state2='serp'; scope2=''; render2(); }
+    });
+    var xc2 = document.getElementById('xclear2');
+    if (xc2) xc2.addEventListener('click', function() { state2='zero'; scope2=''; render2(); });
+    var ns2 = document.getElementById('newSearch2');
+    if (ns2) ns2.addEventListener('click', function() { state2='zero'; scope2=''; render2(); });
+    document.querySelectorAll('.chip2').forEach(function(c) {
+      c.addEventListener('click', function() {
+        scope2 = c.dataset.coll;
+        state2 = (state2==='auto-suggest'||state2==='scope-auto-suggest') ? 'scope-auto-suggest' : 'scope-zero';
+        render2();
+      });
+    });
+    render2();
+  })();
+  const protoStates = {
+    rest:        { lbl:'lbl-rest',    bar:false, clear:false, cur:false, text:'Search for content and people.', ph:true,  secs:[] },
+    zero:        { lbl:'lbl-zero',    bar:true,  clear:false, cur:true,  text:'Search for content and people.', ph:true,  secs:['sec-current','sec-collections','sec-recent'] },
+    typing:      { lbl:'lbl-suggest', bar:true,  clear:true,  cur:true,  text:'Cloud PBX',                      ph:false, secs:['sec-current','sec-collections','sec-skeleton'] },
+    suggestions: { lbl:'lbl-suggest', bar:true,  clear:true,  cur:true,  text:'Cloud PBX',                      ph:false, secs:['sec-current','sec-collections','sec-suggestions'] },
+    end:         { lbl:'lbl-end',     bar:false, clear:true,  cur:false, text:'Cloud PBX',                      ph:false, secs:['sec-end'] }
+  };
+  const allSecs = ['sec-current','sec-collections','sec-recent','sec-skeleton','sec-suggestions','sec-end'];
+  const allLbls = ['lbl-rest','lbl-zero','lbl-suggest','lbl-end'];
+
+  function applyProtoState(name) {
+    const s = protoStates[name];
+    allLbls.forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('active', id === s.lbl); });
+    const bar = document.getElementById('searchBar'); if(bar) bar.classList.toggle('active', s.bar);
+    const dd = document.getElementById('dropdown'); if(dd) dd.classList.toggle('open', s.secs.length > 0);
+    allSecs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('visible', s.secs.includes(id)); });
+    const txt = document.getElementById('searchText'); if(txt){ txt.textContent = s.text; txt.classList.toggle('placeholder', s.ph); }
+    const clr = document.getElementById('clearBtn'); if(clr) clr.classList.toggle('visible', s.clear);
+    const cur = document.getElementById('cursor'); if(cur) cur.classList.toggle('blink', s.cur);
+  }
+
+  const protoSeq = [
+    { state:'rest', delay:800 }, { state:'zero', delay:1200 },
+    { state:'typing', delay:1400 }, { state:'suggestions', delay:1200 }, { state:'end', delay:0 }
+  ];
+  let protoTimers = [];
+
+  function runProto() {
+    protoTimers.forEach(clearTimeout); protoTimers = [];
+    applyProtoState('rest');
+    let t = 0;
+    protoSeq.forEach(({ state, delay }) => {
+      t += delay;
+      protoTimers.push(setTimeout(() => applyProtoState(state), t));
+    });
+  }
+
+  const rb = document.getElementById('replayBtn');
+  if(rb) rb.addEventListener('click', runProto);
+  setTimeout(runProto, 600);
+
+  function loadImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const slot = input.closest('.img-slot');
+      const hint = slot.querySelector('.upload-hint');
+      if (hint) hint.style.display = 'none';
+      let img = slot.querySelector('img');
+      if (!img) { img = document.createElement('img'); slot.appendChild(img); }
+      img.src = ev.target.result;
+      slot.style.border = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+</body>
+</html>
