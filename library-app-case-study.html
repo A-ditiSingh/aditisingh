@@ -45,9 +45,19 @@ nav {
   z-index: 50;
 }
 .nav-name { font-family: 'Lora', serif; font-size: 16px; color: var(--ink); text-decoration: none; }
+.nav-back {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--mid);
+  font-weight: 400;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-back:hover { color: var(--ink); }
 .nav-links { display: flex; gap: 32px; list-style: none; }
 .nav-links a { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
 .nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--ink); font-weight: 500; }
 
 /* ─── HERO ──────────────────────────────────────────────────────── */
 .hero { padding: 80px 60px 60px; max-width: 1100px; margin: 0 auto; }
@@ -264,20 +274,6 @@ nav {
 .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
 .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
 
-/* ─── FOOTER ────────────────────────────────────────────────────── */
-footer {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 48px 60px;
-  border-top: 1px solid var(--rule);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.footer-name { font-family: 'Lora', serif; font-size: 15px; color: var(--ink); text-decoration: none; }
-.footer-back { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
-.footer-back:hover { color: var(--ink); }
-
 /* ─── FADE ──────────────────────────────────────────────────────── */
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -291,7 +287,6 @@ footer {
   .needs-header { flex-direction: column; gap: 24px; }
   .needs-grid { grid-template-columns: 1fr; }
   .takeaway-grid { grid-template-columns: 1fr; }
-  footer { flex-direction: column; gap: 16px; align-items: flex-start; }
 }
 </style>
 </head>
@@ -299,10 +294,11 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <a class="nav-name" href="index.html" style="font-family:'Inter',sans-serif; font-size:13px; color:var(--mid); font-weight:400;">← Back</a>
+  <a class="nav-back" href="index.html">← Back</a>
   <ul class="nav-links">
-    <li><a href="aditi-portfolio-home.html">Work</a></li>
-    <li><a href="aditi-portfolio-home.html#about">About</a></li>
+    <li><a href="index.html">Work</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
   </ul>
 </nav>
 
@@ -483,12 +479,6 @@ footer {
     </div>
   </div>
 </div>
-
-<!-- FOOTER -->
-<footer>
-  <a class="footer-name" href="aditi-portfolio-home.html">Aditi</a>
-  <a class="footer-back" href="aditi-portfolio-home.html">← Back to work</a>
-</footer>
 
 <script>
   // Fade-in on scroll

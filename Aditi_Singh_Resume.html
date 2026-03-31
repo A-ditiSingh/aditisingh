@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Aditi Singh — Resume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  :root {
+    --bg:     #f5f0e8;
+    --ink:    #1a1a1a;
+    --mid:    #6b6560;
+    --rule:   #ddd8ce;
+    --white:  #ffffff;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* NAV */
+  nav {
+    padding: 28px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 50;
+  }
+  .nav-name { font-family: 'Lora', serif; font-size: 16px; color: var(--ink); text-decoration: none; }
+  .nav-back {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--mid);
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .nav-back:hover { color: var(--ink); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--ink); font-weight: 500; }
+
+  /* PAGE */
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 72px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mid);
+    margin-bottom: 20px;
+  }
+
+  .hero-name {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 300;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--mid);
+  }
+
+  .hero-summary {
+    font-size: 15px;
+    color: var(--mid);
+    line-height: 1.75;
+    max-width: 600px;
+    margin-bottom: 28px;
+  }
+
+  /* DOWNLOAD BUTTON */
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--ink);
+    padding: 9px 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    margin-bottom: 40px;
+  }
+  .btn-download:hover { background: var(--ink); color: var(--bg); }
+  .btn-download svg { flex-shrink: 0; transition: transform 0.15s; }
+  .btn-download:hover svg { transform: translateY(2px); }
+
+  .hero-meta {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .meta-block { display: flex; flex-direction: column; gap: 4px; }
+  .meta-block dt { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); font-weight: 400; }
+  .meta-block dd { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .meta-block dd a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 1px; transition: border-color 0.15s; }
+  .meta-block dd a:hover { border-color: var(--ink); }
+
+  /* SECTION ROW */
+  .section-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 64px;
+    align-items: start;
+    padding: 64px 0;
+    border-top: 1px solid var(--rule);
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .section-row:nth-child(2) { animation-delay: 0.1s; }
+  .section-row:nth-child(3) { animation-delay: 0.18s; }
+  .section-row:nth-child(4) { animation-delay: 0.26s; }
+  .section-row:nth-child(5) { animation-delay: 0.34s; }
+
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mid);
+    padding-top: 4px;
+    position: sticky;
+    top: 80px;
+  }
+
+  .section-body { width: 100%; }
+
+  /* ROLE */
+  .role {
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .role:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .role-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .role-title {
+    font-family: 'Lora', serif;
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .role-period {
+    font-size: 12px;
+    color: var(--mid);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    font-weight: 400;
+  }
+
+  .role-company {
+    font-size: 13px;
+    color: var(--mid);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  .role-company::before {
+    content: '·';
+    margin: 0 6px;
+    color: var(--rule);
+  }
+
+  .role ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .role ul li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--mid);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .role ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--rule);
+    font-weight: 300;
+  }
+
+  /* EDUCATION */
+  .edu-item {
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .edu-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .edu-degree {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .edu-school { font-size: 13px; color: var(--mid); margin-bottom: 2px; }
+  .edu-year   { font-size: 12px; color: var(--mid); letter-spacing: 0.04em; }
+
+  /* SKILLS */
+  .skills-block { display: flex; flex-direction: column; gap: 24px; }
+  .skill-group  { display: flex; flex-direction: column; gap: 6px; }
+
+  .skill-cat {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mid);
+    font-weight: 400;
+  }
+
+  .skill-items { font-size: 14px; color: var(--ink); line-height: 1.7; }
+
+  /* NOTABLES */
+  .notables { display: flex; flex-direction: column; }
+
+  .notable-item {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.7;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    gap: 20px;
+    align-items: baseline;
+  }
+  .notable-item:first-child { border-top: 1px solid var(--rule); }
+
+  .notable-num { font-size: 11px; color: var(--mid); flex-shrink: 0; width: 20px; font-weight: 400; }
+
+  .notable-item a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: border-color 0.15s;
+  }
+  .notable-item a:hover { border-color: var(--ink); }
+
+  @media (max-width: 768px) {
+    nav, .page { padding-left: 24px; padding-right: 24px; }
+    .section-row { grid-template-columns: 1fr; gap: 24px; }
+    .section-label { position: static; }
+    .hero-meta { gap: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="Aditi_Singh_Resume.html" class="active">Resume</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Resume</div>
+    <h1 class="hero-name">Aditi Singh</h1>
+    <p class="hero-summary">Product designer with 10+ years of experience spanning UX, research, and systems thinking — with deep roots in architecture and HCI that shape how I approach complexity. Equal comfort in strategy conversations and pixel-level craft.</p>
+    <a class="btn-download" href="Images/Aditi_Singh_Resume.pdf" download="Aditi_Singh_Resume.pdf">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Download PDF
+    </a>
+    <dl class="hero-meta">
+      <div class="meta-block"><dt>Email</dt><dd><a href="mailto:aditis.2788@gmail.com">aditis.2788@gmail.com</a></dd></div>
+      <div class="meta-block"><dt>LinkedIn</dt><dd><a href="https://linkedin.com/in/aditising" target="_blank">linkedin.com/in/aditising</a></dd></div>
+      <div class="meta-block"><dt>Portfolio</dt><dd><a href="https://aditisingh.webflow.io" target="_blank">aditisingh.webflow.io</a></dd></div>
+      <div class="meta-block"><dt>Location</dt><dd>Ontario, Canada</dd></div>
+    </dl>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="section-row">
+    <div class="section-label">Experience</div>
+    <div class="section-body">
+
+      <div class="role">
+        <div class="role-header">
+          <h2 class="role-title">Senior UX Designer <span class="role-company">Highspot</span></h2>
+          <span class="role-period">2022 – Present · Canada (Remote)</span>
+        </div>
+        <ul>
+          <li>Led end-to-end design for Highspot's content analytics and enablement platform, defining information architecture, interaction patterns, and visual systems for a technically complex B2B product used by enterprise sales teams.</li>
+          <li>Designed a conversational analytics agent to replace traditional dashboards — establishing response-format frameworks (stats, tables, charts, lists) based on question structure and user intent.</li>
+          <li>Drove strategic UX for competitive differentiators including Highspot vs. Seismic positioning features, translating competitive intelligence into product design decisions.</li>
+          <li>Created detailed UI specifications and prototypes for features at 480px breakpoints, modern typography systems, and next-step recommendation panels integrated with AI-generated content plays.</li>
+          <li>Collaborated with PMs, engineers, and content strategists in a remote-first environment — presenting work to senior stakeholders and iterating based on structured feedback cycles.</li>
+          <li>Mentored junior designers and contributed to design system standards, elevating team craft and consistency across product areas.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <h2 class="role-title">UX Designer <span class="role-company">Guidewire Software</span></h2>
+          <span class="role-period">Jan 2022 – Present · Canada (Remote)</span>
+        </div>
+        <ul>
+          <li>Designed for enterprise insurance software, translating complex policy management workflows into usable, accessible experiences for professional users with specialized domain knowledge.</li>
+          <li>Conducted user research including contextual inquiry, usability testing, and qualitative analysis to surface pain points in dense, data-heavy interfaces.</li>
+          <li>Partnered with cross-functional teams to align business requirements with user needs, consistently bridging technical constraints and design intent.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <h2 class="role-title">UX Designer <span class="role-company">Mitel</span></h2>
+          <span class="role-period">Sept 2019 – Dec 2021 · Ottawa, Canada</span>
+        </div>
+        <ul>
+          <li>Led all design for video conferencing across web, mobile, and meeting room surfaces — owning UX from discovery through delivery.</li>
+          <li>Redesigned sign-in and onboarding flows for Mitel's unified communication platform, reducing friction for first-time users.</li>
+          <li>Designed the device management console for support staff and partners, handling complex administrative workflows.</li>
+          <li>Collaborated with cross-functional teams to translate business needs and user feedback into usable, high-quality experiences.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <h2 class="role-title">UX Researcher <span class="role-company">Canada Science &amp; Technology Museum</span></h2>
+          <span class="role-period">Jan 2018 – Sept 2018 · Ottawa</span>
+        </div>
+        <ul>
+          <li>Conducted ethnographic observation and interviews with museum visitors on the autism spectrum to understand accessibility needs and behavioral patterns.</li>
+          <li>Synthesized qualitative findings into actionable design recommendations, improving accessibility and wayfinding across the museum experience.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <h2 class="role-title">Research Assistant <span class="role-company">IIT Guwahati</span></h2>
+          <span class="role-period">Sept 2015 – Apr 2017 · India</span>
+        </div>
+        <ul>
+          <li>Designed, fabricated, and conducted usability testing for zooming interactions on flexible display devices — contributing to 4 peer-reviewed publications in HCI conferences.</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-header">
+          <h2 class="role-title">Architect <span class="role-company">Anagram Architects</span></h2>
+          <span class="role-period">May 2012 – Jun 2015 · New Delhi, India</span>
+        </div>
+        <ul>
+          <li>Led concept design, technical drawing, and on-site coordination for 10+ residential and commercial projects — work recognized in Architizer, Archdaily, and Designboom.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section-row">
+    <div class="section-label">Education</div>
+    <div class="section-body">
+      <div class="edu-item">
+        <div class="edu-degree">MASc, Human-Computer Interaction</div>
+        <div class="edu-school">Carleton University, Canada</div>
+        <div class="edu-year">2017 – 2019</div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-degree">Bachelor of Architecture</div>
+        <div class="edu-school">Birla Institute of Technology, India</div>
+        <div class="edu-year">2007 – 2011</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section-row">
+    <div class="section-label">Skills</div>
+    <div class="section-body">
+      <div class="skills-block">
+        <div class="skill-group">
+          <span class="skill-cat">Design &amp; Research</span>
+          <span class="skill-items">User research · Information architecture · Interaction design · Visual design · Prototyping · Usability testing · Accessibility · Design systems · Qualitative &amp; quantitative analysis</span>
+        </div>
+        <div class="skill-group">
+          <span class="skill-cat">Tools</span>
+          <span class="skill-items">Figma · Framer Motion · React (prototyping) · Highspot · Cursor · HTML/CSS · Adobe Illustrator · Procreate · SPSS</span>
+        </div>
+        <div class="skill-group">
+          <span class="skill-cat">Domain Fluency</span>
+          <span class="skill-items">B2B SaaS · Content management platforms · AI-native product design · Web standards · Sales enablement · Enterprise UX</span>
+        </div>
+        <div class="skill-group">
+          <span class="skill-cat">Soft Skills</span>
+          <span class="skill-items">Cross-functional collaboration · Stakeholder presentation · Remote-first leadership · Design mentorship · Strategic alignment</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTABLES -->
+  <div class="section-row">
+    <div class="section-label">Notables</div>
+    <div class="section-body">
+      <div class="notables">
+        <div class="notable-item">
+          <span class="notable-num">01</span>
+          <span>Published 4 research papers in peer-reviewed HCI conferences. Google Scholar profile available.</span>
+        </div>
+        <div class="notable-item">
+          <span class="notable-num">02</span>
+          <span>3rd place, 3-Minute Thesis competition — Carleton University.</span>
+        </div>
+        <div class="notable-item">
+          <span class="notable-num">03</span>
+          <span>Architecture work recognized in Architizer, Archdaily, and Designboom.</span>
+        </div>
+        <div class="notable-item">
+          <span class="notable-num">04</span>
+          <span>Personal portfolio: <a href="https://aditisingh.webflow.io" target="_blank">aditisingh.webflow.io</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -84,12 +84,6 @@
   border-radius: 8px;
 }
 
-/* FOOTER */
-footer { max-width: 1100px; margin: 0 auto; padding: 48px 60px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
-.footer-name { font-family: 'Lora', serif; font-size: 15px; color: var(--ink); text-decoration: none; }
-.footer-back { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
-.footer-back:hover { color: var(--ink); }
-
 /* FADE IN */
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
