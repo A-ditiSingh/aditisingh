@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scoped Search — Interactive prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Source+Sans+3:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+<style>
+html, body { margin: 0; background: #ece7df; }
+/* INTERACTIVE PROTOTYPE v2 */
+.pw2 { background: #ece7df; border-radius: 10px; border: 1px solid #dfdfdf; overflow: hidden; }
+.state-strip2 { display: flex; border-bottom: 1px solid #ddd8ce; background: #f5f0e8; }
+.ss-item2 { flex: 1; padding: 12px 14px; border-right: 1px solid #ddd8ce; transition: background 0.25s; cursor: pointer; }
+.ss-item2:last-child { border-right: none; }
+.ss-item2.active { background: #fff; }
+.ss-item2:hover { background: rgba(255,255,255,0.65); }
+.ss-tag2 { font-size: 9px; font-style: italic; color: #9a9490; font-family: 'Lora', serif; display: block; margin-bottom: 2px; transition: color 0.25s; }
+.ss-name2 { font-size: 11px; font-weight: 500; color: #c5bfbb; transition: color 0.25s; }
+.ss-item2.active .ss-tag2 { color: #6b6560; }
+.ss-item2.active .ss-name2 { color: #1a1a1a; }
+.ui-area2 {
+  padding: 28px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+.search-shell2 { width: 100%; max-width: 400px; position: relative; display: flex; flex-direction: column; align-items: stretch; }
+.sbar2 { display: flex; align-items: center; background: #fff; border: 1px solid #dfdfdf; border-radius: 6px; padding: 0 12px; height: 40px; gap: 8px; transition: box-shadow 0.25s, border-color 0.25s; font-family: 'Source Sans 3', sans-serif; }
+.sbar2.focused2 { border-color: #afafaf; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+.si2 { color: #666; flex-shrink: 0; display: flex; }
+.scope-pill2 { display: flex; align-items: center; gap: 6px; background: #eee; border-radius: 6px; padding: 2px 6px; flex-shrink: 0; }
+.scope-pill2 span { font-size: 14px; font-weight: 400; color: #202020; white-space: nowrap; font-family: 'Source Sans 3', sans-serif; line-height: 20px; }
+.pill-x2 { width: 12px; height: 12px; border-radius: 50%; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.15s; flex-shrink: 0; opacity: 0.75; }
+.pill-x2:hover { opacity: 1; }
+.squery2 {
+  flex: 1;
+  font-size: 14px;
+  line-height: 20px;
+  color: #202020;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 400;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+.squery2::placeholder { color: #666; opacity: 1; }
+.xclear2 { width: 16px; height: 16px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: background 0.15s; }
+.xclear2:hover { background: #aaa; }
+
+/* DROPDOWN — Figma Search-Dropdown (node 5641:29647); in-flow so .pw2 height follows content (no fixed min-height) */
+.dropdown2 {
+  display: none;
+  position: relative;
+  margin-top: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #dfdfdf;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-family: 'Source Sans 3', sans-serif;
+  transform-origin: top center;
+  overflow: hidden;
+}
+.dropdown2.open2 {
+  display: flex;
+  transform: scaleY(1) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Bottom inset matches top (12px) — Figma frame padding; avoid a smaller bottom-only value or the panel looks lopsided */
+
+/* Sections — hidden sections use display:none so they do not consume flex gap on .dropdown2 (max-height:0 alone still leaves 8px gaps between empty siblings). */
+.dd-sec2 { display: none; width: 100%; }
+.dd-sec2.show2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  max-height: 800px;
+  opacity: 1;
+  transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease;
+}
+
+/* Section label — Body 14 reg, #666 */
+.ddlbl2 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #666;
+  padding: 0;
+}
+
+/* Divider */
+.ddhr2 { width: 100%; height: 0; border: none; border-top: 0.5px solid #dfdfdf; margin: 0; flex-shrink: 0; }
+
+/* Collection chips — #f7f7f7, 6px radius */
+.chips2 { display: flex; gap: 8px; padding: 0; flex-wrap: wrap; }
+.chip2 {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: none;
+  background: #f7f7f7;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #202020;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  font-family: 'Source Sans 3', sans-serif;
+}
+.chip2:hover { background: #eee; }
+.chip2.selected2 { background: #e8e8e8; font-weight: 500; }
+
+/* Recent rows — 16px gap, 16px clock icon #666 */
+.ri2 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+  height: 20px;
+  min-height: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.12s;
+  border-radius: 4px;
+}
+.ri2:hover { background: rgba(0,0,0,0.04); }
+.pick2 { cursor: pointer; }
+.ri2 .ri-ic2 { flex-shrink: 0; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #666; }
+.ri2 .ri-ic2 svg { width: 16px; height: 16px; display: block; }
+.ri2 span { font-size: 14px; line-height: 20px; color: #202020; font-family: 'Source Sans 3', sans-serif; font-weight: 400; }
+
+/* Suggestion rows — 20px row height, even vertical rhythm (Figma) */
+.sugg-dynamic-host2,
+.sugg-extra-blocks2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.sugg2 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+  height: 20px;
+  min-height: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 4px;
+  transition: background 0.12s;
+}
+.sugg2:hover { background: rgba(0,0,0,0.04); }
+.sugg-icon2 { flex-shrink: 0; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #666; }
+.sugg-icon2 svg { width: 16px; height: 16px; display: block; }
+.st2 {
+  font-size: 14px;
+  line-height: 20px;
+  color: #202020;
+  flex: 1;
+  min-width: 0;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.st2 strong { font-weight: 600; color: #000; }
+.st2-muted { color: #666; font-weight: 400; }
+.st2 .st2-muted { color: #666; font-weight: 400; }
+
+/* Count badge — #f7f7f7 pill, 12px */
+.sc2 {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: #f7f7f7;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 400;
+  color: #202020;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+/* Skeleton shimmer */
+.sugg2.skel2 .st2 { height: 12px; border-radius: 4px; background: linear-gradient(90deg,#ececec 25%,#f7f7f7 50%,#ececec 75%); background-size: 200%; animation: sh2 1.2s infinite; color: transparent; }
+@keyframes sh2 { 0%{background-position:200% 0}100%{background-position:-200% 0} }
+
+/* Sub-group label (Items, Spots) — same as section */
+.sg-lbl2 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #666;
+  padding: 8px 0 0;
+  width: 100%;
+}
+
+/* Item type icon wells (10% highlight primary / slides yellow) */
+.item-type2 {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.item-type2--pdf { background: rgba(254,74,73,0.1); color: #fe4a49; }
+.item-type2--slide { background: rgba(246,182,0,0.1); color: #d4a000; }
+.item-type2 svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* Spot row — 24px avatar */
+.spot-thumb2 {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c5c5c5 0%, #e8e8e8 100%);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+}
+
+.sugg2:has(.item-type2) { gap: 6px; align-items: center; }
+.sugg2.item-spot2 { gap: 6px; align-items: center; }
+.sugg2.item-spot2 .st2 { font-weight: 400; color: #202020; }
+.sugg2.item-spot2 .st2 strong { font-weight: 600; color: #000; }
+
+/* End bar */
+.end-bar2 { display: flex; align-items: center; gap: 8px; padding: 6px 0 0; width: 100%; }
+.eb-q2 { font-size: 14px; line-height: 20px; color: #666; flex: 1; font-family: 'Source Sans 3', sans-serif; font-weight: 400; }
+.eb-q2 strong { color: #202020; font-weight: 600; }
+.end-act2 { font-size: 14px; line-height: 20px; color: #666; border-bottom: 1px solid #dfdfdf; cursor: pointer; font-family: 'Source Sans 3', sans-serif; padding-bottom: 0; transition: color 0.15s, border-color 0.15s; }
+.end-act2:hover { color: #202020; border-color: #202020; }
+
+.sugg-mirror2 {
+  pointer-events: none;
+  height: 20px;
+  min-height: 20px;
+  box-sizing: border-box;
+}
+.sugg-mirror2 .st2 { white-space: nowrap; }
+.sugg-mirror2 .st2 strong { font-weight: 600; color: #000; }
+.sugg-skel-row2 { height: 20px; min-height: 20px; box-sizing: border-box; }
+.sugg-skel-row2 .st2 { min-height: 12px; max-height: 12px; align-self: center; }
+/* Items / Spots / People — taller rows for 24px media */
+.sugg2.sugg-extra-row2 {
+  height: auto;
+  min-height: 24px;
+  align-items: center;
+}
+.sugg2.sugg-extra-row2 .st2 { white-space: normal; }
+@media (max-width: 768px) {
+  .state-strip2 { flex-wrap: wrap; }
+  .ss-item2 { min-width: 50%; }
+}
+</style>
+</head>
+<body>
+<div class="pw2">
+  <div class="state-strip2">
+    <div class="ss-item2 active" id="sl0"><span class="ss-tag2">State 01</span><span class="ss-name2">Zero</span></div>
+    <div class="ss-item2" id="sl1"><span class="ss-tag2">State 02</span><span class="ss-name2">Scope + Zero</span></div>
+    <div class="ss-item2" id="sl2"><span class="ss-tag2">State 03</span><span class="ss-name2">Auto-suggest</span></div>
+    <div class="ss-item2" id="sl3"><span class="ss-tag2">State 04</span><span class="ss-name2">Scope + Auto-suggest</span></div>
+    <div class="ss-item2" id="sl4"><span class="ss-tag2">State 05</span><span class="ss-name2">SERP</span></div>
+  </div>
+  <div class="ui-area2">
+    <div class="search-shell2">
+      <div class="sbar2 focused2" id="sbar2">
+        <div class="si2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div>
+        <div class="scope-pill2" id="scopePill2" style="display:none">
+          <span id="scopePillText2">Compete Materials</span>
+          <div class="pill-x2" id="pillX2"><svg viewBox="0 0 8 8" fill="none" stroke="#202020" stroke-width="1.5" width="8" height="8"><path d="M1 1l6 6M7 1l-6 6"/></svg></div>
+        </div>
+        <input type="text" class="squery2" id="searchInput2" placeholder="Search for content" autocomplete="off" aria-label="Search">
+        <div class="xclear2" id="xclear2" style="display:none"><svg viewBox="0 0 8 8" fill="none" stroke="#fff" stroke-width="1.5" width="8" height="8"><path d="M1 1l6 6M7 1l-6 6"/></svg></div>
+      </div>
+      <div class="dropdown2 open2" id="dd2">
+        <div class="dd-sec2 show2" id="s2-colls">
+          <div class="ddlbl2">Search in content collections</div>
+          <div class="chips2">
+            <div class="chip2" data-coll="Official">Official</div>
+            <div class="chip2" data-coll="APAC">APAC</div>
+            <div class="chip2" data-coll="EMEA">EMEA</div>
+            <div class="chip2" data-coll="North America">North America</div>
+          </div>
+        </div>
+        <div class="dd-sec2 show2" id="s2-recent">
+          <div class="ddhr2" id="s2-recent-hr"></div>
+          <div class="ddlbl2">Recent</div>
+          <div class="ri2" data-query="Nexuspath Compete" role="button" tabindex="0"><div class="ri-ic2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg></div><span>Nexuspath Compete</span></div>
+          <div class="ri2" data-query="Sales Strategy Nexuspath" role="button" tabindex="0"><div class="ri-ic2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg></div><span>Sales Strategy Nexuspath</span></div>
+          <div class="ri2" data-query="Technitouch pricing" role="button" tabindex="0"><div class="ri-ic2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg></div><span>Technitouch pricing</span></div>
+          <div class="ri2" data-query="Nexuspath overview" role="button" tabindex="0"><div class="ri-ic2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg></div><span>Nexuspath overview</span></div>
+          <div class="ri2" data-query="Product info" role="button" tabindex="0"><div class="ri-ic2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5l2 1.5"/></svg></div><span>Product info</span></div>
+        </div>
+        <div class="dd-sec2" id="s2-sugg">
+          <div class="ddlbl2">Suggestions</div>
+          <div class="sugg2 sugg-mirror2" id="suggMirrorRow2">
+            <div class="sugg-icon2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div>
+            <div class="st2"><strong class="sugg-mirror-text2" id="suggMirrorText2"></strong></div>
+          </div>
+          <div class="sugg-dynamic-host2" id="suggDynamic2"></div>
+          <div class="sugg-extra-blocks2" id="suggExtra2"></div>
+        </div>
+        <div class="dd-sec2" id="s2-sugg-scoped">
+          <div class="ddlbl2">Suggestions</div>
+          <div class="sugg2 sugg-mirror2" id="suggMirrorRow2Scoped">
+            <div class="sugg-icon2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div>
+            <div class="st2"><strong class="sugg-mirror-text2" id="suggMirrorText2Scoped"></strong></div>
+          </div>
+          <div class="sugg-dynamic-host2" id="suggDynamic2Scoped"></div>
+          <div class="sugg-extra-blocks2" id="suggExtra2Scoped"></div>
+        </div>
+        <div class="dd-sec2" id="s2-end">
+          <div class="end-bar2"><span class="eb-q2" id="eb-q2">Results for <strong></strong></span><span class="end-act2" id="newSearch2">New search</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  /** Tell parent iframe to match real content height (scrollHeight includes the iframe viewport and breaks shrink). */
+  function notifyParentPrototypeHeight() {
+    if (window.parent === window) return;
+    var root = document.querySelector('.pw2');
+    if (!root) return;
+    var h = Math.ceil(root.getBoundingClientRect().height);
+    window.parent.postMessage({ type: 'scoped-prototype-height', height: h }, '*');
+  }
+  function scheduleNotifyParentPrototypeHeight() {
+    requestAnimationFrame(function() {
+      requestAnimationFrame(notifyParentPrototypeHeight);
+    });
+  }
+
+  // Interactive prototype v2
+  (function() {
+    var state2 = 'zero', scope2 = '', query2 = '';
+    var allSecs2 = ['s2-colls','s2-recent','s2-sugg','s2-sugg-scoped','s2-end'];
+    var allLbls2 = ['sl0','sl1','sl2','sl3','sl4'];
+
+    var SUGG_POOL = [
+      { text: 'Cloud PBX in Cloud PBX Marketing', badge: '12', badgeScoped: '12' },
+      { text: 'Cloud PBX in Customer Stories', badge: '6', badgeScoped: '6' },
+      { text: 'Introduction to Cloud PBX', badge: '12k+', badgeScoped: '12k+' },
+      { text: 'Cloud PBX Nexuspath', badge: '8', badgeScoped: '8' },
+      { text: 'Cloud PBX manual', badge: '4', badgeScoped: '3' },
+      { text: 'Cloud PBX compete', badge: '6', badgeScoped: '6' },
+      { text: 'Cloud PBX Product Pricing', badge: '152', badgeScoped: '24' },
+      { text: 'YoY growth Cloud PBX', badge: '9', badgeScoped: '4' },
+      { text: 'Cloud PBX Customer Stories', badge: '11', badgeScoped: '7' },
+      { text: 'Nexuspath Compete', badge: '3', badgeScoped: '2' },
+      { text: 'Sales Strategy Nexuspath', badge: '5', badgeScoped: '4' },
+      { text: 'Technitouch pricing', badge: '8', badgeScoped: '6' }
+    ];
+    var EXTRA_ITEMS = [
+      { kind: 'pdf', template: 'Cloud PBX Product Pricing' },
+      { kind: 'slide', template: 'YoY growth Cloud PBX' }
+    ];
+    var EXTRA_SPOTS = [
+      { template: 'Cloud PBX Customer Stories' },
+      { template: 'Cloud PBX Marketing' }
+    ];
+    var EXTRA_PEOPLE = [
+      { template: 'Cloud PBX Sales team' }
+    ];
+    var SKEL_WIDTHS = ['58%', '73%', '44%', '65%'];
+    var CANONICAL_QUERY = 'Cloud PBX';
+    var suggestPhase = 'transition';
+    var suggestRevealTimer = null;
+
+    function escHtml(s) {
+      var d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+    function escapeRegExp(s) {
+      return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    /** Replace every occurrence of the canonical phrase with the user's typed query. */
+    function personalizeTemplate(str, userQ) {
+      if (!userQ) return str.replace(new RegExp(escapeRegExp(CANONICAL_QUERY), 'gi'), ' ');
+      return str.replace(new RegExp(escapeRegExp(CANONICAL_QUERY), 'gi'), userQ);
+    }
+    function formatSt2Html(displayText, q) {
+      if (!q) return escHtml(displayText);
+      try {
+        var parts = displayText.split(new RegExp('(' + escapeRegExp(q) + ')', 'gi'));
+        return parts.map(function(part) {
+          if (part.toLowerCase() === q.toLowerCase()) return '<strong>' + escHtml(part) + '</strong>';
+          return escHtml(part);
+        }).join('');
+      } catch (e) {
+        return escHtml(displayText);
+      }
+    }
+    function clearSuggestTimer() {
+      if (suggestRevealTimer) {
+        clearTimeout(suggestRevealTimer);
+        suggestRevealTimer = null;
+      }
+      suggestPhase = 'transition';
+    }
+    function resetSuggestTimer() {
+      clearSuggestTimer();
+      suggestPhase = 'transition';
+      suggestRevealTimer = setTimeout(function() {
+        suggestRevealTimer = null;
+        suggestPhase = 'full';
+        refreshTypingSuggestions();
+      }, 800);
+    }
+
+    function filterSuggestionPool(q) {
+      var ql = q.toLowerCase();
+      if (!ql) return [];
+      var out = [];
+      for (var i = 0; i < SUGG_POOL.length; i++) {
+        var item = SUGG_POOL[i];
+        var pText = personalizeTemplate(item.text, q);
+        var tl = pText.toLowerCase();
+        if (tl === ql) continue;
+        if (tl.indexOf(ql) === -1) continue;
+        out.push({ item: item, pText: pText });
+      }
+      out.sort(function(a, b) {
+        var al = a.pText.toLowerCase().indexOf(ql) === 0 ? 0 : 1;
+        var bl = b.pText.toLowerCase().indexOf(ql) === 0 ? 0 : 1;
+        if (al !== bl) return al - bl;
+        return a.pText.length - b.pText.length;
+      });
+      return out;
+    }
+
+    function makeSkeletonRow(widthPct) {
+      var row = document.createElement('div');
+      row.className = 'sugg2 skel2 sugg-skel-row2';
+      row.setAttribute('aria-hidden', 'true');
+      row.innerHTML = '<div class="sugg-icon2"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg></div><div class="st2" style="width:' + widthPct + '"></div>';
+      return row;
+    }
+
+    function makePickRow(displayText, badge, q) {
+      var row = document.createElement('div');
+      row.className = 'sugg2 pick2';
+      row.setAttribute('data-query', displayText);
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      var icon = document.createElement('div');
+      icon.className = 'sugg-icon2';
+      icon.innerHTML = '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5.5" cy="5.5" r="4"/><path d="M9 9l2.5 2.5"/></svg>';
+      var st = document.createElement('div');
+      st.className = 'st2';
+      st.innerHTML = formatSt2Html(displayText, q);
+      row.appendChild(icon);
+      row.appendChild(st);
+      if (badge && badge !== '—') {
+        var b = document.createElement('span');
+        b.className = 'sc2';
+        b.textContent = badge;
+        row.appendChild(b);
+      }
+      return row;
+    }
+
+    function makeItemRow(kind, displayText, q) {
+      var row = document.createElement('div');
+      row.className = 'sugg2 pick2 sugg-extra-row2';
+      row.setAttribute('data-query', displayText);
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      var icon = document.createElement('div');
+      icon.className = 'item-type2 ' + (kind === 'pdf' ? 'item-type2--pdf' : 'item-type2--slide');
+      if (kind === 'pdf') {
+        icon.innerHTML = '<svg viewBox="0 0 12 12" fill="none"><path d="M3 1.5h4l2.5 2.5V10.5a.5.5 0 01-.5.5H3a.5.5 0 01-.5-.5v-9a.5.5 0 01.5-.5z" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 1.5V4h2.5" stroke="currentColor" stroke-width="1.2"/></svg>';
+      } else {
+        icon.innerHTML = '<svg viewBox="0 0 12 12" fill="none"><rect x="2" y="1.5" width="8" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2.5 4.5h7M4 7l1.5 1.5L8 6" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>';
+      }
+      var st = document.createElement('div');
+      st.className = 'st2';
+      st.innerHTML = formatSt2Html(displayText, q);
+      row.appendChild(icon);
+      row.appendChild(st);
+      return row;
+    }
+
+    function makeSpotRow(displayText, q) {
+      var row = document.createElement('div');
+      row.className = 'sugg2 item-spot2 pick2 sugg-extra-row2';
+      row.setAttribute('data-query', displayText);
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      var thumb = document.createElement('div');
+      thumb.className = 'spot-thumb2';
+      thumb.setAttribute('aria-hidden', 'true');
+      var st = document.createElement('div');
+      st.className = 'st2';
+      st.innerHTML = formatSt2Html(displayText, q);
+      row.appendChild(thumb);
+      row.appendChild(st);
+      return row;
+    }
+
+    function makePersonRow(displayText, q) {
+      var row = document.createElement('div');
+      row.className = 'sugg2 pick2 sugg-extra-row2';
+      row.setAttribute('data-query', displayText);
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      var icon = document.createElement('div');
+      icon.className = 'spot-thumb2';
+      icon.style.background = 'linear-gradient(135deg, #4a5a7a 0%, #6a7a9a 100%)';
+      icon.setAttribute('aria-hidden', 'true');
+      var st = document.createElement('div');
+      st.className = 'st2';
+      st.innerHTML = formatSt2Html(displayText, q);
+      row.appendChild(icon);
+      row.appendChild(st);
+      return row;
+    }
+
+    function fillExtraSections(host, scopedVariant, q) {
+      if (!host) return;
+      host.innerHTML = '';
+      var lblItems = document.createElement('div');
+      lblItems.className = 'sg-lbl2';
+      lblItems.textContent = 'Items';
+      host.appendChild(lblItems);
+      EXTRA_ITEMS.forEach(function(it) {
+        var txt = personalizeTemplate(it.template, q);
+        host.appendChild(makeItemRow(it.kind, txt, q));
+      });
+      var lblSpots = document.createElement('div');
+      lblSpots.className = 'sg-lbl2';
+      lblSpots.textContent = 'Spots';
+      host.appendChild(lblSpots);
+      EXTRA_SPOTS.forEach(function(it) {
+        var txt = personalizeTemplate(it.template, q);
+        host.appendChild(makeSpotRow(txt, q));
+      });
+      var lblP = document.createElement('div');
+      lblP.className = 'sg-lbl2';
+      lblP.textContent = 'People and Groups';
+      host.appendChild(lblP);
+      EXTRA_PEOPLE.forEach(function(it) {
+        var txt = personalizeTemplate(it.template, q);
+        host.appendChild(makePersonRow(txt, q));
+      });
+      void scopedVariant;
+    }
+
+    function refreshTypingSuggestions() {
+      if (state2 !== 'auto-suggest' && state2 !== 'scope-auto-suggest') return;
+      var inp = inp2();
+      if (!inp) return;
+      var raw = inp.value;
+      var q = raw.trim();
+      var mt = document.getElementById('suggMirrorText2');
+      var ms = document.getElementById('suggMirrorText2Scoped');
+      if (mt) mt.textContent = raw;
+      if (ms) ms.textContent = raw;
+      var rowEl = document.getElementById('suggMirrorRow2');
+      var rowScoped = document.getElementById('suggMirrorRow2Scoped');
+      var showMirror = q.length > 0;
+      if (rowEl) rowEl.style.display = showMirror ? '' : 'none';
+      if (rowScoped) rowScoped.style.display = showMirror ? '' : 'none';
+
+      var extra2 = document.getElementById('suggExtra2');
+      var extraScoped = document.getElementById('suggExtra2Scoped');
+      if (extra2) extra2.innerHTML = '';
+      if (extraScoped) extraScoped.innerHTML = '';
+
+      var maxBelow = 4;
+      var i;
+
+      if (suggestPhase === 'transition') {
+        function fillTransition(host) {
+          if (!host) return;
+          host.innerHTML = '';
+          for (i = 0; i < maxBelow; i++) {
+            host.appendChild(makeSkeletonRow(SKEL_WIDTHS[i % SKEL_WIDTHS.length]));
+          }
+        }
+        fillTransition(document.getElementById('suggDynamic2'));
+        fillTransition(document.getElementById('suggDynamic2Scoped'));
+        scheduleNotifyParentPrototypeHeight();
+        return;
+      }
+
+      var filtered = filterSuggestionPool(q);
+      var picks = filtered.slice(0, maxBelow);
+      var skelCount = maxBelow - picks.length;
+
+      function fillHost(host, scopedVariant) {
+        if (!host) return;
+        host.innerHTML = '';
+        for (i = 0; i < picks.length; i++) {
+          var p = picks[i];
+          var badge = scopedVariant ? p.item.badgeScoped : p.item.badge;
+          host.appendChild(makePickRow(p.pText, badge, q));
+        }
+        for (i = 0; i < skelCount; i++) {
+          host.appendChild(makeSkeletonRow(SKEL_WIDTHS[(picks.length + i) % SKEL_WIDTHS.length]));
+        }
+      }
+      fillHost(document.getElementById('suggDynamic2'), false);
+      fillHost(document.getElementById('suggDynamic2Scoped'), true);
+      if (extra2) fillExtraSections(extra2, false, q);
+      if (extraScoped) fillExtraSections(extraScoped, true, q);
+      scheduleNotifyParentPrototypeHeight();
+    }
+
+    function inp2() { return document.getElementById('searchInput2'); }
+
+    function readQueryFromInput() {
+      var el = inp2();
+      return el ? el.value.trim() : '';
+    }
+
+    function syncInputValue() {
+      var el = inp2();
+      if (el && el.value !== query2) el.value = query2;
+    }
+
+    function show2(ids) {
+      allSecs2.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.toggle('show2', ids.indexOf(id) > -1);
+      });
+    }
+    function setLbl2(i) {
+      allLbls2.forEach(function(id, idx) {
+        var el = document.getElementById(id);
+        if (el) el.classList.toggle('active', idx === i);
+      });
+    }
+
+    function submitSerpFromInput() {
+      var q = readQueryFromInput();
+      if (!q) return;
+      query2 = q;
+      var scoped = !!scope2;
+      state2 = scoped ? 'serp-scoped' : 'serp';
+      syncInputValue();
+      render2();
+    }
+
+    function applyPickedQuery(q) {
+      if (!q) return;
+      query2 = q;
+      var el = inp2();
+      if (el) el.value = q;
+      state2 = scope2 ? 'serp-scoped' : 'serp';
+      render2();
+    }
+
+    function render2() {
+      var pill = document.getElementById('scopePill2');
+      var pillTxt = document.getElementById('scopePillText2');
+      var xcl = document.getElementById('xclear2');
+      var dd = document.getElementById('dd2');
+
+      var isSerp = (state2 === 'serp' || state2 === 'serp-scoped');
+      if (!isSerp) query2 = readQueryFromInput();
+
+      if (state2 !== 'auto-suggest' && state2 !== 'scope-auto-suggest') clearSuggestTimer();
+
+      var hasScope = (state2 === 'scope-zero' || state2 === 'scope-auto-suggest' || state2 === 'serp-scoped');
+      var hasQuery = query2.trim().length > 0;
+
+      if (pill) { pill.style.display = hasScope ? 'flex' : 'none'; if (pillTxt) pillTxt.textContent = scope2; }
+      syncInputValue();
+      var inpEl = inp2();
+      if (inpEl) { inpEl.readOnly = isSerp; }
+
+      if (xcl) xcl.style.display = (hasQuery || hasScope) ? 'flex' : 'none';
+      if (dd) {
+        dd.classList.toggle('open2', !isSerp);
+      }
+
+      if (state2 === 'zero') { show2(['s2-colls','s2-recent']); setLbl2(0); }
+      else if (state2 === 'scope-zero') { show2(['s2-recent']); setLbl2(1); }
+      else if (state2 === 'auto-suggest') { show2(['s2-colls','s2-sugg']); setLbl2(2); }
+      else if (state2 === 'scope-auto-suggest') { show2(['s2-colls','s2-sugg-scoped']); setLbl2(3); }
+      else if (isSerp) { show2([]); setLbl2(4); }
+
+      var recentHr = document.getElementById('s2-recent-hr');
+      if (recentHr) recentHr.style.display = (state2 === 'zero') ? '' : 'none';
+
+      var eb = document.getElementById('eb-q2');
+      if (eb) {
+        var ebStrong = eb.querySelector('strong');
+        if (ebStrong) ebStrong.textContent = query2;
+      }
+
+      refreshTypingSuggestions();
+      scheduleNotifyParentPrototypeHeight();
+    }
+
+    function onSearchInput() {
+      if (state2 === 'serp' || state2 === 'serp-scoped') return;
+      query2 = readQueryFromInput();
+      var t = query2.trim();
+      if (t && state2 === 'zero') state2 = 'auto-suggest';
+      else if (t && state2 === 'scope-zero') state2 = 'scope-auto-suggest';
+      else if (!t && state2 === 'auto-suggest') state2 = 'zero';
+      else if (!t && state2 === 'scope-auto-suggest') state2 = 'scope-zero';
+      if (state2 === 'auto-suggest' || state2 === 'scope-auto-suggest') resetSuggestTimer();
+      render2();
+    }
+
+    var px2 = document.getElementById('pillX2');
+    if (px2) px2.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (state2 === 'scope-zero') {
+        state2 = 'zero';
+        scope2 = '';
+        render2();
+      } else if (state2 === 'scope-auto-suggest') {
+        scope2 = '';
+        state2 = 'auto-suggest';
+        resetSuggestTimer();
+        render2();
+      } else if (state2 === 'serp-scoped') {
+        scope2 = '';
+        state2 = 'auto-suggest';
+        resetSuggestTimer();
+        render2();
+      }
+    });
+    var xc2 = document.getElementById('xclear2');
+    if (xc2) xc2.addEventListener('click', function(e) {
+      e.stopPropagation();
+      query2 = '';
+      var i = inp2();
+      if (i) { i.value = ''; i.readOnly = false; }
+      state2 = 'zero';
+      scope2 = '';
+      clearSuggestTimer();
+      render2();
+      if (i) i.focus();
+    });
+    var ns2 = document.getElementById('newSearch2');
+    if (ns2) ns2.addEventListener('click', function() {
+      query2 = '';
+      var i = inp2();
+      if (i) { i.value = ''; i.readOnly = false; }
+      state2 = 'zero';
+      scope2 = '';
+      render2();
+      if (i) i.focus();
+    });
+
+    var sbar = document.getElementById('sbar2');
+    if (sbar) sbar.addEventListener('click', function(e) {
+      if (e.target.closest('#xclear2') || e.target.closest('#pillX2') || e.target.closest('#scopePill2')) return;
+      var i = inp2();
+      if (i && !i.readOnly) i.focus();
+    });
+
+    var si = inp2();
+    if (si) {
+      si.addEventListener('input', onSearchInput);
+      si.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          submitSerpFromInput();
+        }
+      });
+    }
+
+    var dd2 = document.getElementById('dd2');
+    if (dd2) dd2.addEventListener('click', function(e) {
+      var row = e.target.closest('.ri2[data-query], .sugg2.pick2[data-query]');
+      if (!row || row.classList.contains('skel2')) return;
+      var q = row.getAttribute('data-query');
+      if (q) applyPickedQuery(q);
+    });
+    if (dd2) dd2.addEventListener('keydown', function(e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var row = e.target.closest('.ri2[data-query], .sugg2.pick2[data-query]');
+      if (!row || row.classList.contains('skel2')) return;
+      e.preventDefault();
+      var q = row.getAttribute('data-query');
+      if (q) applyPickedQuery(q);
+    });
+
+    document.querySelectorAll('.chip2').forEach(function(c) {
+      c.addEventListener('click', function() {
+        scope2 = c.dataset.coll;
+        query2 = readQueryFromInput();
+        state2 = (state2==='auto-suggest'||state2==='scope-auto-suggest') ? 'scope-auto-suggest' : 'scope-zero';
+        if (state2 === 'scope-auto-suggest') resetSuggestTimer();
+        render2();
+      });
+    });
+
+    // Allow direct navigation by clicking top state tabs.
+    function jumpToStateFromTab(targetState, targetScope) {
+      query2 = CANONICAL_QUERY;
+      // render2() pulls query from the input first; set the field here or the read wipes query2.
+      var el = inp2();
+      if (el) el.value = CANONICAL_QUERY;
+      scope2 = targetScope || '';
+      state2 = targetState;
+      if (state2 === 'auto-suggest' || state2 === 'scope-auto-suggest') resetSuggestTimer();
+      render2();
+    }
+    var tabMap = {
+      sl0: function() { jumpToStateFromTab('zero', ''); },
+      sl1: function() { jumpToStateFromTab('scope-zero', 'APAC'); },
+      sl2: function() { jumpToStateFromTab('auto-suggest', ''); },
+      sl3: function() { jumpToStateFromTab('scope-auto-suggest', 'APAC'); },
+      sl4: function() { jumpToStateFromTab('serp-scoped', 'APAC'); }
+    };
+    Object.keys(tabMap).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('click', tabMap[id]);
+    });
+
+    render2();
+  })();
+
+(function() {
+  var root = document.querySelector('.pw2');
+  if (!root) return;
+  function send() {
+    notifyParentPrototypeHeight();
+  }
+  send();
+  if (typeof ResizeObserver !== 'undefined') {
+    var ro = new ResizeObserver(function() { scheduleNotifyParentPrototypeHeight(); });
+    ro.observe(root);
+    var dd = document.getElementById('dd2');
+    if (dd) ro.observe(dd);
+  }
+  window.addEventListener('load', function() { scheduleNotifyParentPrototypeHeight(); });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() { scheduleNotifyParentPrototypeHeight(); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-    const pwd = sessionStorage.getItem('auth');
-    if (pwd !== 'yourpassword') {
-      const input = prompt('Enter password');
-      if (input === 'yourpassword') sessionStorage.setItem('auth', input);
-      else document.body.innerHTML = 'Access denied';
-    }
-  </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scoped Search — Aditi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Source+Sans+3:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="case-study.css">
 <style>
@@ -22,40 +14,25 @@
   .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
   .hero-image-card { background: var(--lilac); }
 
-  /* DUAL IMAGE */
-  .dual-image { display: grid; grid-template-columns: 1fr; gap: 16px; }
-  .dual-image .section-image-card .img-slot { height: 220px; }
+  /* STATE GRID */
+  .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  .state-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 16px 18px; }
+  .state-card .s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 6px; }
+  .state-card .s-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .state-card .s-body { font-size: 12px; color: var(--mid); line-height: 1.5; }
 
-  /* STATES GRID */
-  .states-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-  .state-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 20px; }
-  .state-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 6px; }
-  .state-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
-  .state-desc { font-size: 12px; color: var(--mid); line-height: 1.55; }
+  /* FINDING CALLOUT */
+  .finding { margin-top: 20px; padding: 20px 24px; background: var(--lilac); border-radius: 6px; }
+  .finding .f-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(0,0,0,0.45); margin-bottom: 8px; }
+  .finding p { font-size: 14px; color: var(--ink); line-height: 1.65; font-weight: 500; }
 
-  /* PIVOT */
-  .pivot-inline { margin: 20px 0; display: flex; flex-direction: column; gap: 10px; }
-  .pivot-row { display: flex; gap: 12px; align-items: baseline; }
-  .pivot-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; flex-shrink: 0; width: 44px; }
-  .pivot-tag.before { color: #bbb; }
-  .pivot-tag.after  { color: var(--ink); }
-  .pivot-row.before-row .pivot-content { font-size: 13px; color: #aaa; text-decoration: line-through; text-decoration-color: #ccc; }
-  .pivot-row.after-row .pivot-content { font-size: 13px; color: var(--ink); font-weight: 500; }
-
-  /* REQUIREMENTS LIST */
-  .req-list { margin-top: 20px; display: flex; flex-direction: column; gap: 0; }
-  .req-item { display: flex; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); }
-  .req-item:first-child { border-top: 1px solid var(--rule); }
-  .req-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink); flex-shrink: 0; margin-top: 6px; }
-  .req-text { font-size: 13px; color: var(--ink); line-height: 1.5; }
-
-  /* PRINCIPLE */
+  /* PRINCIPLE LIST */
   .principle-list { margin-top: 20px; display: flex; flex-direction: column; gap: 0; }
-  .principle-item { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+  .principle-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
   .principle-item:last-child { border-bottom: none; }
-  .principle-num { font-size: 11px; color: var(--mid); font-weight: 400; flex-shrink: 0; padding-top: 2px; width: 20px; }
-  .principle-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
-  .principle-text p { font-size: 13px; color: var(--mid); line-height: 1.5; max-width: none; }
+  .principle-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); flex-shrink: 0; margin-top: 6px; }
+  .principle-text { font-size: 13px; color: var(--mid); line-height: 1.55; }
+  .principle-text strong { color: var(--ink); font-weight: 500; }
 
   /* CHAIN */
   .chain { margin-top: 20px; }
@@ -65,17 +42,6 @@
   .chain-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
   .chain-text p { font-size: 13px; color: var(--mid); line-height: 1.5; max-width: none; }
 
-  /* FINDING CALLOUT */
-  .finding-callout { margin-top: 20px; padding: 20px 24px; background: rgba(0,0,0,0.03); border-radius: 6px; border-left: 2px solid var(--ink); }
-  .finding-callout .f-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 8px; }
-  .finding-callout p { font-size: 13px; color: var(--ink); line-height: 1.6; max-width: none; }
-  .finding-callout strong { font-weight: 500; }
-
-  /* DISCOVERY */
-  .discovery { margin-top: 20px; padding: 16px 20px; background: rgba(0,0,0,0.04); border-radius: 6px; border-left: 2px solid var(--ink); }
-  .discovery .d-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 6px; }
-  .discovery p { font-size: 13px; color: var(--ink); line-height: 1.6; max-width: none; }
-
   /* TAKEAWAYS */
   .takeaway-section { padding: 80px 0; border-top: 1px solid var(--rule); }
   .takeaway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
@@ -84,17 +50,12 @@
   .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
   .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
 
-  @media (max-width: 768px) {
-    .dual-image { grid-template-columns: 1fr; }
-    .takeaway-grid { grid-template-columns: 1fr; }
-    .states-grid { grid-template-columns: 1fr; }
-  }
 </style>
 </head>
 <body>
 
 <nav>
-  <a class="nav-name" href="index.html" style="font-family:'Inter',sans-serif; font-size:13px; color:var(--mid); font-weight:400;">← Back</a>
+  <a class="nav-name" href="#">Aditi</a>
   <ul class="nav-links">
     <li><a href="#">Work</a></li>
     <li><a href="#">About</a></li>
@@ -102,14 +63,14 @@
 </nav>
 
 <div class="hero fade-in">
-  <div class="hero-year">2023</div>
+  <div class="hero-year">2025</div>
   <h1 class="hero-title">Scoped Search</h1>
-  <p class="hero-desc">Sales reps in large organizations have access to nearly all content in Highspot — and that abundance works against them. More content to wade through means more time searching, less time selling. Scoped Search gives reps a fast, frictionless way to search within what's actually relevant to them.</p>
+  <p class="hero-desc">Sales reps in large organizations spend more time finding content than selling. Scoped Search gives reps a fast, low-friction way to search within the content that's relevant to them.</p>
   <dl class="hero-meta">
     <div class="meta-block"><dt>Role</dt><dd>Lead Product Designer</dd></div>
-    <div class="meta-block"><dt>Stage</dt><dd>New Capability</dd></div>
-    <div class="meta-block"><dt>Domain</dt><dd>Search & Navigation</dd></div>
-    <div class="meta-block"><dt>Timeline</dt><dd>2023</dd></div>
+    <div class="meta-block"><dt>Stage</dt><dd>Zero to One</dd></div>
+    <div class="meta-block"><dt>Domain</dt><dd>Sales Enablement</dd></div>
+    <div class="meta-block"><dt>Timeline</dt><dd>2025</dd></div>
   </dl>
 </div>
 
@@ -117,10 +78,10 @@
   <div class="hero-image-card">
     <div class="img-slot">
       <img src="Images/Scoped Search_hero.png" alt="Scoped Search">
-        <span style="font-size:11px;">Scoped search interaction or final design</span>
-      </div>
+      <span style="font-size:11px;">Scoped search interaction or final design</span>
     </div>
   </div>
+  <p class="img-caption">Scoped Search — search UI with collection scope selector</p>
 </div>
 
 <div class="content">
@@ -134,20 +95,19 @@
           <div class="upload-hint"><span class="plus">+</span><span>Problem / context visual</span></div>
         </div>
       </div>
-      <p class="img-caption">Open access — all content, no context</p>
+      <p class="img-caption">Open access at scale — content sprawl in Highspot</p>
     </div>
     <div class="section-text">
       <div class="section-label">The Problem</div>
-      <h2 class="section-title">Open access to everything made finding anything harder</h2>
+      <h2 class="section-title">Open access to everything means finding nothing fast</h2>
       <div class="section-body">
-        <p>In Highspot, content lives in folder-like constructs called Spots. Large organizations accumulate hundreds of them — organized by team, region, product, or some combination of all three.</p>
-        <p>Reps with access to almost all of it face a paradox of choice. Every search surfaces results from across the entire org. The signal is buried in noise.</p>
-        <p>This isn't a rep problem. It's a structure problem. And it costs time that could be spent selling.</p>
+        <p>In large organizations, Highspot gives sales reps access to almost all content in the platform. Paradoxically, this abundance creates friction — reps spend more time searching for the right content and less time selling.</p>
+        <p>Open access at scale doesn't serve the rep or the org. The problem isn't a lack of content. It's that relevance is buried inside volume.</p>
       </div>
     </div>
   </div>
 
-  <!-- FOUNDATION: CONTENT COLLECTIONS -->
+  <!-- FOUNDATION -->
   <div class="section-row reverse fade-in">
     <div>
       <div class="section-image-card orange">
@@ -156,25 +116,20 @@
           <div class="upload-hint"><span class="plus">+</span><span>Content collections diagram</span></div>
         </div>
       </div>
-      <p class="img-caption">Content Collections — grouping related Spots</p>
+      <p class="img-caption">From spots to content collections — the organizational layer</p>
     </div>
     <div class="section-text">
       <div class="section-label">The Foundation</div>
-      <h2 class="section-title">First, a structural layer: Content Collections</h2>
+      <h2 class="section-title">Content Collections: grouping spots into a searchable scope</h2>
       <div class="section-body">
-        <p>Before we could scope search, we needed to introduce a meaningful organizational unit above the Spot level.</p>
-        <p>We introduced <strong>Content Collections</strong> — admin-defined groupings of related Spots. Once a Spot belongs to a Collection, every item inside it inherits that association automatically. No additional decisions required from content owners.</p>
-        <p>This made Collections especially valuable for organizations that structure content by sub-org, product line, or region — the association becomes structural, not manual.</p>
-      </div>
-      <div class="chain">
-        <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Admin defines a Collection</h4><p>Groups related Spots into a single logical container</p></div></div>
-        <div class="chain-item"><div class="chain-num">02</div><div class="chain-text"><h4>Items inherit automatically</h4><p>Every item in a Spot is associated with its Collection — no manual tagging</p></div></div>
-        <div class="chain-item"><div class="chain-num">03</div><div class="chain-text"><h4>Reps search within scope</h4><p>Collections become the unit for scoping search</p></div></div>
+        <p>Content in Highspot lives in spots — folder-like constructs with individual access control. Every item added requires a manual decision about which spot it belongs to.</p>
+        <p>To make scoped search possible, we first introduced <strong>content collections</strong> — an admin-defined grouping of related spots. Once a collection is configured, item-to-collection association becomes automatic.</p>
+        <p>Collections map naturally to how large orgs already think: by sub-org, product line, or region. They don't replace spots — they aggregate them into a meaningful scope.</p>
       </div>
     </div>
   </div>
 
-  <!-- FIRST PASS -->
+  <!-- DESIGN CHALLENGE -->
   <div class="section-row fade-in">
     <div>
       <div class="full-image">
@@ -189,102 +144,86 @@
       </div>
     </div>
     <div class="section-text">
-      <div class="section-label">Learning 01 — First Pass</div>
-      <h2 class="section-title">Going far and wide revealed the wrong problem to solve</h2>
+      <div class="section-label">The Design Challenge</div>
+      <h2 class="section-title">The more you can scope, the harder it is to scope</h2>
       <div class="section-body">
-        <p>The first round of explorations designed for maximum flexibility — letting users scope to any Collection through the search dropdown. The logic was sound. The experience wasn't.</p>
-        <p>Surfacing every available Collection in the dropdown created a new layer of complexity at exactly the moment users needed speed. The search bar is prime real estate. It has to be fast and obvious.</p>
-        <p>Designing for all possibilities made the interaction feel like a configuration task.</p>
+        <p>The first iteration went wide — exploring every way a user might select a collection scope before or during a search. The exploration surfaced a core tension: more collections meant more complex interaction patterns in the search dropdown.</p>
+        <p>The search dropdown is not a place for complexity. It needs to be fast and instinctive. Every additional option in that surface is friction.</p>
       </div>
-      <div class="pivot-inline">
-        <div class="pivot-row before-row"><span class="pivot-tag before">Before</span><span class="pivot-content">Scope to any collection — full flexibility in the dropdown</span></div>
-        <div class="pivot-row after-row"><span class="pivot-tag after">After</span><span class="pivot-content">Scope to 1–3 promoted collections — simplicity first, filters for scale</span></div>
+      <div class="discovery">
+        <div class="d-label">The Insight</div>
+        <p>We went back to customers and studied actual usage. Users either have access to 1–3 collections, or they have access to more but realistically only care about 1–3. The design problem collapsed.</p>
       </div>
     </div>
   </div>
 
-    <!-- FINDING -->
-    <div class="section-row reverse fade-in">
+  <!-- FINDING -->
+  <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
       <div>
-        <div class="section-image-card yellow">
-          <div class="img-slot">
-            <input type="file" accept="image/*" onchange="loadImage(this)">
-            <div class="upload-hint"><span class="plus">+</span><span>Customer research finding</span></div>
-          </div>
-        </div>
-        <p class="img-caption">Customer research — collection access patterns</p>
-      </div>
-      <div class="section-text">
         <div class="section-label">The Research Finding</div>
         <h2 class="section-title">Users have access to many. They care about a few.</h2>
         <div class="section-body">
           <p>We went back to customers with a focused question: how many Collections do users actually have access to, and how many do they realistically use?</p>
           <p>Users had access to many collections — but would consistently engage with only 1–3. This grounded a core design principle: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
         </div>
-        <div class="discovery">
-          <div class="d-label">Key Finding</div>
+        <div class="finding" style="margin-top: 20px;">
+          <div class="f-label">Key Finding</div>
           <p>Users had access to many collections but functionally used 1–3. Surfacing every collection equally in the search dropdown would optimize for a scenario that rarely happens.</p>
         </div>
-        <div class="section-body" style="margin-top: 16px;">
-          <p>That meant splitting responsibility across two surfaces. The search dropdown stays clean and quick. The sidebar scales to edge cases.
-            <div class="principle-list">
-              <div class="principle-item">
-                <div class="principle-num">01</div>
-                <div class="principle-text">
-                  <h4>Making frequent tasks easy</h4>
-                  <p>A small set of <strong>promoted collections</strong> would appear in the search dropdown — letting users scope their query before submitting, fast and contextual.</p>
-                </div>
-              </div>
-              <div class="principle-item">
-                <div class="principle-num">02</div>
-                <div class="principle-text">
-                  <h4>Making less frequent tasks possible</h4>
-                  <p>For less frequent cross-collection searches, <strong>filters in the results sidebar</strong> would handle it, exactly like any other facet filter</p>
-                </div>
-              </div>
-            </div> 
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom: 20px;">How this shaped the design</div>
+        <div style="display: flex; flex-direction: column; gap: 0;">
+          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--rule); align-items: start;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding-top: 2px;">Frequent</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Promoted collections in the search dropdown</div>
+              <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">A small set of relevant collections appear directly in the dropdown — letting users scope before submitting. Fast, contextual, zero friction.</div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; padding: 20px 0; align-items: start;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding-top: 2px;">Possible</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Collection filter in the results sidebar</div>
+              <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">For less frequent cross-collection searches, the sidebar filter handles it — exactly like any other facet. The dropdown stays clean. The sidebar scales to edge cases.</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
   <!-- DESIGN PRINCIPLES -->
-  <div class="section-row reverse fade-in">
-    <div>
-      <div class="section-image-card yellow">
-        <div class="img-slot">
-          <input type="file" accept="image/*" onchange="loadImage(this)">
-          <div class="upload-hint"><span class="plus">+</span><span>Design principles visual</span></div>
+  <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start;">
+      <div>
+        <div class="section-label">Design Principles</div>
+        <h2 class="section-title">Search is a dynamic surface. Design every state, not just the default.</h2>
+        <div class="section-body">
+          <p>Interacting with search is not a single action — it's a sequence. Every keystroke, pause, and click changes what the dropdown should show. If transitions aren't fluid, the perception of speed breaks down even when results are fast.</p>
         </div>
       </div>
-      <p class="img-caption">Design principles — guiding the interaction</p>
-    </div>
-    <div class="section-text">
-      <div class="section-label">Design Principles</div>
-      <h2 class="section-title">Three principles that kept the interaction honest</h2>
-      <div class="section-body">
-        <p>The search dropdown is a dynamic surface — it responds to every click, every keystroke, every pause. The principles weren't aesthetic guidelines. They were constraints that kept the complexity from creeping back in.</p>
-      </div>
-      <div class="principle-list">
-        <div class="principle-item">
-          <div class="principle-num">01</div>
-          <div class="principle-text">
-            <h4>Optimize for simplicity</h4>
-            <p>Scoping must be quick and feel effortless. The dropdown is prime real estate — complexity scales through filters, not through the dropdown itself.</p>
-          </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden;">
+        <div style="background: var(--bg); padding: 24px 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">01</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Optimize for simplicity</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Scoping should feel quick, not like a configuration step. Every extra decision in the dropdown is friction.</div>
         </div>
-        <div class="principle-item">
-          <div class="principle-num">02</div>
-          <div class="principle-text">
-            <h4>Fluid transitions</h4>
-            <p>Every user action demands a response from the UI. The transitions between states matter as much as the states themselves — they create the perception of speed.</p>
-          </div>
+        <div style="background: var(--bg); padding: 24px 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">02</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Fluid transitions</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">The perception of speed matters as much as actual speed. State changes should feel invisible.</div>
         </div>
-        <div class="principle-item">
-          <div class="principle-num">03</div>
-          <div class="principle-text">
-            <h4>Bring relevance closer</h4>
-            <p>Promote the Collections most likely to matter to this user in this context. Relevance is contextual, not neutral.</p>
-          </div>
+        <div style="background: var(--bg); padding: 24px 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">03</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Dropdown is prime real estate</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Keep it clean and fast. Rely on sidebar filters for scalability — don't let edge cases crowd the common case.</div>
+        </div>
+        <div style="background: var(--bg); padding: 24px 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">04</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Bring the collection to the user</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Don't make users hunt for their scope. Surface the 1–3 relevant collections — promoted, not buried in a list.</div>
         </div>
       </div>
     </div>
@@ -323,7 +262,6 @@
     <p class="img-caption" style="text-align:center; margin-top: 12px;">Interactive prototype</p>
   </div>
 
-
   <!-- TAKEAWAYS -->
   <div class="takeaway-section fade-in">
     <div class="section-label">Key Learnings</div>
@@ -331,13 +269,13 @@
     <div class="takeaway-grid">
       <div class="takeaway-card">
         <div class="t-num">Learning 01</div>
-        <div class="t-title">More flexibility can mean less usability</div>
-        <div class="t-body">The first design gave users every option. The research revealed they only needed a few. Constraining the surface to what people actually use — and handling scale through filters — made the interaction fast and obvious.</div>
+        <div class="t-title">The right scope is smaller than you think</div>
+        <div class="t-body">Building for the full range of possibilities produces complexity nobody asked for. Users self-limit in predictable ways. The best design honors that — and optimizes hard for the common case rather than softly covering every case.</div>
       </div>
       <div class="takeaway-card">
         <div class="t-num">Learning 02</div>
-        <div class="t-title">Dynamic interactions need to be choreographed, not just designed</div>
-        <div class="t-body">Search is never one moment — it's a sequence of states in motion. Aligning the team on every state before designing any of them kept transitions coherent and prevented complexity from quietly returning.</div>
+        <div class="t-title">Transitions are a design deliverable, not an afterthought</div>
+        <div class="t-body">Search is a dynamic surface — every action changes what the user sees. If the transition between states isn't deliberate, the interaction feels broken even when the logic is correct. Designing the states and the motion between them are equally important.</div>
       </div>
     </div>
   </div>
@@ -346,7 +284,7 @@
 
 <footer>
   <a class="footer-name" href="#">Aditi</a>
-  <a class="footer-back" href="aditi-portfolio-home.html">← Back to work</a>
+  <a class="footer-back" href="#">← Back to work</a>
 </footer>
 
 <script>
@@ -355,6 +293,17 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.06 });
   els.forEach(el => io.observe(el));
+
+  (function() {
+    var iframe = document.getElementById('scopedSearchPrototypeFrame');
+    if (!iframe) return;
+    window.addEventListener('message', function(e) {
+      if (!e.data || e.data.type !== 'scoped-prototype-height') return;
+      if (e.source !== iframe.contentWindow) return;
+      var h = Math.max(200, Math.ceil(e.data.height));
+      iframe.style.height = h + 'px';
+    });
+  })();
 
   function loadImage(input) {
     const file = input.files[0];
