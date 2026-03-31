@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Design for Data — Aditi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="case-study.css">
+<style>
+  /* HERO */
+  .hero-title { margin-bottom: 24px; }
+  .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
+  .hero-image-card { background: var(--lilac); }
+
+  /* DUAL IMAGE */
+  .dual-image { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .dual-image .section-image-card .img-slot { aspect-ratio: 9/5; }
+
+  /* CHAIN */
+  .chain { margin-top: 20px; }
+  .chain-item { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+  .chain-item:last-child { border-bottom: none; }
+  .chain-num { font-size: 11px; color: var(--mid); font-weight: 400; flex-shrink: 0; padding-top: 2px; width: 20px; }
+  .chain-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .chain-text p { font-size: 13px; color: var(--mid); line-height: 1.5; max-width: none; }
+
+  /* RESPONSE TYPE GRID */
+  .response-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  .response-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 18px 20px; }
+  .r-num { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 6px; }
+  .r-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .r-body { font-size: 12px; color: var(--mid); line-height: 1.55; }
+
+  /* COMPARE TABLE */
+  .compare-wrap { margin-top: 24px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding: 8px 16px 8px 0; text-align: left; border-bottom: 1px solid var(--rule); font-weight: 400; }
+  thead th:last-child { color: var(--ink); font-weight: 500; }
+  tbody td { padding: 12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  tbody td:first-child { color: var(--mid); width: 120px; font-size: 12px; }
+  tbody td:nth-child(2) { color: #aaa; }
+  tbody td:last-child { color: var(--ink); font-weight: 500; }
+
+  /* PIVOT */
+  .pivot-inline { margin: 20px 0; display: flex; flex-direction: column; gap: 10px; }
+  .pivot-row { display: flex; gap: 12px; align-items: baseline; }
+  .pivot-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; flex-shrink: 0; width: 44px; }
+  .pivot-tag.before { color: #bbb; }
+  .pivot-tag.after  { color: var(--ink); }
+  .pivot-row.before-row .pivot-content { font-size: 13px; color: #aaa; text-decoration: line-through; text-decoration-color: #ccc; }
+  .pivot-row.after-row .pivot-content { font-size: 13px; color: var(--ink); font-weight: 500; }
+
+  /* TAKEAWAYS */
+  .takeaway-section { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .takeaway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+  .takeaway-card { background: rgba(0,0,0,0.03); padding: 32px; border-radius: 6px; }
+  .t-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 16px; }
+  .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
+  .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+
+  /* REQ LIST */
+  .req-list { margin-top: 20px; display: flex; flex-direction: column; gap: 0; }
+  .req-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+  .req-item:last-child { border-bottom: none; }
+  .req-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); flex-shrink: 0; margin-top: 6px; }
+  .req-text { font-size: 13px; color: var(--mid); line-height: 1.55; }
+  .req-text strong { color: var(--ink); font-weight: 500; }
+
+  @media (max-width: 768px) {
+    .dual-image { grid-template-columns: 1fr; }
+    .response-grid { grid-template-columns: 1fr; }
+    .takeaway-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="index.html" style="font-family:'Inter',sans-serif; font-size:13px; color:var(--mid); font-weight:400;">← Back</a>
+  <ul class="nav-links">
+    <li><a href="#">Work</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+</nav>
+
+<div class="hero fade-in">
+  <div class="hero-year">2026</div>
+  <h1 class="hero-title">Agentic design for data</h1>
+  <p class="hero-desc">When an AI agent answers a question with data, the design challenge isn't just what to show — it's how to present it, how to build trust, and how to help users understand exactly where the answer came from.</p>
+  <dl class="hero-meta">
+    <div class="meta-block"><dt>Role</dt><dd>Design Lead, GTM Agent</dd></div>
+    <div class="meta-block"><dt>Stage</dt><dd>Zero to One</dd></div>
+    <div class="meta-block"><dt>Domain</dt><dd>Agentic AI · Analytics</dd></div>
+    <div class="meta-block"><dt>Timeline</dt><dd>Feb 2026 – present</dd></div>
+  </dl>
+</div>
+
+<div class="hero-image-wrap fade-in">
+  <div class="hero-image-card">
+    <div class="img-slot">
+      <img src="/mnt/user-data/uploads/1774687936770_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+    </div>
+  </div>
+  <p class="img-caption">GTM Agent — table component with contextual data response</p>
+</div>
+
+<div class="content">
+
+  <!-- CONTEXT -->
+  <div class="section-row fade-in">
+    <div>
+      <div class="section-image-card lilac">
+        <div class="img-slot">
+          <img src="/mnt/user-data/uploads/1774687835759_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+        </div>
+      </div>
+      <p class="img-caption">Context — role, collaborators, timeline</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Context</div>
+      <h2 class="section-title">Assigned as design lead for GTM Agent because most GTM questions need data</h2>
+      <div class="section-body">
+        <p>As design lead for analytics, I was assigned to the GTM Agent because the questions GTM teams ask — about content performance, rep activity, pipeline — almost always warrant a data-based response, not just a text summary.</p>
+        <p>This made it a different design problem than a typical conversational agent.</p>
+      </div>
+      <div class="chain">
+        <div class="chain-item"><div class="chain-num">—</div><div class="chain-text"><h4>Solo designer</h4><p>Embedded with Agent Platform crew: 1 PM, 2 engineers</p></div></div>
+        <div class="chain-item"><div class="chain-num">—</div><div class="chain-text"><h4>Scope</h4><p>Design the data response format and guardrails for how the agent chooses how to present information</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHIFT -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="dual-image">
+        <div>
+          <div class="section-image-card warm">
+            <div class="img-slot">
+              <img src="/mnt/user-data/uploads/1774687842577_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+            </div>
+          </div>
+          <p class="img-caption">Before AI — user navigates between dashboards and reports</p>
+        </div>
+        <div>
+          <div class="section-image-card sage">
+            <div class="img-slot">
+              <img src="/mnt/user-data/uploads/1774687849156_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+            </div>
+          </div>
+          <p class="img-caption">After AI — agent looks through platform and composes the response</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-text">
+      <div class="section-label">The Shift</div>
+      <h2 class="section-title">Before: wayfinding. After: a different design problem entirely.</h2>
+      <div class="section-body">
+        <p>Before AI, users had to navigate to the right place themselves — scorecard for overviews, report builder for datasets. My job was to make that wayfinding as frictionless as possible.</p>
+        <p>After AI, the user asks a question. The agent looks through the platform and composes the answer. My job changed completely.</p>
+      </div>
+      <div class="compare-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>Before AI</th><th>After AI</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>User does</td><td>Navigate to the right surface</td><td>Ask a question</td></tr>
+            <tr><td>Design job</td><td>Reduce wayfinding friction</td><td>Ensure the answer is trustworthy and understandable</td></tr>
+            <tr><td>Problem</td><td>Help users find information</td><td>Help users trust and act on information</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA RESPONSE FORMAT -->
+  <div class="section-row fade-in">
+    <div>
+      <div class="section-image-card orange">
+        <div class="img-slot">
+          <img src="/mnt/user-data/uploads/1774687854999_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+        </div>
+      </div>
+      <p class="img-caption">Current state — agent responding to data queries with structured output</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">The Design Problem</div>
+      <h2 class="section-title">Data responses require more than a good summary</h2>
+      <div class="section-body">
+        <p>A text-based agent response needs to summarize sources well. A data-based response has to do more: it needs to present data in the right format, and it needs to give users the context to understand how that data was derived.</p>
+        <p>Without both, users can't tell if the answer is right. They either overtrust it or ignore it.</p>
+      </div>
+      <div class="req-list">
+        <div class="req-item"><div class="req-dot"></div><div class="req-text"><strong>Present data in an appropriate format</strong> — not all data reads the same way; the wrong format creates confusion even when the data is correct</div></div>
+        <div class="req-item"><div class="req-dot"></div><div class="req-text"><strong>Surface the derivation context</strong> — users need to understand the filters, assumptions, and scope the agent applied to arrive at the answer</div></div>
+        <div class="req-item"><div class="req-dot"></div><div class="req-text"><strong>Allow easy requery</strong> — if the answer isn't quite right, the path to refining it should be obvious and low-friction</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESPONSE FORMAT -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="dual-image">
+        <div>
+          <div class="section-image-card lilac">
+            <div class="img-slot">
+              <img src="/mnt/user-data/uploads/1774687862884_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+            </div>
+          </div>
+          <p class="img-caption">Text vs. data response format — different jobs, different components</p>
+        </div>
+        <div>
+          <div class="section-image-card warm">
+            <div class="img-slot">
+              <img src="/mnt/user-data/uploads/1774687870529_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+            </div>
+          </div>
+          <p class="img-caption">Four response types — Table, List, Chart, Single Stat</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Response Format</div>
+      <h2 class="section-title">Four response types. Each with a distinct job.</h2>
+      <div class="section-body">
+        <p>The starting point for a data response is choosing the right format. We defined four types based on the shape of the question — not just the shape of the data.</p>
+      </div>
+      <div class="response-grid">
+        <div class="response-card">
+          <div class="r-num">01</div>
+          <div class="r-title">Single stat</div>
+          <div class="r-body">The answer is a direct fact or single number. No additional structure needed.</div>
+        </div>
+        <div class="response-card">
+          <div class="r-num">02</div>
+          <div class="r-title">List</div>
+          <div class="r-body">Query is scoped enough that additional metadata adds no value. Names, not measurements.</div>
+        </div>
+        <div class="response-card">
+          <div class="r-num">03</div>
+          <div class="r-title">Table</div>
+          <div class="r-body">Ranked or comparative answer where the metric value matters — users need to act on specific values.</div>
+        </div>
+        <div class="response-card">
+          <div class="r-num">04</div>
+          <div class="r-title">Chart</div>
+          <div class="r-body">The shape of the data is the answer — a trend, spike, plateau, or anomaly.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMPT AS DESIGN SPEC -->
+  <div class="section-row fade-in">
+    <div>
+      <div class="section-image-card clay">
+        <div class="img-slot">
+          <img src="/mnt/user-data/uploads/1774687909077_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+        </div>
+      </div>
+      <p class="img-caption">The prompt as design spec — decision rules for categorizing questions into response types</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Design Insight</div>
+      <h2 class="section-title">The prompt is the design spec</h2>
+      <div class="section-body">
+        <p>Defining the four types was the easy part. Getting the agent to choose correctly required specifying decision logic precisely enough that the model could apply it consistently.</p>
+        <p>That meant writing detailed decision rules — when to use a table over a list, how to distinguish a trend question from a ranking question — and encoding them directly into the prompt. The prompt became the design deliverable.</p>
+      </div>
+      <div class="discovery">
+        <div class="d-label">Key insight</div>
+        <p>In agentic design, the prompt is the design spec. If you can't articulate a decision rule clearly enough to write it down, the agent can't apply it. The act of writing the prompt forces design rigor.</p>
+      </div>
+      <div class="pivot-inline" style="margin-top: 20px;">
+        <div class="pivot-row before-row"><span class="pivot-tag before">Before</span><span class="pivot-content">Format chosen by default — usually a text summary regardless of the question type</span></div>
+        <div class="pivot-row after-row"><span class="pivot-tag after">After</span><span class="pivot-content">Format chosen by explicit decision rules encoded in the prompt</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE COMPONENT -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="dual-image">
+        <div>
+          <div class="section-image-card lilac">
+            <div class="img-slot">
+              <img src="/mnt/user-data/uploads/1774687918565_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+            </div>
+          </div>
+          <p class="img-caption">Table component — wireframe with surrounding context label</p>
+        </div>
+        <div>
+          <div class="section-image-card orange">
+            <div class="img-slot">
+              <img src="/mnt/user-data/uploads/1774687936770_image.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;" />
+            </div>
+          </div>
+          <p class="img-caption">Table component — final design with applied filters, dig deeper, view report</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-text">
+      <div class="section-label">The Table Component</div>
+      <h2 class="section-title">Data alone isn't enough. Context makes it trustworthy.</h2>
+      <div class="section-body">
+        <p>The table response isn't just a data dump. It's a structured artifact that gives users everything they need to evaluate and act on the answer.</p>
+      </div>
+      <div class="chain">
+        <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Query + Additional Context tabs</h4><p>Users can see how the question was interpreted and what context the agent applied</p></div></div>
+        <div class="chain-item"><div class="chain-num">02</div><div class="chain-text"><h4>Applied filters</h4><p>Surfaces exactly which filters shaped the dataset — time range, scope, exclusions</p></div></div>
+        <div class="chain-item"><div class="chain-num">03</div><div class="chain-text"><h4>Supporting information label</h4><p>Distinguishes the data table from surrounding context — users know what they're looking at</p></div></div>
+        <div class="chain-item"><div class="chain-num">04</div><div class="chain-text"><h4>Dig deeper + View report</h4><p>Easy paths to refine the query or move into a full report without losing context</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAKEAWAYS -->
+  <div class="takeaway-section fade-in">
+    <div class="section-label">Key Learnings</div>
+    <h2 class="section-title">What this product taught me</h2>
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <div class="t-num">Learning 01</div>
+        <div class="t-title">The prompt is the design spec</div>
+        <div class="t-body">In agentic product design, you can't just design the UI — you have to design the agent's decision logic too. Writing precise decision rules for format selection forced a clarity that visual mockups alone never require.</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="t-num">Learning 02</div>
+        <div class="t-title">Trust is a design deliverable</div>
+        <div class="t-body">For data-based AI responses, the answer alone isn't enough. Users need to see how the dataset was derived to decide whether to act on it. Surfacing derivation context — filters, scope, assumptions — is as important as the data itself.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-name" href="#">Aditi</a>
+  <a class="footer-back" href="aditi-portfolio-home.html">← Back to work</a>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.fade-in');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  els.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
