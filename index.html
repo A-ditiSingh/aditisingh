@@ -30,12 +30,29 @@
     color: var(--mid);
   }
 
+  .hero h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(15px, 2vw, 18px);
+    font-weight: 300;
+    color: var(--mid);
+    margin-bottom: 16px;
+  }
+
   .hero-sub {
     font-size: 15px;
     color: var(--mid);
     line-height: 1.7;
     max-width: 420px;
   }
+
+  .hero-sub a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s;
+  }
+  .hero-sub a:hover { text-decoration-color: var(--ink); }
 
   /* SECTION LABEL */
   .section-label-row {
@@ -163,77 +180,6 @@
   }
   .link-secondary:hover { color: var(--ink); border-color: var(--ink); }
 
-  /* ABOUT */
-  .about-strip {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 80px 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-    border-bottom: 1px solid var(--rule);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.65s ease, transform 0.65s ease;
-  }
-  .about-strip.visible { opacity: 1; transform: translateY(0); }
-
-  .about-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--mid);
-    margin-bottom: 16px;
-  }
-
-  .about-title {
-    font-family: 'Lora', serif;
-    font-size: clamp(24px, 3vw, 36px);
-    font-weight: 400;
-    line-height: 1.2;
-    margin-bottom: 16px;
-  }
-
-  .about-body {
-    font-size: 14px;
-    color: var(--mid);
-    line-height: 1.75;
-    max-width: 400px;
-  }
-
-  .about-body p + p { margin-top: 12px; }
-
-  /* CONTACT */
-  .contact-col { padding-top: 36px; }
-
-  .contact-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .contact-item:first-child { border-top: 1px solid var(--rule); }
-
-  .contact-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--mid);
-  }
-
-  .contact-value {
-    font-size: 14px;
-    color: var(--ink);
-    text-decoration: none;
-    font-weight: 400;
-    transition: opacity 0.15s;
-  }
-
-  .contact-value:hover { opacity: 0.5; }
-
   /* HERO FADE */
   .hero-fade {
     opacity: 0;
@@ -243,12 +189,11 @@
   .hero-fade.visible { opacity: 1; transform: translateY(0); }
 
   @media (max-width: 768px) {
-    .hero, .section-label-row, .projects, .about-strip {
+    .hero, .section-label-row, .projects {
       padding-left: 24px;
       padding-right: 24px;
     }
     .project-row { grid-template-columns: 1fr; gap: 32px; }
-    .about-strip { grid-template-columns: 1fr; gap: 48px; }
     .hero h1 { font-size: 42px; }
   }
 </style>
@@ -257,18 +202,18 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-name" href="#" style="font-family:'Fraunces',serif; font-weight:300; font-variation-settings:'opsz' 144,'SOFT' 100; font-size:28px;"><strong>aditi singh</strong></a>
+  <a class="nav-name" href="#" style="font-family:'Fraunces',serif; font-weight:300; font-variation-settings:'opsz' 144,'SOFT' 100; font-size:28px;"><strong>as</strong></a>
   <ul class="nav-links">
     <li><a href="#" class="active">Work</a></li>
-    <li><a href="#about">About</a></li>
     <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <div class="hero hero-fade">
-  <!--<h1><strong>aditi singh</strong></h1>-->
-  <p class="hero-sub">I am a product designer based in Ottawa, Canada with 7+ years of experience in B2B SaaS.</p>
+  <h1><strong>aditi singh </strong></h1>
+  <h2>Senior Product Designer</h2>
+  <p class="hero-sub">Currently at <a href="https://www.highspot.com/" target="_blank" rel="noopener noreferrer">Highspot</a>, Previous at <a href="https://www.guidewire.com/" target="_blank" rel="noopener noreferrer">Guidewire</a> and <a href="https://www.mitel.com/" target="_blank" rel="noopener noreferrer">Mitel</a></p>
 </div>
 
 <!-- PROJECTS LABEL -->
@@ -357,37 +302,9 @@
 
 </div>
 
-<!-- ABOUT -->
-<div class="about-strip" id="about">
-  <div>
-    <div class="about-label">About</div>
-    <h2 class="about-title">Product Designer, B2B SaaS, Ottawa</h2>
-    <div class="about-body">
-      <p>I build products at the intersection of sales behavior and business outcomes — helping GTM teams see what's actually working and act on it.</p>
-      <p>My work spans zero-to-one capabilities, configuration UX, and data storytelling. I care about reducing friction and surfacing the signal that matters.</p>
-      <p>7+ years in B2B SaaS, most recently at Highspot.</p>
-    </div>
-  </div>
-  <div class="contact-col">
-    <div class="about-label">Contact</div>
-    <div class="contact-item">
-      <span class="contact-label">Email</span>
-      <a href="mailto:hello@aditi.com" class="contact-value">aditis.2788@gmail.com</a>
-    </div>
-    <div class="contact-item">
-      <span class="contact-label">LinkedIn</span>
-      <a href="#" class="contact-value">linkedin.com/in/aditi</a>
-    </div>
-    <div class="contact-item">
-      <span class="contact-label">Based in</span>
-      <span class="contact-value">Ontario, Canada</span>
-    </div>
-  </div>
-</div>
-
 <script>
   // Intersection observer for fade-ins
-  const fadeEls = document.querySelectorAll('.hero-fade, .project-row, .about-strip');
+  const fadeEls = document.querySelectorAll('.hero-fade, .project-row');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.06 });
