@@ -735,22 +735,27 @@ html, body { margin: 0; background: #ece7df; }
       render2();
     }
 
+    /** Remove scope pill while keeping typed query (pill ×, Backspace with empty input). */
+    function clearScopeKeepQuery() {
+      if (!scope2) return;
+      scope2 = '';
+      if (state2 === 'scope-zero') {
+        state2 = 'auto-suggest';
+        resetSuggestTimer();
+      } else if (state2 === 'scope-auto-suggest') {
+        state2 = 'auto-suggest';
+        resetSuggestTimer();
+      } else if (state2 === 'serp-scoped') {
+        state2 = 'auto-suggest';
+        resetSuggestTimer();
+      }
+    }
+
     var px2 = document.getElementById('pillX2');
     if (px2) px2.addEventListener('click', function(e) {
       e.stopPropagation();
-      if (state2 === 'scope-zero') {
-        state2 = 'zero';
-        scope2 = '';
-        render2();
-      } else if (state2 === 'scope-auto-suggest') {
-        scope2 = '';
-        state2 = 'auto-suggest';
-        resetSuggestTimer();
-        render2();
-      } else if (state2 === 'serp-scoped') {
-        scope2 = '';
-        state2 = 'auto-suggest';
-        resetSuggestTimer();
+      if (state2 === 'scope-zero' || state2 === 'scope-auto-suggest' || state2 === 'serp-scoped') {
+        clearScopeKeepQuery();
         render2();
       }
     });
@@ -791,6 +796,17 @@ html, body { margin: 0; background: #ece7df; }
         if (e.key === 'Enter') {
           e.preventDefault();
           submitSerpFromInput();
+          return;
+        }
+        if (e.key === 'Backspace') {
+          if (state2 === 'serp' || state2 === 'serp-scoped') return;
+          var el = inp2();
+          if (!el || el.readOnly) return;
+          if (el.value.length !== 0) return;
+          if (!scope2) return;
+          e.preventDefault();
+          clearScopeKeepQuery();
+          render2();
         }
       });
     }
