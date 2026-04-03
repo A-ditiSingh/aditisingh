@@ -50,6 +50,36 @@
   .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
   .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
 
+  /* Embedded prototype: smooth iframe resize when dropdown state changes */
+  .scoped-search-prototype-frame {
+    transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Two-column section blocks — stack on small screens */
+  .ss-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .ss-state-model-intro { margin-bottom: 40px; }
+
+  .ss-finding-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 20px;
+    padding: 20px 0;
+    align-items: start;
+  }
+  .ss-finding-row:not(:last-child) { border-bottom: 1px solid var(--rule); }
+
+  @media (max-width: 768px) {
+    .ss-two-col { grid-template-columns: 1fr; gap: 40px; }
+    .state-grid { grid-template-columns: 1fr; }
+    .takeaway-grid { grid-template-columns: 1fr; }
+    .ss-finding-row { grid-template-columns: 1fr; gap: 10px; }
+  }
+
 </style>
 </head>
 <body>
@@ -87,7 +117,7 @@
 <div class="content">
 
   <!-- PROBLEM -->
-  <div class="section-row fade-in">
+  <div class="section-row reverse fade-in">
     <div>
       <div class="section-image-card lilac">
         <div class="img-slot">
@@ -130,7 +160,7 @@
   </div>
 
   <!-- DESIGN CHALLENGE -->
-  <div class="section-row fade-in">
+  <div class="section-row reverse fade-in">
     <div>
       <div class="full-image">
         <div>
@@ -159,7 +189,7 @@
 
   <!-- FINDING -->
   <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
+    <div class="ss-two-col">
       <div>
         <div class="section-label">The Research Finding</div>
         <h2 class="section-title">Users have access to many. They care about a few.</h2>
@@ -175,14 +205,14 @@
       <div>
         <div class="section-label" style="margin-bottom: 20px;">How this shaped the design</div>
         <div style="display: flex; flex-direction: column; gap: 0;">
-          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--rule); align-items: start;">
+          <div class="ss-finding-row">
             <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding-top: 2px;">Frequent</div>
             <div>
               <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Promoted collections in the search dropdown</div>
               <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">A small set of relevant collections appear directly in the dropdown — letting users scope before submitting. Fast, contextual, zero friction.</div>
             </div>
           </div>
-          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; padding: 20px 0; align-items: start;">
+          <div class="ss-finding-row">
             <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding-top: 2px;">Possible</div>
             <div>
               <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Collection filter in the results sidebar</div>
@@ -196,7 +226,7 @@
 
   <!-- DESIGN PRINCIPLES -->
   <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
-    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start;">
+    <div class="ss-two-col">
       <div>
         <div class="section-label">Design Principles</div>
         <h2 class="section-title">Search is a dynamic surface. Design every state, not just the default.</h2>
@@ -204,7 +234,7 @@
           <p>Interacting with search is not a single action — it's a sequence. Every keystroke, pause, and click changes what the dropdown should show. If transitions aren't fluid, the perception of speed breaks down even when results are fast.</p>
         </div>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--rule); border-radius: 8px; overflow: hidden;">
         <div style="background: var(--bg); padding: 24px 28px;">
           <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">01</div>
           <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Optimize for simplicity</div>
@@ -220,11 +250,6 @@
           <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Dropdown is prime real estate</div>
           <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Keep it clean and fast. Rely on sidebar filters for scalability — don't let edge cases crowd the common case.</div>
         </div>
-        <div style="background: var(--bg); padding: 24px 28px;">
-          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">04</div>
-          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Bring the collection to the user</div>
-          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Don't make users hunt for their scope. Surface the 1–3 relevant collections — promoted, not buried in a list.</div>
-        </div>
       </div>
     </div>
   </div>
@@ -232,7 +257,7 @@
   <!-- SEARCH STATES — full width -->
   <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
     <div class="section-label" style="margin-bottom: 12px;">The State Model</div>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-bottom: 40px;">
+    <div class="ss-two-col ss-state-model-intro">
       <div>
         <h2 class="section-title">Five states. Each with a distinct job.</h2>
         <div class="section-body">
@@ -292,11 +317,19 @@
   (function() {
     var iframe = document.getElementById('scopedSearchPrototypeFrame');
     if (!iframe) return;
+    var pendingH = null;
+    var rafId = null;
+    function applyPendingHeight() {
+      rafId = null;
+      if (pendingH == null) return;
+      iframe.style.height = pendingH + 'px';
+      pendingH = null;
+    }
     window.addEventListener('message', function(e) {
       if (!e.data || e.data.type !== 'scoped-prototype-height') return;
       if (e.source !== iframe.contentWindow) return;
-      var h = Math.max(200, Math.ceil(e.data.height));
-      iframe.style.height = h + 'px';
+      pendingH = Math.max(200, Math.ceil(e.data.height));
+      if (rafId == null) rafId = requestAnimationFrame(applyPendingHeight);
     });
   })();
 
