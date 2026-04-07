@@ -283,11 +283,11 @@ html, body { margin: 0; background: #ece7df; }
 <body>
 <div class="pw2">
   <div class="state-strip2">
-    <div class="ss-item2 active" id="sl0"><span class="ss-tag2">State 01</span><span class="ss-name2">Zero</span></div>
-    <div class="ss-item2" id="sl1"><span class="ss-tag2">State 02</span><span class="ss-name2">Scope + Zero</span></div>
-    <div class="ss-item2" id="sl2"><span class="ss-tag2">State 03</span><span class="ss-name2">Auto-suggest</span></div>
-    <div class="ss-item2" id="sl3"><span class="ss-tag2">State 04</span><span class="ss-name2">Scope + Auto-suggest</span></div>
-    <div class="ss-item2" id="sl4"><span class="ss-tag2">State 05</span><span class="ss-name2">SERP</span></div>
+    <div class="ss-item2 active" id="sl0"><span class="ss-tag2">01</span><span class="ss-name2">Zero</span></div>
+    <div class="ss-item2" id="sl1"><span class="ss-tag2">02</span><span class="ss-name2">Scope + Zero</span></div>
+    <div class="ss-item2" id="sl2"><span class="ss-tag2">03</span><span class="ss-name2">Auto-suggest</span></div>
+    <div class="ss-item2" id="sl3"><span class="ss-tag2">04</span><span class="ss-name2">Scope + Auto-suggest</span></div>
+    <div class="ss-item2" id="sl4"><span class="ss-tag2">05</span><span class="ss-name2">End State</span></div>
   </div>
   <div class="ui-area2">
     <div class="search-shell2">
@@ -735,22 +735,27 @@ html, body { margin: 0; background: #ece7df; }
       render2();
     }
 
+    /** Remove scope pill while keeping typed query (pill ×, Backspace with empty input). */
+    function clearScopeKeepQuery() {
+      if (!scope2) return;
+      scope2 = '';
+      if (state2 === 'scope-zero') {
+        state2 = 'auto-suggest';
+        resetSuggestTimer();
+      } else if (state2 === 'scope-auto-suggest') {
+        state2 = 'auto-suggest';
+        resetSuggestTimer();
+      } else if (state2 === 'serp-scoped') {
+        state2 = 'auto-suggest';
+        resetSuggestTimer();
+      }
+    }
+
     var px2 = document.getElementById('pillX2');
     if (px2) px2.addEventListener('click', function(e) {
       e.stopPropagation();
-      if (state2 === 'scope-zero') {
-        state2 = 'zero';
-        scope2 = '';
-        render2();
-      } else if (state2 === 'scope-auto-suggest') {
-        scope2 = '';
-        state2 = 'auto-suggest';
-        resetSuggestTimer();
-        render2();
-      } else if (state2 === 'serp-scoped') {
-        scope2 = '';
-        state2 = 'auto-suggest';
-        resetSuggestTimer();
+      if (state2 === 'scope-zero' || state2 === 'scope-auto-suggest' || state2 === 'serp-scoped') {
+        clearScopeKeepQuery();
         render2();
       }
     });
@@ -791,6 +796,17 @@ html, body { margin: 0; background: #ece7df; }
         if (e.key === 'Enter') {
           e.preventDefault();
           submitSerpFromInput();
+          return;
+        }
+        if (e.key === 'Backspace') {
+          if (state2 === 'serp' || state2 === 'serp-scoped') return;
+          var el = inp2();
+          if (!el || el.readOnly) return;
+          if (el.value.length !== 0) return;
+          if (!scope2) return;
+          e.preventDefault();
+          clearScopeKeepQuery();
+          render2();
         }
       });
     }
