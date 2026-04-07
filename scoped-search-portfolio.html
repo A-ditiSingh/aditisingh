@@ -14,6 +14,17 @@
   .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
   .hero-image-card { background: var(--lilac); }
 
+  /* No corner radius on hero & content imagery / prototype */
+  .hero-image-card,
+  .hero-image-card .img-slot,
+  .content .section-image-card,
+  .content .section-image-card .img-slot,
+  .content .section-image-card .img-slot img,
+  .content .full-image img,
+  .scoped-search-prototype-frame {
+    border-radius: 0;
+  }
+
   /* STATE GRID */
   .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
   .state-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 16px 18px; }
@@ -52,6 +63,7 @@
 
   /* Embedded prototype: smooth iframe resize when dropdown state changes */
   .scoped-search-prototype-frame {
+    margin-top: 12px;
     transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -73,11 +85,86 @@
   }
   .ss-finding-row:not(:last-child) { border-bottom: 1px solid var(--rule); }
 
+  /* Research finding — same width as .section-body */
+  .ss-finding-copy {
+    max-width: 440px;
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .ss-finding-item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ss-finding-item:last-child {
+    border-bottom: none;
+  }
+
   @media (max-width: 768px) {
     .ss-two-col { grid-template-columns: 1fr; gap: 40px; }
     .state-grid { grid-template-columns: 1fr; }
     .takeaway-grid { grid-template-columns: 1fr; }
     .ss-finding-row { grid-template-columns: 1fr; gap: 10px; }
+    .ss-finding-copy { max-width: 100%; }
+  }
+
+  /* Problem — full-width text within content column */
+  .ss-problem-section {
+    padding: 80px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .ss-problem-section .section-body {
+    max-width: none;
+  }
+
+  /* Foundation block — edge-aligned image, full width in column */
+  .section-image-card.ss-foundation-visual {
+    padding: 24px 0 0 24px;
+  }
+  .section-image-card.ss-foundation-visual .img-slot {
+    aspect-ratio: auto;
+    display: block;
+  }
+  .section-image-card.ss-foundation-visual .img-slot img {
+    position: static;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: unset;
+    object-position: unset;
+  }
+
+  /* Design challenge — less card padding so the image reads larger; right & bottom flush */
+  .section-image-card.ss-exploration-visual {
+    padding: 24px 0 0 24px;
+  }
+
+  /* Research finding — stacked section-image-card + img-slot (matches other sections) */
+  .ss-finding-visual-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .section-image-card.ss-finding-shaping-card {
+    padding: 24px 0 0 24px;
+  }
+  .section-image-card.ss-finding-shaping-card .img-slot {
+    aspect-ratio: auto;
+    display: block;
+  }
+  .section-image-card.ss-finding-shaping-card .img-slot img {
+    position: static;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: unset;
+    object-position: unset;
+  }
+  .ss-finding-visual-stack .img-caption {
+    margin-top: 10px;
+    margin-bottom: 0;
+    text-align: left;
   }
 
 </style>
@@ -117,44 +204,31 @@
 <div class="content">
 
   <!-- PROBLEM -->
-  <div class="section-row reverse fade-in">
-    <div>
-      <div class="section-image-card lilac">
-        <div class="img-slot">
-          <input type="file" accept="image/*" onchange="loadImage(this)">
-          <div class="upload-hint"><span class="plus">+</span><span>Problem / context visual</span></div>
-        </div>
-      </div>
-      <p class="img-caption">Open access at scale — content sprawl in Highspot</p>
-    </div>
-    <div class="section-text">
-      <div class="section-label">The Problem</div>
-      <h2 class="section-title">Open access to everything means finding nothing fast</h2>
-      <div class="section-body">
-        <p>In large organizations, Highspot gives sales reps access to almost all content in the platform. Paradoxically, this abundance creates friction — reps spend more time searching for the right content and less time selling.</p>
-        <p>Open access at scale doesn't serve the rep or the org. The problem isn't a lack of content. It's that relevance is buried inside volume.</p>
-      </div>
+  <div class="ss-problem-section fade-in">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title">Open access with granular filter creates an overwhelming experience</h2>
+    <div class="section-body">
+      <p>Content in Highspot is organized into folder-like constructs (spots), each with its own access control. When items are added, the owner make a decision about the spot it belong to.</p>
+      <p>When reps search, they think in terms of broad content areas (a product line, a vertical, or a sub-org). The platform search does not map to those boundaries. Reps can filter results by spot, but spots are too granular to represent a product area or a vertical, and selecting the right combination of spots requires organizational knowledge that most reps do not have.</p>
     </div>
   </div>
 
   <!-- FOUNDATION -->
   <div class="section-row reverse fade-in">
     <div>
-      <div class="section-image-card orange">
+      <div class="section-image-card warm ss-foundation-visual">
         <div class="img-slot">
-          <input type="file" accept="image/*" onchange="loadImage(this)">
-          <div class="upload-hint"><span class="plus">+</span><span>Content collections diagram</span></div>
+          <img src="Images/content-collections-settings.png" alt="Scoped Search">
         </div>
       </div>
-      <p class="img-caption">From spots to content collections — the organizational layer</p>
+      <p class="img-caption">Content Collections as promoted filters in the search results page</p>
     </div>
     <div class="section-text">
-      <div class="section-label">The Foundation</div>
-      <h2 class="section-title">Content Collections: grouping spots into a searchable scope</h2>
+      <div class="section-label">A NEW FILTERING CONSTRUCT</div>
+      <h2 class="section-title">Content Collections make searching within a broad area possible</h2>
       <div class="section-body">
-        <p>Content in Highspot lives in spots — folder-like constructs with individual access control. Every item added requires a manual decision about which spot it belongs to.</p>
         <p>To make scoped search possible, we first introduced <strong>content collections</strong> — an admin-defined grouping of related spots. Once a collection is configured, item-to-collection association becomes automatic.</p>
-        <p>Collections map naturally to how large orgs already think: by sub-org, product line, or region. They don't replace spots — they aggregate them into a meaningful scope.</p>
+        <p>Collections can map naturally to how large orgs already think: by sub-org, product line, or region. This becomes a useful contrsuct for reps to limit their search results to a broader area. .</p>
       </div>
     </div>
   </div>
@@ -164,25 +238,36 @@
     <div>
       <div class="full-image">
         <div>
-          <div class="section-image-card warm">
+          <div class="section-image-card warm ss-exploration-visual">
             <div class="img-slot">
               <img src="Images/SS_Early explorations.png" alt="Scoped Search">
             </div>
           </div>
-          <p class="img-caption">Early exploration — broad interaction patterns</p>
+          <p class="img-caption">Early exploration — two interaction models</p>
         </div>
       </div>
     </div>
     <div class="section-text">
       <div class="section-label">The Design Challenge</div>
-      <h2 class="section-title">The more you can scope, the harder it is to scope</h2>
+      <h2 class="section-title">How might we limit search results to a content collection?</h2>
       <div class="section-body">
-        <p>The first iteration went wide — exploring every way a user might select a collection scope before or during a search. The exploration surfaced a core tension: more collections meant more complex interaction patterns in the search dropdown.</p>
-        <p>The search dropdown is not a place for complexity. It needs to be fast and instinctive. Every additional option in that surface is friction.</p>
+        <p>The initial exploration examined two interaction models for limiting search results to a content area.</p>
       </div>
-      <div class="discovery">
-        <div class="d-label">The Insight</div>
-        <p>We went back to customers and studied actual usage. Users either have access to 1–3 collections, or they have access to more but realistically only care about 1–3. The design problem collapsed.</p>
+      <div class="chain">
+        <div class="chain-item">
+          <div class="chain-num">01</div>
+          <div class="chain-text">
+            <h4>Scope before the query — in the search dropdown</h4>
+            <p>The user selects a content collection before typing. The scoping interaction happens in the dropdown. The assumption at this stage was that any available collection could be a valid scope — and the platform supports up to 50 collections, which meant the dropdown needed to accommodate a potentially large selection set.</p>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-num">02</div>
+          <div class="chain-text">
+            <h4>Filter after the query — on the search results page</h4>
+            <p>The user submits a query first, then filters results by collection. This is standard filter behavior: a collection appears as a filter option only if at least one result in the result set belongs to it. The available filter options are determined by what the search returns, not by what the user intended to search within.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -192,32 +277,40 @@
     <div class="ss-two-col">
       <div>
         <div class="section-label">The Research Finding</div>
-        <h2 class="section-title">Users have access to many. They care about a few.</h2>
+        <h2 class="section-title">Most sales reps will frequently engage with 1–3 collections</h2>
         <div class="section-body">
-          <p>We went back to customers with a focused question: how many Collections do users actually have access to, and how many do they realistically use?</p>
-          <p>Users had access to many collections — but would consistently engage with only 1–3. This grounded a core design principle: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
+          <p>The team returned to customers with a focused question: how many collections do users actually have access to, and how many do they use when searching?</p>
+          <p>The data showed that users with access to many collections consistently engaged with only 1–3. This finding established the core design principle for the interaction: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
         </div>
-        <div class="finding" style="margin-top: 20px;">
-          <div class="f-label">Key Finding</div>
-          <p>Users had access to many collections but functionally used 1–3. Surfacing every collection equally in the search dropdown would optimize for a scenario that rarely happens.</p>
+        <div class="ss-finding-copy">
+          <div class="ss-finding-item">
+            <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Promote scoping to frequent collections — in the dropdown</div>
+            <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">The 1–3 collections most relevant to the user are surfaced directly in the search dropdown, allowing the user to scope before submitting. Fast, contextual, low friction.</div>
+          </div>
+          <div class="ss-finding-item">
+            <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Allow filtering to other collections post-search</div>
+            <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">For less frequent cross-collection searches, the sidebar filter handles it — exactly like any other facet. The dropdown stays clean. The sidebar scales to edge cases.</div>
+          </div>
         </div>
       </div>
       <div>
         <div class="section-label" style="margin-bottom: 20px;">How this shaped the design</div>
-        <div style="display: flex; flex-direction: column; gap: 0;">
-          <div class="ss-finding-row">
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding-top: 2px;">Frequent</div>
-            <div>
-              <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Promoted collections in the search dropdown</div>
-              <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">A small set of relevant collections appear directly in the dropdown — letting users scope before submitting. Fast, contextual, zero friction.</div>
+        <div class="ss-finding-visual-stack">
+          <div>
+            <div class="section-image-card warm ss-finding-shaping-card">
+              <div class="img-slot">
+                <img src="Images/promoted content collection.png" alt="Search UI with collection scope: promoted collections in the dropdown before submit.">
+              </div>
             </div>
+            <p class="img-caption">Promoted collections in the search dropdown</p>
           </div>
-          <div class="ss-finding-row">
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding-top: 2px;">Possible</div>
-            <div>
-              <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Collection filter in the results sidebar</div>
-              <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">For less frequent cross-collection searches, the sidebar filter handles it — exactly like any other facet. The dropdown stays clean. The sidebar scales to edge cases.</div>
+          <div>
+            <div class="section-image-card warm ss-finding-shaping-card">
+              <div class="img-slot">
+                <img src="Images/content-collections.png" alt="Search results with Content Collection filter in the sidebar.">
+              </div>
             </div>
+            <p class="img-caption">Collection filter in the results sidebar</p>
           </div>
         </div>
       </div>
@@ -229,26 +322,27 @@
     <div class="ss-two-col">
       <div>
         <div class="section-label">Design Principles</div>
-        <h2 class="section-title">Search is a dynamic surface. Design every state, not just the default.</h2>
+        <h2 class="section-title">Identify and design every state</h2>
         <div class="section-body">
-          <p>Interacting with search is not a single action — it's a sequence. Every keystroke, pause, and click changes what the dropdown should show. If transitions aren't fluid, the perception of speed breaks down even when results are fast.</p>
+          <p>Each keystroke, each pause, and each click changes the state of the dropdown. Each of those states needs to be identified and designed explicitly.</p>
+          <p>Transition states need to be designed so that the perceived speed of the interaction exceeds the actual response time, and so that the state changes occurring with every keystroke feel seamless to the user.</p>
         </div>
       </div>
       <div style="display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--rule); border-radius: 8px; overflow: hidden;">
         <div style="background: var(--bg); padding: 24px 28px;">
           <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">01</div>
           <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Optimize for simplicity</div>
-          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Scoping should feel quick, not like a configuration step. Every extra decision in the dropdown is friction.</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Scoping should require a single quick action. Each additional decision point in the dropdown increases the effort required to complete a search.</div>
         </div>
         <div style="background: var(--bg); padding: 24px 28px;">
           <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">02</div>
-          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Fluid transitions</div>
-          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">The perception of speed matters as much as actual speed. State changes should feel invisible.</div>
+          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Fluid transition between states</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Transitions need to be smooth enough that the user perceives the surface as continuously responsive, and designed so that perceived speed exceeds actual response time.</div>
         </div>
         <div style="background: var(--bg); padding: 24px 28px;">
           <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">03</div>
           <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Dropdown is prime real estate</div>
-          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Keep it clean and fast. Rely on sidebar filters for scalability — don't let edge cases crowd the common case.</div>
+          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">The search dropdown is reserved for the most frequent actions. Less common filtering needs are handled by the sidebar filter panel on the results page.</div>
         </div>
       </div>
     </div>
@@ -259,19 +353,51 @@
     <div class="section-label" style="margin-bottom: 12px;">The State Model</div>
     <div class="ss-two-col ss-state-model-intro">
       <div>
-        <h2 class="section-title">Five states. Each with a distinct job.</h2>
+        <h2 class="section-title">Schematic breakdown of a search interaction.</h2>
         <div class="section-body">
-          <p>We redesigned each state of the search surface from scratch — deciding what's important at each stage and how to arrange it. The transitions between them became as important as the states themselves.</p>
-          <p>The scoped variants (Scope + Zero, Scope + Auto-suggest) mirror their unscoped counterparts with a collection pill added to the bar. Removing the pill always takes you back to the plain version of that state.</p>
+          <p>Even though the search interaction takes place in a matter of seconds, the search dropdown goes through multiple states. Breaking the interaction down into distinct states helps identify the most relevant information to surface to the user at each point. Stitching those states together with well-designed transitions makes the interaction feel relevant and smooth throughout.</p>
         </div>
       </div>
-      <div class="state-grid">
-        <div class="state-card"><div class="s-label">State 01</div><div class="s-title">Zero</div><div class="s-body">User clicks in. Show recent history and promoted collections.</div></div>
-        <div class="state-card"><div class="s-label">State 02</div><div class="s-title">Scope + Zero</div><div class="s-body">User has scoped, but not typed. Same history, pill in bar.</div></div>
-        <div class="state-card"><div class="s-label">State 03</div><div class="s-title">Auto-suggest</div><div class="s-body">User is typing. Keyword and entity suggestions, fast and fluid.</div></div>
-        <div class="state-card"><div class="s-label">State 04</div><div class="s-title">Scope + Auto-suggest</div><div class="s-body">Scoped suggestions — filtered to the selected collection.</div></div>
+      <div class="chain">
+        <div class="chain-item">
+          <div class="chain-num">01</div>
+          <div class="chain-text">
+            <h4>Rest - No interaction has happened yet.</h4>
+            <p>The search bar is visible and discoverable. The design goal is to make search easy to find and invite interaction without introducing distraction.</p>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-num">02</div>
+          <div class="chain-text">
+            <h4>Zero state - The user has clicked in.</h4>
+            <p>Intent is unknown. The dropdown surfaces recent searches to give the user a fast path back to queries they have already run.</p>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-num">03</div>
+          <div class="chain-text">
+            <h4>Auto-suggest - The user is actively typing. </h4>
+            <p>The dropdown surfaces keyword and entity suggestions that update with every keystroke. Transitions need to be smooth enough that the surface feels continuously responsive.</p>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-num">04</div>
+          <div class="chain-text">
+            <h4>End state - The user has submitted a query.</h4>
+            <p>Search results are displayed in this state. The design provides clear affordances for adjusting the query, changing the scope, or starting a new search with minimal steps.</p>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+
+<!-- PROTOTYPE -->
+<div class="ss-problem-section fade-in">
+  <div class="section-label">The Solution</div>
+  <h2 class="section-title">Interactive Prototype</h2>
+  <div class="section-body">
+    <p>The interactive prototype shows the search experience in action.</p>
+  </div>
 
     <!-- Interactive prototype markup/CSS/JS: scoped-search-prototype.html (embedded below) -->
     <iframe
@@ -282,30 +408,12 @@
       width="100%"
       height="560"
       loading="lazy"
-      style="border:0;display:block;max-width:100%;border-radius:10px;"
+      style="border:0;display:block;max-width:100%;"
     ></iframe>
-    <p class="img-caption" style="text-align:center; margin-top: 12px;">Interactive prototype</p>
-  </div>
-
-  <!-- TAKEAWAYS -->
-  <div class="takeaway-section fade-in">
-    <div class="section-label">Key Learnings</div>
-    <h2 class="section-title">What this product taught me</h2>
-    <div class="takeaway-grid">
-      <div class="takeaway-card">
-        <div class="t-num">Learning 01</div>
-        <div class="t-title">The right scope is smaller than you think</div>
-        <div class="t-body">Building for the full range of possibilities produces complexity nobody asked for. Users self-limit in predictable ways. The best design honors that — and optimizes hard for the common case rather than softly covering every case.</div>
-      </div>
-      <div class="takeaway-card">
-        <div class="t-num">Learning 02</div>
-        <div class="t-title">Transitions are a design deliverable, not an afterthought</div>
-        <div class="t-body">Search is a dynamic surface — every action changes what the user sees. If the transition between states isn't deliberate, the interaction feels broken even when the logic is correct. Designing the states and the motion between them are equally important.</div>
-      </div>
-    </div>
-  </div>
-
+    <p class="img-caption" style="text-align:center; margin-top: 12px;">Vibe-coded prototype to demonstate the search interaction</p>
 </div>
+
+
 
 <script>
   const els = document.querySelectorAll('.fade-in');
@@ -332,22 +440,6 @@
       if (rafId == null) rafId = requestAnimationFrame(applyPendingHeight);
     });
   })();
-
-  function loadImage(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const slot = input.closest('.img-slot');
-      const hint = slot.querySelector('.upload-hint');
-      if (hint) hint.style.display = 'none';
-      let img = slot.querySelector('img');
-      if (!img) { img = document.createElement('img'); slot.appendChild(img); }
-      img.src = ev.target.result;
-      slot.style.border = 'none';
-    };
-    reader.readAsDataURL(file);
-  }
 </script>
 </body>
 </html>
