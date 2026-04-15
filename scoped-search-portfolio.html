@@ -25,33 +25,13 @@
     border-radius: 0;
   }
 
-  /* STATE GRID */
-  .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-  .state-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 16px 18px; }
-  .state-card .s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 6px; }
-  .state-card .s-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
-  .state-card .s-body { font-size: 12px; color: var(--mid); line-height: 1.5; }
-
-  /* FINDING CALLOUT */
-  .finding { margin-top: 20px; padding: 20px 24px; background: var(--lilac); border-radius: 6px; }
-  .finding .f-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(0,0,0,0.45); margin-bottom: 8px; }
-  .finding p { font-size: 14px; color: var(--ink); line-height: 1.65; font-weight: 500; }
-
-  /* PRINCIPLE LIST */
-  .principle-list { margin-top: 20px; display: flex; flex-direction: column; gap: 0; }
-  .principle-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
-  .principle-item:last-child { border-bottom: none; }
-  .principle-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); flex-shrink: 0; margin-top: 6px; }
-  .principle-text { font-size: 13px; color: var(--mid); line-height: 1.55; }
-  .principle-text strong { color: var(--ink); font-weight: 500; }
-
   /* CHAIN */
   .chain { margin-top: 20px; }
   .chain-item { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
   .chain-item:last-child { border-bottom: none; }
   .chain-num { font-size: 11px; color: var(--mid); font-weight: 400; flex-shrink: 0; padding-top: 2px; width: 20px; }
   .chain-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
-  .chain-text p { font-size: 13px; color: var(--mid); line-height: 1.5; max-width: none; }
+  .chain-text p { font-size: 14px; color: var(--mid); line-height: 1.75; max-width: none; }
 
   /* TAKEAWAYS */
   .takeaway-section { padding: 80px 0; border-top: 1px solid var(--rule); }
@@ -59,112 +39,64 @@
   .takeaway-card { background: rgba(0,0,0,0.03); padding: 32px; border-radius: 6px; }
   .t-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 16px; }
   .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
-  .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+  .t-body { font-size: 14px; color: var(--mid); line-height: 1.75; }
 
-  /* Embedded prototype: smooth iframe resize when dropdown state changes */
-  .scoped-search-prototype-frame {
-    margin-top: 12px;
-    transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+  /* SIGNAL CARDS (problem section) */
+  .ss-signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
+  .signal-card { background: rgba(0,0,0,0.03); border-radius: 8px; padding: 28px 28px 8px; }
+  .signal-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 20px; }
+  .signal-row { padding: 14px 0; border-bottom: 1px solid var(--rule); font-size: 14px; color: var(--mid); line-height: 1.75; }
+  .signal-row:last-child { border-bottom: none; }
 
-  /* Two-column section blocks — stack on small screens */
-  .ss-two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: start;
-  }
+  /* FULL-WIDTH SECTIONS with top divider */
+  .ss-section { border-top: 1px solid var(--rule); padding: 80px 0; }
+
+  /* Two-column section blocks */
+  .ss-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
   .ss-state-model-intro { margin-bottom: 40px; }
 
-  .ss-finding-row {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 20px;
-    padding: 20px 0;
-    align-items: start;
-  }
-  .ss-finding-row:not(:last-child) { border-bottom: 1px solid var(--rule); }
+  /* Research finding copy list */
+  .ss-finding-copy { max-width: 440px; padding-top: 16px; display: flex; flex-direction: column; gap: 0; }
+  .ss-finding-item { padding: 20px 0; border-bottom: 1px solid var(--rule); }
+  .ss-finding-item:last-child { border-bottom: none; }
+  .fi-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
 
-  /* Research finding — same width as .section-body */
-  .ss-finding-copy {
-    max-width: 440px;
-    padding-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .ss-finding-item {
-    padding: 20px 0;
-    border-bottom: 1px solid var(--rule);
-  }
-  .ss-finding-item:last-child {
-    border-bottom: none;
+  /* Design principles ruled list */
+  .ss-principles-list { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--rule); border-radius: 8px; overflow: hidden; }
+  .ss-principle-item { background: var(--bg); padding: 24px 28px; }
+  .ss-principle-item .t-num { margin-bottom: 10px; }
+  .ss-principle-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+
+  /* Problem — full-width text within content column */
+  .ss-problem-section { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .ss-problem-section .section-body { max-width: none; }
+
+  /* Finding visual column label spacing */
+  .ss-finding-visual-col > .section-label { margin-bottom: 20px; }
+
+  /* Research finding — stacked image cards */
+  .ss-finding-visual-stack { display: flex; flex-direction: column; gap: 28px; }
+  .ss-finding-visual-stack .img-caption { margin-top: 10px; margin-bottom: 0; text-align: left; }
+
+  /* Shared image card variant — edge-aligned, full-width image */
+  .section-image-card.ss-edge-visual { padding: 24px 0 0 24px; }
+  .section-image-card.ss-edge-visual .img-slot { aspect-ratio: auto; display: block; }
+  .section-image-card.ss-edge-visual .img-slot img { position: static; width: 100%; height: auto; display: block; object-fit: unset; object-position: unset; }
+
+  /* Centered caption (prototype section) */
+  .img-caption--center { text-align: center; }
+
+  /* Embedded prototype: smooth iframe resize when dropdown state changes */
+  .scoped-search-prototype-frame { margin-top: 12px; transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+
+  @media (max-width: 700px) {
+    .ss-signal-grid { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 768px) {
     .ss-two-col { grid-template-columns: 1fr; gap: 40px; }
-    .state-grid { grid-template-columns: 1fr; }
     .takeaway-grid { grid-template-columns: 1fr; }
-    .ss-finding-row { grid-template-columns: 1fr; gap: 10px; }
     .ss-finding-copy { max-width: 100%; }
-  }
-
-  /* Problem — full-width text within content column */
-  .ss-problem-section {
-    padding: 80px 0;
-    border-top: 1px solid var(--rule);
-  }
-  .ss-problem-section .section-body {
-    max-width: none;
-  }
-
-  /* Foundation block — edge-aligned image, full width in column */
-  .section-image-card.ss-foundation-visual {
-    padding: 24px 0 0 24px;
-  }
-  .section-image-card.ss-foundation-visual .img-slot {
-    aspect-ratio: auto;
-    display: block;
-  }
-  .section-image-card.ss-foundation-visual .img-slot img {
-    position: static;
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: unset;
-    object-position: unset;
-  }
-
-  /* Design challenge — less card padding so the image reads larger; right & bottom flush */
-  .section-image-card.ss-exploration-visual {
-    padding: 24px 0 0 24px;
-  }
-
-  /* Research finding — stacked section-image-card + img-slot (matches other sections) */
-  .ss-finding-visual-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-  .section-image-card.ss-finding-shaping-card {
-    padding: 24px 0 0 24px;
-  }
-  .section-image-card.ss-finding-shaping-card .img-slot {
-    aspect-ratio: auto;
-    display: block;
-  }
-  .section-image-card.ss-finding-shaping-card .img-slot img {
-    position: static;
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: unset;
-    object-position: unset;
-  }
-  .ss-finding-visual-stack .img-caption {
-    margin-top: 10px;
-    margin-bottom: 0;
-    text-align: left;
   }
 
 </style>
@@ -195,7 +127,6 @@
   <div class="hero-image-card">
     <div class="img-slot">
       <img src="Images/Scoped Search_hero.png" alt="Scoped Search">
-      <span style="font-size:11px;">Scoped search interaction or final design</span>
     </div>
   </div>
   <p class="img-caption">Scoped Search — search UI with collection scope selector</p>
@@ -203,20 +134,33 @@
 
 <div class="content">
 
-  <!-- PROBLEM -->
-  <div class="ss-problem-section fade-in">
-    <div class="section-label">The Problem</div>
-    <h2 class="section-title">Open access with granular filter creates an overwhelming experience</h2>
-    <div class="section-body">
-      <p>Content in Highspot is organized into folder-like constructs (spots), each with its own access control. When items are added, the owner make a decision about the spot it belong to.</p>
-      <p>When reps search, they think in terms of broad content areas (a product line, a vertical, or a sub-org). The platform search does not map to those boundaries. Reps can filter results by spot, but spots are too granular to represent a product area or a vertical, and selecting the right combination of spots requires organizational knowledge that most reps do not have.</p>
+<!-- PROBLEM -->
+<div class="ss-problem-section fade-in">
+  <div class="section-label">The Problem</div>
+  <h2 class="section-title">Existing filters were too granular for how enterprise reps think about content</h2>
+  <div class="section-body">
+    <div class="ss-signal-grid">
+      <div class="signal-card">
+        <div class="t-num">customer signal</div>
+        <div class="t-title">Poor search relevance was driving down customer satisfaction</div>
+        <div class="signal-row">Approximately <strong>70%</strong> of NPS detractors mentioned poor search relevance as the top reason for rating the product negatively</div>
+        <div class="signal-row">Larger and older customer accounts with a high volume of content items reported mentioned poor search relevance more frequently, putting enterprise customer at risk of churn</div>
+        <div class="signal-row">Search submission to click conversion was lower in larger, older accounts than in smaller ones</div>
+      </div>
+      <div class="signal-card">
+        <div class="t-num">existing paradigm</div>
+        <div class="t-title">Narrowing search results was too difficult</div>
+        <div class="signal-row">The only way to narrow search results was to use filters.The number of filters were too many and too granular to be useful. <strong>Less than 2% of users were using filters</strong> to narrow their search results</strong></div>
+        <div class="signal-row">Reps thought about content in terms of broad areas: a product line, a region, or a vertical.There was no way to limit search to the content area most relevant to their role</div>
+      </div>
     </div>
   </div>
+</div>
 
   <!-- FOUNDATION -->
   <div class="section-row reverse fade-in">
     <div>
-      <div class="section-image-card warm ss-foundation-visual">
+      <div class="section-image-card warm ss-edge-visual">
         <div class="img-slot">
           <img src="Images/content-collections-settings.png" alt="Scoped Search">
         </div>
@@ -238,7 +182,7 @@
     <div>
       <div class="full-image">
         <div>
-          <div class="section-image-card warm ss-exploration-visual">
+          <div class="section-image-card warm ss-edge-visual">
             <div class="img-slot">
               <img src="Images/SS_Early explorations.png" alt="Scoped Search">
             </div>
@@ -249,31 +193,35 @@
     </div>
     <div class="section-text">
       <div class="section-label">The Design Challenge</div>
-      <h2 class="section-title">How might we limit search results to a content collection?</h2>
+      <h2 class="section-title">Two interaction models. One dropdown that couldn't hold both.</h2>
       <div class="section-body">
-        <p>The initial exploration examined two interaction models for limiting search results to a content area.</p>
+        <p>The initial exploration examined two distinct models for how a rep could limit search results to a content area.</p>
       </div>
       <div class="chain">
         <div class="chain-item">
           <div class="chain-num">01</div>
           <div class="chain-text">
             <h4>Scope before the query — in the search dropdown</h4>
-            <p>The user selects a content collection before typing. The scoping interaction happens in the dropdown. The assumption at this stage was that any available collection could be a valid scope — and the platform supports up to 50 collections, which meant the dropdown needed to accommodate a potentially large selection set.</p>
+            <p>The user selects a content collection before typing. The scoping interaction happens in the dropdown. The platform supports up to 50 collections, which meant the dropdown needed to accommodate a potentially large selection set — and the interaction patterns required to make that work cleanly made the dropdown more complex than the search experience it was supposed to simplify.</p>
           </div>
         </div>
         <div class="chain-item">
           <div class="chain-num">02</div>
           <div class="chain-text">
             <h4>Filter after the query — on the search results page</h4>
-            <p>The user submits a query first, then filters results by collection. This is standard filter behavior: a collection appears as a filter option only if at least one result in the result set belongs to it. The available filter options are determined by what the search returns, not by what the user intended to search within.</p>
+            <p>The user submits a query first, then filters results by collection using sidebar filters or tabs on the results page. The available filter options are determined by what the search returns, not by what the user intended to search within.</p>
           </div>
         </div>
+      </div>
+      <div class="discovery">
+        <div class="d-label">The tension</div>
+        <p>Both models were valid. The problem was designing the first one at scale. The interaction patterns required to expose every available collection in the dropdown made it more complex than the search experience it was meant to simplify. I recognized early that we were solving for access to everything in a surface that needed to do one thing fast.</p>
       </div>
     </div>
   </div>
 
   <!-- FINDING -->
-  <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
+  <div class="ss-section fade-in">
     <div class="ss-two-col">
       <div>
         <div class="section-label">The Research Finding</div>
@@ -284,20 +232,20 @@
         </div>
         <div class="ss-finding-copy">
           <div class="ss-finding-item">
-            <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Promote scoping to frequent collections — in the dropdown</div>
-            <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">The 1–3 collections most relevant to the user are surfaced directly in the search dropdown, allowing the user to scope before submitting. Fast, contextual, low friction.</div>
+            <div class="fi-title">Promote scoping to frequent collections — in the dropdown</div>
+            <div class="t-body">The 1–3 collections most relevant to the user are surfaced directly in the search dropdown, allowing the user to scope before submitting. Fast, contextual, low friction.</div>
           </div>
           <div class="ss-finding-item">
-            <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px;">Allow filtering to other collections post-search</div>
-            <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">For less frequent cross-collection searches, the sidebar filter handles it — exactly like any other facet. The dropdown stays clean. The sidebar scales to edge cases.</div>
+            <div class="fi-title">Allow filtering to other collections post-search</div>
+            <div class="t-body">For less frequent cross-collection searches, the sidebar filter handles it — exactly like any other facet. The dropdown stays clean. The sidebar scales to edge cases.</div>
           </div>
         </div>
       </div>
-      <div>
-        <div class="section-label" style="margin-bottom: 20px;">How this shaped the design</div>
+      <div class="ss-finding-visual-col">
+        <div class="section-label">How this shaped the design</div>
         <div class="ss-finding-visual-stack">
           <div>
-            <div class="section-image-card warm ss-finding-shaping-card">
+            <div class="section-image-card warm ss-edge-visual">
               <div class="img-slot">
                 <img src="Images/promoted content collection.png" alt="Search UI with collection scope: promoted collections in the dropdown before submit.">
               </div>
@@ -305,7 +253,7 @@
             <p class="img-caption">Promoted collections in the search dropdown</p>
           </div>
           <div>
-            <div class="section-image-card warm ss-finding-shaping-card">
+            <div class="section-image-card warm ss-edge-visual">
               <div class="img-slot">
                 <img src="Images/content-collections.png" alt="Search results with Content Collection filter in the sidebar.">
               </div>
@@ -318,7 +266,7 @@
   </div>
 
   <!-- DESIGN PRINCIPLES -->
-  <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
+  <div class="ss-section fade-in">
     <div class="ss-two-col">
       <div>
         <div class="section-label">Design Principles</div>
@@ -328,29 +276,29 @@
           <p>Transition states need to be designed so that the perceived speed of the interaction exceeds the actual response time, and so that the state changes occurring with every keystroke feel seamless to the user.</p>
         </div>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--rule); border-radius: 8px; overflow: hidden;">
-        <div style="background: var(--bg); padding: 24px 28px;">
-          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">01</div>
-          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Optimize for simplicity</div>
-          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Scoping should require a single quick action. Each additional decision point in the dropdown increases the effort required to complete a search.</div>
+      <div class="ss-principles-list">
+        <div class="ss-principle-item">
+          <div class="t-num">01</div>
+          <div class="ss-principle-title">Optimize for simplicity</div>
+          <div class="t-body">Scoping should require a single quick action. Each additional decision point in the dropdown increases the effort required to complete a search.</div>
         </div>
-        <div style="background: var(--bg); padding: 24px 28px;">
-          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">02</div>
-          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Fluid transition between states</div>
-          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">Transitions need to be smooth enough that the user perceives the surface as continuously responsive, and designed so that perceived speed exceeds actual response time.</div>
+        <div class="ss-principle-item">
+          <div class="t-num">02</div>
+          <div class="ss-principle-title">Fluid transition between states</div>
+          <div class="t-body">Transitions need to be smooth enough that the user perceives the surface as continuously responsive, and designed so that perceived speed exceeds actual response time.</div>
         </div>
-        <div style="background: var(--bg); padding: 24px 28px;">
-          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 10px;">03</div>
-          <div style="font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3;">Dropdown is prime real estate</div>
-          <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">The search dropdown is reserved for the most frequent actions. Less common filtering needs are handled by the sidebar filter panel on the results page.</div>
+        <div class="ss-principle-item">
+          <div class="t-num">03</div>
+          <div class="ss-principle-title">Dropdown is prime real estate</div>
+          <div class="t-body">The search dropdown is reserved for the most frequent actions. Less common filtering needs are handled by the sidebar filter panel on the results page.</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- SEARCH STATES — full width -->
-  <div class="fade-in" style="border-top: 1px solid var(--rule); padding: 80px 0;">
-    <div class="section-label" style="margin-bottom: 12px;">The State Model</div>
+  <div class="ss-section fade-in">
+    <div class="section-label">The State Model</div>
     <div class="ss-two-col ss-state-model-intro">
       <div>
         <h2 class="section-title">Schematic breakdown of a search interaction.</h2>
@@ -410,9 +358,31 @@
       loading="lazy"
       style="border:0;display:block;max-width:100%;"
     ></iframe>
-    <p class="img-caption" style="text-align:center; margin-top: 12px;">Vibe-coded prototype to demonstate the search interaction</p>
+    <p class="img-caption img-caption--center">Vibe-coded prototype to demonstate the search interaction</p>
 </div>
 
+
+<!-- TAKEAWAYS -->
+<div class="takeaway-section fade-in">
+  <div class="section-label">Impact</div>
+  <h2 class="section-title">Better search relevance leads to more conversions</h2>
+  <div class="takeaway-grid">
+    <div class="takeaway-card">
+      <div class="t-num">Adoption</div>
+      <div class="t-title">350,000 searches. 5% scoped.</div>
+      <div class="t-body">Content collections are configured in organizations that collectively account for 350,000 search submissions. Of those, 5% of searches are scoped to a collection before the query is submitted.</div>
+    </div>
+    <div class="takeaway-card">
+      <div class="t-num">Search to click conversion</div>
+      <div class="t-title">15% more conversions on scoped searches</div>
+      <div class="t-body">In organizations using content collections, searches scoped to a collection produced 15% more clicks on results than unscoped searches in the same organizations. Reps who narrowed their search to a relevant content area before submitting found a relevant search result more often.</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
 
 
 <script>
@@ -441,5 +411,3 @@
     });
   })();
 </script>
-</body>
-</html>
