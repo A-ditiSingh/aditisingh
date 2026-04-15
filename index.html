@@ -238,7 +238,10 @@
       <h2 class="project-title">Go to market with Initiatives</h2>
       <p class="project-desc">Enablement teams can manage, execute, and measure Go-To-Market strategies. They can connect rep activities like content usage and training to business outcomes such as pipeline and revenue. Identifying what practices to amplify.</p>
       <div class="project-links">
-        <a href="gtm-oversight-portfolio_1.html" class="link-primary">Read more</a>
+        <button class="link-primary lock-btn" data-dest="gtm-oversight-portfolio_1.html" style="background:none;border:none;border-bottom:1px solid var(--ink);padding-bottom:1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:var(--ink);font-family:inherit;">
+          <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="5.5" width="8" height="6" rx="1" fill="currentColor" opacity="0.8"/><path d="M3.5 5.5V3.75a2 2 0 0 1 4 0V5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+          Read more
+        </button>
       </div>
     </div>
   </div>
@@ -275,7 +278,10 @@
       <h2 class="project-title">Scoped search</h2>
       <p class="project-desc">Scoped Search addresses a productivity problem for sales reps in large organizations: when reps have open access to nearly all data in Highspot, they end up spending more time searching for content than actually selling. This hurts both the rep and the organization.</p>
       <div class="project-links">
-        <a href="scoped-search-portfolio.html" class="link-primary">Read more</a>
+        <button class="link-primary lock-btn" data-dest="scoped-search-portfolio.html" style="background:none;border:none;border-bottom:1px solid var(--ink);padding-bottom:1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:var(--ink);font-family:inherit;">
+          <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="5.5" width="8" height="6" rx="1" fill="currentColor" opacity="0.8"/><path d="M3.5 5.5V3.75a2 2 0 0 1 4 0V5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+          Read more
+        </button>
       </div>
     </div>
   </div>
@@ -302,20 +308,29 @@
 
 </div>
 
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:200;display:none;align-items:center;justify-content:center;">
+  <div style="max-width:380px;width:100%;padding:0 32px;">
+    <div style="font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:8px;">This work is protected</div>
+    <div style="font-size:14px;color:var(--mid);line-height:1.65;margin-bottom:32px;">Enter the password to view this case study. If you don't have it, feel free to reach out.</div>
+    <input id="pw-input" type="password" placeholder="Password" style="width:100%;font-size:14px;font-family:inherit;padding:12px 14px;border:1px solid var(--rule);border-radius:4px;background:transparent;color:var(--ink);outline:none;margin-bottom:8px;" />
+    <div id="pw-error" style="font-size:12px;color:#c0392b;min-height:18px;margin-bottom:12px;"></div>
+    <button id="pw-submit" style="width:100%;font-size:14px;font-family:inherit;font-weight:500;padding:12px;background:var(--ink);color:var(--bg);border:none;border-radius:4px;cursor:pointer;">Continue</button>
+    <button id="pw-cancel" style="width:100%;font-size:13px;font-family:inherit;color:var(--mid);background:none;border:none;cursor:pointer;margin-top:16px;">Cancel</button>
+  </div>
+</div>
+
 <script>
-  // Intersection observer for fade-ins
   const fadeEls = document.querySelectorAll('.hero-fade, .project-row');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.06 });
   fadeEls.forEach(el => io.observe(el));
 
-  // Stagger hero elements slightly
   document.querySelectorAll('.hero-fade').forEach((el, i) => {
     el.style.transitionDelay = `${i * 0.08}s`;
   });
 
-  // Image upload
   function loadImage(input) {
     const file = input.files[0];
     if (!file) return;
@@ -331,6 +346,49 @@
     };
     reader.readAsDataURL(file);
   }
+
+  // Password overlay
+  const PASS = 'accessmyprojects';
+  const STORAGE_KEY = 'aditi_portfolio_auth';
+  const overlay = document.getElementById('pw-overlay');
+  const pwInput = document.getElementById('pw-input');
+  const pwError = document.getElementById('pw-error');
+  let pendingDest = null;
+
+  document.querySelectorAll('.lock-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dest = btn.getAttribute('data-dest');
+      if (localStorage.getItem(STORAGE_KEY) === 'true') {
+        window.location.href = dest;
+        return;
+      }
+      pendingDest = dest;
+      pwInput.value = '';
+      pwError.textContent = '';
+      overlay.style.display = 'flex';
+      setTimeout(() => pwInput.focus(), 50);
+    });
+  });
+
+  document.getElementById('pw-submit').addEventListener('click', attempt);
+  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+
+  function attempt() {
+    if (pwInput.value === PASS) {
+      localStorage.setItem(STORAGE_KEY, 'true');
+      overlay.style.display = 'none';
+      window.location.href = pendingDest;
+    } else {
+      pwError.textContent = 'Incorrect password. Please try again.';
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  }
+
+  document.getElementById('pw-cancel').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    pendingDest = null;
+  });
 </script>
 </body>
 </html>
