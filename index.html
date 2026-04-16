@@ -308,17 +308,6 @@
 
 </div>
 
-<!-- PASSWORD OVERLAY -->
-<div id="pw-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:200;display:none;align-items:center;justify-content:center;">
-  <div style="max-width:380px;width:100%;padding:0 32px;">
-    <div style="font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:8px;">This work is protected</div>
-    <div style="font-size:14px;color:var(--mid);line-height:1.65;margin-bottom:32px;">Enter the password to view this case study. If you don't have it, feel free to reach out.</div>
-    <input id="pw-input" type="password" placeholder="Password" style="width:100%;font-size:14px;font-family:inherit;padding:12px 14px;border:1px solid var(--rule);border-radius:4px;background:transparent;color:var(--ink);outline:none;margin-bottom:8px;" />
-    <div id="pw-error" style="font-size:12px;color:#c0392b;min-height:18px;margin-bottom:12px;"></div>
-    <button id="pw-submit" style="width:100%;font-size:14px;font-family:inherit;font-weight:500;padding:12px;background:var(--ink);color:var(--bg);border:none;border-radius:4px;cursor:pointer;">Continue</button>
-    <button id="pw-cancel" style="width:100%;font-size:13px;font-family:inherit;color:var(--mid);background:none;border:none;cursor:pointer;margin-top:16px;">Cancel</button>
-  </div>
-</div>
 
 <script>
   const fadeEls = document.querySelectorAll('.hero-fade, .project-row');
@@ -347,47 +336,10 @@
     reader.readAsDataURL(file);
   }
 
-  // Password overlay
-  const PASS = 'accessmyprojects';
-  const STORAGE_KEY = 'aditi_portfolio_auth';
-  const overlay = document.getElementById('pw-overlay');
-  const pwInput = document.getElementById('pw-input');
-  const pwError = document.getElementById('pw-error');
-  let pendingDest = null;
-
   document.querySelectorAll('.lock-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const dest = btn.getAttribute('data-dest');
-      if (localStorage.getItem(STORAGE_KEY) === 'true') {
-        window.location.href = dest;
-        return;
-      }
-      pendingDest = dest;
-      pwInput.value = '';
-      pwError.textContent = '';
-      overlay.style.display = 'flex';
-      setTimeout(() => pwInput.focus(), 50);
+      window.location.href = btn.getAttribute('data-dest');
     });
-  });
-
-  document.getElementById('pw-submit').addEventListener('click', attempt);
-  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
-
-  function attempt() {
-    if (pwInput.value === PASS) {
-      localStorage.setItem(STORAGE_KEY, 'true');
-      overlay.style.display = 'none';
-      window.location.href = pendingDest;
-    } else {
-      pwError.textContent = 'Incorrect password. Please try again.';
-      pwInput.value = '';
-      pwInput.focus();
-    }
-  }
-
-  document.getElementById('pw-cancel').addEventListener('click', () => {
-    overlay.style.display = 'none';
-    pendingDest = null;
   });
 </script>
 </body>
