@@ -8,7 +8,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="case-study.css">
+<script>
+  if (localStorage.getItem('aditi_portfolio_auth') === 'true')
+    document.documentElement.classList.add('pw-authed');
+</script>
 <style>
+  /* PASSWORD OVERLAY */
+  #pw-overlay { display: flex; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; }
+  .pw-authed #pw-overlay { display: none; }
   /* FULL WIDTH SECTION */
   .section-full {
     padding: 72px 0;
@@ -148,6 +155,18 @@
 </style>
 </head>
 <body>
+
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay">
+  <div style="max-width:380px;width:100%;padding:0 32px;">
+    <div style="font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:8px;">This work is protected</div>
+    <div style="font-size:14px;color:var(--mid);line-height:1.65;margin-bottom:32px;">Enter the password to view this case study. If you don't have it, reach out at aditisingh.design@gmail.com.</div>
+    <input id="pw-input" type="password" placeholder="Password" style="width:100%;font-size:14px;font-family:inherit;padding:12px 14px;border:1px solid var(--rule);border-radius:4px;background:transparent;color:var(--ink);outline:none;margin-bottom:8px;" />
+    <div id="pw-error" style="font-size:12px;color:#c0392b;min-height:18px;margin-bottom:12px;"></div>
+    <button id="pw-submit" style="width:100%;font-size:14px;font-family:inherit;font-weight:500;padding:12px;background:var(--ink);color:var(--bg);border:none;border-radius:4px;cursor:pointer;">Continue</button>
+    <button id="pw-cancel" style="width:100%;font-size:13px;font-family:inherit;color:var(--mid);background:none;border:none;cursor:pointer;margin-top:16px;">Cancel</button>
+  </div>
+</div>
 
 <nav>
   <a class="nav-back" href="index.html">← Back</a>
@@ -457,6 +476,36 @@
     };
     reader.readAsDataURL(file);
   }
+
+  // Password gate
+  (function() {
+    const PASS = 'seeproject';
+    const STORAGE_KEY = 'aditi_portfolio_auth';
+    const overlay = document.getElementById('pw-overlay');
+    const pwInput = document.getElementById('pw-input');
+    const pwError = document.getElementById('pw-error');
+
+    if (localStorage.getItem(STORAGE_KEY) !== 'true') {
+      setTimeout(() => pwInput.focus(), 50);
+    }
+
+    function attempt() {
+      if (pwInput.value === PASS) {
+        localStorage.setItem(STORAGE_KEY, 'true');
+        overlay.style.display = 'none';
+      } else {
+        pwError.textContent = 'Incorrect password. Please try again.';
+        pwInput.value = '';
+        pwInput.focus();
+      }
+    }
+
+    document.getElementById('pw-submit').addEventListener('click', attempt);
+    pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+    document.getElementById('pw-cancel').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  })();
 </script>
 </body>
 </html>
