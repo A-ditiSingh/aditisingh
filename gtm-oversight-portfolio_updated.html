@@ -9,7 +9,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="case-study.css">
+<script>
+  if (localStorage.getItem('aditi_portfolio_auth') === 'true')
+    document.documentElement.classList.add('pw-authed');
+</script>
 <style>
+  /* PASSWORD OVERLAY */
+  #pw-overlay { display: flex; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; }
+  .pw-authed #pw-overlay { display: none; }
   /* FULL WIDTH SECTION */
   .section-full {
     padding: 72px 0;
@@ -150,6 +157,18 @@
 </head>
 <body>
 
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay">
+  <div style="max-width:380px;width:100%;padding:0 32px;">
+    <div style="font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:8px;">This work is protected</div>
+    <div style="font-size:14px;color:var(--mid);line-height:1.65;margin-bottom:32px;">Enter the password to view this case study. If you don't have it, reach out at aditisingh.design@gmail.com.</div>
+    <input id="pw-input" type="password" placeholder="Password" style="width:100%;font-size:14px;font-family:inherit;padding:12px 14px;border:1px solid var(--rule);border-radius:4px;background:transparent;color:var(--ink);outline:none;margin-bottom:8px;" />
+    <div id="pw-error" style="font-size:12px;color:#c0392b;min-height:18px;margin-bottom:12px;"></div>
+    <button id="pw-submit" style="width:100%;font-size:14px;font-family:inherit;font-weight:500;padding:12px;background:var(--ink);color:var(--bg);border:none;border-radius:4px;cursor:pointer;">Continue</button>
+    <button id="pw-cancel" style="width:100%;font-size:13px;font-family:inherit;color:var(--mid);background:none;border:none;cursor:pointer;margin-top:16px;">Cancel</button>
+  </div>
+</div>
+
 <nav>
   <a class="nav-back" href="index.html">← Back</a>
   <ul class="nav-links">
@@ -212,19 +231,19 @@
         <div class="gtm-carousel-viewport">
           <div class="gtm-carousel-slide is-active">
             <div class="img-slot gtm-carousel-slot">
-              <img src="Images/BD.png" alt="Define — business outcomes framing">
+              <img src="Images/define.png" alt="Define — business outcomes framing">
             </div>
             <p class="gtm-carousel-title">Define<span>Articulate the initiative and strategic intent</span></p>
           </div>
           <div class="gtm-carousel-slide">
             <div class="img-slot gtm-carousel-slot">
-              <img src="Images/BO framing.png" alt="Configure — goals and outcomes">
+              <img src="Images/Configure.png" alt="Configure — goals and outcomes">
             </div>
             <p class="gtm-carousel-title">Configure<span>Set goals and select activities to measure</span></p>
           </div>
           <div class="gtm-carousel-slide">
             <div class="img-slot gtm-carousel-slot">
-              <img src="Images/Activity framing.png" alt="Track — activity and engagement">
+              <img src="Images/Track.png" alt="Track — activity and engagement">
             </div>
             <p class="gtm-carousel-title">Track<span>Monitor progress on a live dashboard</span></p>
           </div>
@@ -242,155 +261,150 @@
     </div>
   </div>
 
-  <!-- LEARNING 1 -->
-  <div class="section-row fade-in">
-    <div>
-      <div class="dual-image">
-        <div>
-          <div class="section-image-card warm">
-            <div class="img-slot">
-              <img src="Images/Before_WYSWYG.png" alt="Go to market with Initiatives">
-            </div>
-          </div>
-          <p class="img-caption">Before — open WYSIWYG editor</p>
-        </div>
-        <div>
-          <div class="section-image-card sage">
-            <div class="img-slot">
-              <img src="Images/After_structured.png" alt="Go to market with Initiatives">
-            </div>
-          </div>
-          <p class="img-caption">After — structured drag-and-drop scaffolding</p>
-        </div>
-      </div>
-    </div>
-    <div class="section-text">
-      <div class="section-label">Learning 01 — Creation</div>
-      <h2 class="section-title">A blank slate and complete flexibility increased the effort of defining the initiative.</h2>
-      <div class="section-body">
-        <p>The initial design used a WYSIWYG editor, intended to give leaders flexibility in articulating their initiative. In testing with pilot customers, users focused on formatting decisions rather than the strategic content of the initiative.</p>
-        <p>Feedback from 10 customers in our pilot program made the problem concrete:</p>
-      </div>
-      <div class="chain" style="margin-top: 16px;">
-        <div class="chain-item">
-          <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--ink); width:36px;">7/10</div>
-          <div class="chain-text"><p>Initiative owners said a blank slate was an overwhelming starting point</p></div>
-        </div>
-        <div class="chain-item">
-          <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--ink); width:36px;">3/10</div>
-          <div class="chain-text"><p>Did not expect to define the initiative in the WYSIWYG editor at all</p></div>
-        </div>
-        <div class="chain-item">
-          <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--ink); width:36px;">4/10</div>
-          <div class="chain-text"><p>Liked the WYSIWYG experience due to familiarity, but needed a template to reduce the number of decisions to be made</p></div>
-        </div>
-      </div>
-      <div class="pivot-inline" style="margin-top: 20px;">
-        <div class="pivot-row before-row"><span class="pivot-tag before">Before</span><span class="pivot-content">Open WYSIWYG — leaders design their own layout</span></div>
-        <div class="pivot-row after-row"><span class="pivot-tag after">After</span><span class="pivot-content">Structured drag-and-drop — constrained inputs, clear scaffolding</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- LEARNING 2 -->
-  <div class="section-row reverse fade-in">
-    <div>
-      <div class="section-image-card clay">
-        <div class="img-slot" style="aspect-ratio: 2/3;">
-          <img src="Images/BD.png" alt="Go to market with Initiatives">
-        </div>
-      </div>
-      <p class="img-caption">Business Outcomes section — original framing</p>
-    </div>
-    <div class="section-text">
-      <div class="section-label">Learning 02 — Data Engagement</div>
-      <h2 class="section-title">The correlation metric was hard to understand.</h2>
-      <div class="section-body">
-        <p>The scorecard introduced a metric to answer the question "Is completing an activity correlated with higher revenue outcomes?" The metric was intended to help teams differentiate high and low impact activities.</p>
-        <p>Customer feedback highlighted that the metric was valuable but hard to understand:</p>
-      </div>
-      <div class="chain" style="margin-top: 16px;">
-        <div class="chain-item">
-          <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--mid); width:36px;">0/10</div>
-          <div class="chain-text"><p>Customers understood the metric before it was explained to them</p></div>
-        </div>
-        <div class="chain-item">
-          <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--ink); width:36px;">10/10</div>
-          <div class="chain-text"><p>Loved the metric once they understood it</p></div>
-        </div>
-      </div>
-      <div class="section-body" style="margin-top: 16px;">
-        <p>Customer research highlighted that the data was useful but the product wasn't doing a great job of communicating this to the user. The metric was presented in a "Business Outcomes" section, where the revenue figure was the headline and the activity driving that revenue appeared as secondary text below it.</p>
-        <p>The team addressed the comprehension gap through customer onboarding conversations in the short term, but renaming the section to "Business Drivers" resolved the issue at the product level.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- REFRAME -->
-  <div class="section-full fade-in" style="max-width: none;">
-    <div class="section-label">The Pivot — Naming & Framing</div>
-    <h2 class="section-title">Renaming "Business Outcomes" to "Business Drivers" changed how customers read and used the data</h2>
-    <div class="section-body">
-      <p>Renaming the section from "Business Outcomes" to "Business Drivers" was more than a copy change. The new name shifted the mental model from revenue as the primary lens to activity as the driver of revenue, which required updates to chart labels, the configuration flow, and how the data was presented to users.</p>
-    </div>
-    <div class="compare-wrap">
-      <table>
-        <thead>
-          <tr><th></th><th>Business Outcomes</th><th>Business Drivers</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Model</td><td>Revenue leads, activity is context</td><td>Activity leads, revenue is proof</td></tr>
-          <tr><td>Chart reads</td><td>Avg. revenue: did vs. didn't</td><td>For this activity: revenue difference?</td></tr>
-          <tr><td>Configure flow</td><td>Pick metric → pick activity</td><td>Pick activity → revenue surfaces</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="full-image" style="grid-template-columns: 1fr 1fr; margin-top: 40px;">
+ <!-- LEARNING 1 -->
+ <div class="section-row fade-in">
+  <div>
+    <div class="dual-image">
       <div>
         <div class="section-image-card warm">
-          <div class="img-slot" style="aspect-ratio: 2/1;">
-            <img src="Images/BO framing.png" alt="Go to market with Initiatives">
+          <div class="img-slot">
+            <img src="Images/Before_WYSWYG.png" alt="Go to market with Initiatives">
           </div>
         </div>
-        <p class="img-caption">Before — "Business Outcomes" framing</p>
+        <p class="img-caption">Before — open WYSIWYG editor</p>
       </div>
-    
-    </div>
-    
-    <div class="full-image" style="grid-template-columns: 1fr 1fr; margin-top: 40px;">
       <div>
         <div class="section-image-card sage">
-          <div class="img-slot" style="aspect-ratio: 2/1;">
-            <img src="Images/Activity framing.png" alt="Go to market with Initiatives">
+          <div class="img-slot">
+            <img src="Images/After_structured.png" alt="Go to market with Initiatives">
           </div>
         </div>
-        <p class="img-caption">After — "Activity" framing</p>
+        <p class="img-caption">After — structured drag-and-drop scaffolding</p>
       </div>
     </div>
   </div>
+  <div class="section-text">
+    <div class="section-label">Learning 01 — Creating an initiative</div>
+    <h2 class="section-title">A blank slate and complete flexibility increased the effort of defining the initiative.</h2>
+    <div class="section-body">
+      <p>The initiative creation experience was originally scoped as a WYSIWYG editor. After the product shipped to a pilot cohort, customer feedback indicated the open-ended format was not working — users were focused on formatting decisions rather than the strategic content of the initiative. I used that feedback to make the case for replacing the WYSIWYG with a structured drag-and-drop model.</p>
+      <p>Feedback from 10 customers in the pilot made the problem concrete:</p>
+    </div>
+    <div class="chain" style="margin-top: 16px;">
+      <div class="chain-item">
+        <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--ink); width:36px;">7/10</div>
+        <div class="chain-text"><p>Initiative owners said a blank slate was an overwhelming starting point</p></div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--ink); width:36px;">3/10</div>
+        <div class="chain-text"><p>Did not expect to define the initiative in the WYSIWYG editor at all</p></div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--ink); width:36px;">4/10</div>
+        <div class="chain-text"><p>Liked the WYSIWYG experience due to familiarity, but needed a template to reduce the number of decisions to be made</p></div>
+      </div>
+    </div>
+    <div class="pivot-inline" style="margin-top: 20px;">
+      <div class="pivot-row before-row"><span class="pivot-tag before">Before</span><span class="pivot-content">Open WYSIWYG — leaders design their own layout</span></div>
+      <div class="pivot-row after-row"><span class="pivot-tag after">After</span><span class="pivot-content">Structured drag-and-drop — constrained inputs, clear scaffolding</span></div>
+    </div>
+  </div>
+</div>
 
-  <!-- OUTCOME -->
-  <div class="section-row reverse fade-in">
+<!-- LEARNING 2 -->
+<div class="section-row reverse fade-in">
+  <div>
+    <div class="section-image-card clay">
+      <div class="img-slot" style="aspect-ratio: 2/3;">
+        <img src="Images/BD.png" alt="Go to market with Initiatives">
+      </div>
+    </div>
+    <p class="img-caption">Business Outcomes section — original framing</p>
+  </div>
+  <div class="section-text">
+    <div class="section-label">Learning 02 — framing the data</div>
+    <h2 class="section-title">The correlation metric was hard to understand.</h2>
+    <div class="section-body">
+      <p>The scorecard introduced a metric to answer the question "Is completing an activity correlated with higher revenue outcomes?" The metric was intended to help teams differentiate high and low impact activities.</p>
+      <p>Customer feedback highlighted that the metric was valuable but hard to understand:</p>
+    </div>
+    <div class="chain" style="margin-top: 16px;">
+      <div class="chain-item">
+        <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--mid); width:36px;">0/10</div>
+        <div class="chain-text"><p>Customers understood the metric before it was explained to them</p></div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num" style="font-size:15px; font-weight:500; color:var(--ink); width:36px;">10/10</div>
+        <div class="chain-text"><p>Loved the metric once they understood it</p></div>
+      </div>
+    </div>
+    <div class="section-body" style="margin-top: 16px;">
+      <p>Customer research highlighted that the data was useful but the product wasn't doing a great job of communicating this to the user. The metric was presented in a "Business Outcomes" section, where the revenue figure was the headline and the activity driving that revenue appeared as secondary text below it.</p>
+      <p>The team addressed the comprehension gap through customer onboarding conversations in the short term, but renaming the section to "Business Drivers" resolved the issue at the product level.</p>
+    </div>
+  </div>
+</div>
+
+<!-- REFRAME -->
+<div class="section-full fade-in" style="max-width: none;">
+  <div class="section-label">The Pivot — Naming & Framing</div>
+  <h2 class="section-title">Renaming "Business Outcomes" to "Business Drivers" changed how customers read and used the data</h2>
+  <div class="section-body">
+    <p>Renaming the section from "Business Outcomes" to "Business Drivers" was more than a copy change. The new name shifted the mental model from revenue as the primary lens to activity as the driver of revenue, which required updates to chart labels, the configuration flow, and how the data was presented to users.</p>
+  </div>
+  <div class="compare-wrap">
+    <table>
+      <thead>
+        <tr><th></th><th>Business Outcomes</th><th>Business Drivers</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Model</td><td>Revenue leads, activity is context</td><td>Activity leads, revenue is proof</td></tr>
+        <tr><td>Chart reads</td><td>Avg. revenue: did vs. didn't</td><td>For this activity: revenue difference?</td></tr>
+        <tr><td>Configure flow</td><td>Pick metric → pick activity</td><td>Pick activity → revenue surfaces</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="full-image" style="grid-template-columns: 1fr 1fr; margin-top: 40px;">
     <div>
-      <div class="section-image-card yellow">
-        <div class="img-slot">
-          <input type="file" accept="image/*" onchange="loadImage(this)">
-          <div class="upload-hint"><span class="plus">+</span><span>Final dashboard view</span></div>
+      <div class="section-image-card warm">
+        <div class="img-slot" style="aspect-ratio: 2/1;">
+          <img src="Images/BO framing.png" alt="Go to market with Initiatives">
         </div>
       </div>
-      <p class="img-caption">Final product — causal chain dashboard</p>
+      <p class="img-caption">Before — "Business Outcomes" framing</p>
     </div>
-    <div class="section-text">
-      <div class="section-label">The Result</div>
-      <h2 class="section-title">A causal chain GTM leaders can act on</h2>
-      <div class="section-body">
-        <p>The product presents a sequential causal chain that connects rep behavior, customer conversations, and revenue outcomes, giving leaders a structured view of whether their initiative is working and where to take action.</p>
+  
+  </div>
+  
+  <div class="full-image" style="grid-template-columns: 1fr 1fr; margin-top: 40px;">
+    <div>
+      <div class="section-image-card sage">
+        <div class="img-slot" style="aspect-ratio: 2/1;">
+          <img src="Images/Activity framing.png" alt="Go to market with Initiatives">
+        </div>
       </div>
-      <div class="chain">
-        <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Training behavior</h4><p>Are reps completing activities to build the right skills?</p></div></div>
-        <div class="chain-item"><div class="chain-num">02</div><div class="chain-text"><h4>Customer conversations</h4><p>Are they having the expected conversations?</p></div></div>
-        <div class="chain-item"><div class="chain-num">03</div><div class="chain-text"><h4>Revenue correlation</h4><p>Is completing that activity correlated with higher revenue?</p></div></div>
-        <div class="chain-item"><div class="chain-num">04</div><div class="chain-text"><h4>Initiative performance</h4><p>Is the initiative hitting its revenue goal in aggregate?</p></div></div>
+      <p class="img-caption">After — "Activity" framing</p>
+    </div>
+  </div>
+</div>
+
+
+  <!-- IMPACT -->
+  <div class="section-full fade-in">
+    <div class="section-label">The Impact</div>
+    <h2 class="section-title">30% of tracked pipeline was tied to an Initiative within two months of launch</h2>
+    <div class="chain" style="margin-top: 24px;">
+      <div class="chain-item">
+        <div class="chain-num" style="font-size:11px; color:var(--mid); width:72px; flex-shrink:0;">Oct 2025</div>
+        <div class="chain-text"><p>The product was selected to demo at the opening keynote of Highspot's largest annual customer event</p></div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num" style="font-size:11px; color:var(--mid); width:72px; flex-shrink:0;">Jan 2026</div>
+        <div class="chain-text"><p>30 customers onboarded and 320 Initiatives created post-launch</p></div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num" style="font-size:11px; color:var(--mid); width:72px; flex-shrink:0;">Jan 2026</div>
+        <div class="chain-text"><p>30% of tracked pipeline was tied to an Initiative — the core metric the product had been designed to influence</p></div>
       </div>
     </div>
   </div>
@@ -403,7 +417,7 @@
       <div class="takeaway-card">
         <div class="t-num">Learning 01</div>
         <div class="t-title">Simplifying configuration surfaced usage patterns the team had not anticipated</div>
-        <div class="t-body">Simplifying the creation flow surfaced usage patterns the team had not designed for. Removing structural barriers allowed users to focus on the strategic decisions the product was built to support.</div>
+        <div class="t-body">Simplifying the creation flow allowed users to focus on the strategic decisions the product was built to support, and surfaced behaviors the team had not designed for.</div>
       </div>
       <div class="takeaway-card">
         <div class="t-num">Learning 02</div>
@@ -458,6 +472,36 @@
     };
     reader.readAsDataURL(file);
   }
+
+  // Password gate
+  (function() {
+    const PASS = 'seeproject';
+    const STORAGE_KEY = 'aditi_portfolio_auth';
+    const overlay = document.getElementById('pw-overlay');
+    const pwInput = document.getElementById('pw-input');
+    const pwError = document.getElementById('pw-error');
+
+    if (localStorage.getItem(STORAGE_KEY) !== 'true') {
+      setTimeout(() => pwInput.focus(), 50);
+    }
+
+    function attempt() {
+      if (pwInput.value === PASS) {
+        localStorage.setItem(STORAGE_KEY, 'true');
+        overlay.style.display = 'none';
+      } else {
+        pwError.textContent = 'Incorrect password. Please try again.';
+        pwInput.value = '';
+        pwInput.focus();
+      }
+    }
+
+    document.getElementById('pw-submit').addEventListener('click', attempt);
+    pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+    document.getElementById('pw-cancel').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  })();
 </script>
 </body>
 </html>
