@@ -136,9 +136,7 @@
   <h1 class="hero-title">Scoped Search</h1>
   <p class="hero-desc">Sales reps in large organizations spend more time finding content than selling. Scoped Search gives reps a fast, low-friction way to search within the content that's relevant to them.</p>
   <dl class="hero-meta">
-    <div class="meta-block"><dt>Role</dt><dd>Lead Product Designer</dd></div>
-    <div class="meta-block"><dt>Stage</dt><dd>Zero to One</dd></div>
-    <div class="meta-block"><dt>Domain</dt><dd>Sales Enablement</dd></div>
+    <div class="meta-block"><dt>Role</dt><dd>Solo Product Designer</dd></div>
     <div class="meta-block"><dt>Timeline</dt><dd>2025</dd></div>
   </dl>
 </div>
@@ -191,7 +189,7 @@
       <div class="section-label">A NEW FILTERING CONSTRUCT</div>
       <h2 class="section-title">Content Collections make searching within a broad area possible</h2>
       <div class="section-body">
-        <p>To make scoped search possible, we first introduced <strong>content collections</strong> — an admin-defined grouping of related spots. Once a collection is configured, item-to-collection association becomes automatic.</p>
+        <p>To make scoped search possible, we first introduced <strong>content collections</strong> — an admin-defined grouping of related spots. Once an admin configures a collection, item-to-collection association becomes automatic.</p>
         <p>Collections can map naturally to how large orgs already think: by sub-org, product line, or region. This becomes a useful contrsuct for reps to limit their search results to a broader area. .</p>
       </div>
     </div>
@@ -215,21 +213,21 @@
       <div class="section-label">The Design Challenge</div>
       <h2 class="section-title">Two interaction models. One dropdown that couldn't hold both.</h2>
       <div class="section-body">
-        <p>The initial exploration examined two distinct models for how a rep could limit search results to a content area.</p>
+        <p>I explored two distinct models for how a rep could limit search results to a content area.</p>
       </div>
       <div class="chain">
         <div class="chain-item">
           <div class="chain-num">01</div>
           <div class="chain-text">
             <h4>Scope before the query — in the search dropdown</h4>
-            <p>The user selects a content collection before typing. The scoping interaction happens in the dropdown. The platform supports up to 50 collections, which meant the dropdown needed to accommodate a potentially large selection set — and the interaction patterns required to make that work cleanly made the dropdown more complex than the search experience it was supposed to simplify.</p>
+            <p>The user selects a content collection before typing. The scoping interaction happens in the dropdown. The platform supports up to 50 collections, which meant the dropdown needed to accommodate a potentially large selection set — and the interaction patterns required to make that work cleanly made the dropdown more complex than the search experience it aimed to simplify.</p>
           </div>
         </div>
         <div class="chain-item">
           <div class="chain-num">02</div>
           <div class="chain-text">
             <h4>Filter after the query — on the search results page</h4>
-            <p>The user submits a query first, then filters results by collection using sidebar filters or tabs on the results page. The available filter options are determined by what the search returns, not by what the user intended to search within.</p>
+            <p>The user submits a query first, then filters results by collection using sidebar filters or tabs on the results page. The available filter options depend on what the search returns, not on what the user intended to search within.</p>
           </div>
         </div>
       </div>
@@ -249,7 +247,7 @@
         <div class="ss-finding-copy">
           <div class="ss-finding-item">
             <div class="fi-title">Promote scoping to frequent collections — in the dropdown</div>
-            <div class="t-body">The 1–3 collections most relevant to the user are surfaced directly in the search dropdown, allowing the user to scope before submitting. Fast, contextual, low friction.</div>
+            <div class="t-body">The dropdown surfaces the 1–3 collections most relevant to the user directly, allowing the user to scope before submitting. Fast, contextual, low friction.</div>
           </div>
           <div class="ss-finding-item">
             <div class="fi-title">Allow filtering to other collections post-search</div>
@@ -318,7 +316,7 @@
           <div class="chain-num">04</div>
           <div class="chain-text">
             <h4>End state - The user has submitted a query.</h4>
-            <p>Search results are displayed in this state. The design provides clear affordances for adjusting the query, changing the scope, or starting a new search with minimal steps.</p>
+            <p>The dropdown displays search results in this state. The design provides clear affordances for adjusting the query, changing the scope, or starting a new search with minimal steps.</p>
           </div>
         </div>
       </div>
@@ -356,7 +354,7 @@
     <div class="takeaway-card">
       <div class="t-num">Adoption</div>
       <div class="t-title">350,000 searches. 5% scoped.</div>
-      <div class="t-body">Content collections are configured in organizations that collectively account for 350,000 search submissions. Of those, 5% of searches are scoped to a collection before the query is submitted.</div>
+      <div class="t-body">Admins have configured content collections in organizations that collectively account for 350,000 search submissions. Of those, reps scope 5% of searches to a collection before submitting the query.</div>
     </div>
     <div class="takeaway-card">
       <div class="t-num">Search to click conversion</div>

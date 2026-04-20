@@ -121,9 +121,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">Context</div>
-      <h2 class="section-title">Assigned as design lead for GTM Agent because most GTM questions need data</h2>
+      <h2 class="section-title">I led design for GTM Agent because most GTM questions need data</h2>
       <div class="section-body">
-        <p>As design lead for analytics, I was assigned to the GTM Agent because the questions GTM teams ask — about content performance, rep activity, pipeline — almost always warrant a data-based response, not just a text summary.</p>
+        <p>As design lead for analytics, I took on GTM Agent because the questions GTM teams ask — about content performance, rep activity, pipeline — almost always warrant a data-based response, not just a text summary.</p>
         <p>This made it a different design problem than a typical conversational agent.</p>
       </div>
       <div class="chain">
@@ -191,7 +191,7 @@
       <div class="section-label">The Design Problem</div>
       <h2 class="section-title">Data responses require more than a good summary</h2>
       <div class="section-body">
-        <p>A text-based agent response needs to summarize sources well. A data-based response has to do more: it needs to present data in the right format, and it needs to give users the context to understand how that data was derived.</p>
+        <p>A text-based agent response needs to summarize sources well. A data-based response has to do more: it needs to present data in the right format, and it needs to give users the context to understand how the agent derived that data.</p>
         <p>Without both, users can't tell if the answer is right. They either overtrust it or ignore it.</p>
       </div>
       <div class="req-list">
@@ -269,16 +269,16 @@
       <div class="section-label">Design Insight</div>
       <h2 class="section-title">The prompt is the design spec</h2>
       <div class="section-body">
-        <p>Defining the four types was the easy part. Getting the agent to choose correctly required specifying decision logic precisely enough that the model could apply it consistently.</p>
-        <p>That meant writing detailed decision rules — when to use a table over a list, how to distinguish a trend question from a ranking question — and encoding them directly into the prompt. The prompt became the design deliverable.</p>
+        <p>Defining the four types was the easy part. To get the agent to choose correctly, I had to specify decision logic precisely enough that the model could apply it consistently.</p>
+        <p>I wrote detailed decision rules — when to use a table over a list, how to distinguish a trend question from a ranking question — and encoded them directly into the prompt. The prompt became the design deliverable.</p>
       </div>
       <div class="discovery">
         <div class="d-label">Key insight</div>
         <p>In agentic design, the prompt is the design spec. If you can't articulate a decision rule clearly enough to write it down, the agent can't apply it. The act of writing the prompt forces design rigor.</p>
       </div>
       <div class="pivot-inline" style="margin-top: 20px;">
-        <div class="pivot-row before-row"><span class="pivot-tag before">Before</span><span class="pivot-content">Format chosen by default — usually a text summary regardless of the question type</span></div>
-        <div class="pivot-row after-row"><span class="pivot-tag after">After</span><span class="pivot-content">Format chosen by explicit decision rules encoded in the prompt</span></div>
+        <div class="pivot-row before-row"><span class="pivot-tag before">Before</span><span class="pivot-content">Agent defaulted to a text summary regardless of the question type</span></div>
+        <div class="pivot-row after-row"><span class="pivot-tag after">After</span><span class="pivot-content">Explicit decision rules I encoded in the prompt drive format choice</span></div>
       </div>
     </div>
   </div>
@@ -312,7 +312,7 @@
         <p>The table response isn't just a data dump. It's a structured artifact that gives users everything they need to evaluate and act on the answer.</p>
       </div>
       <div class="chain">
-        <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Query + Additional Context tabs</h4><p>Users can see how the question was interpreted and what context the agent applied</p></div></div>
+        <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Query + Additional Context tabs</h4><p>Users can see how the agent interpreted the question and what context it applied</p></div></div>
         <div class="chain-item"><div class="chain-num">02</div><div class="chain-text"><h4>Applied filters</h4><p>Surfaces exactly which filters shaped the dataset — time range, scope, exclusions</p></div></div>
         <div class="chain-item"><div class="chain-num">03</div><div class="chain-text"><h4>Supporting information label</h4><p>Distinguishes the data table from surrounding context — users know what they're looking at</p></div></div>
         <div class="chain-item"><div class="chain-num">04</div><div class="chain-text"><h4>Dig deeper + View report</h4><p>Easy paths to refine the query or move into a full report without losing context</p></div></div>
@@ -333,7 +333,7 @@
       <div class="takeaway-card">
         <div class="t-num">Learning 02</div>
         <div class="t-title">Trust is a design deliverable</div>
-        <div class="t-body">For data-based AI responses, the answer alone isn't enough. Users need to see how the dataset was derived to decide whether to act on it. Surfacing derivation context — filters, scope, assumptions — is as important as the data itself.</div>
+        <div class="t-body">For data-based AI responses, the answer alone isn't enough. Users need to see how the agent derived the dataset to decide whether to act on it. Surfacing derivation context — filters, scope, assumptions — is as important as the data itself.</div>
       </div>
     </div>
   </div>
