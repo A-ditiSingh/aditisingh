@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="icon" type="image/svg+xml" href="Images/favicon.svg">
 <title>Aditi Singh — Resume</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -69,9 +68,11 @@
 
   /* HERO */
   .hero {
-    padding: 80px 0 72px;
+    padding: 96px 0 72px;
     animation: fadeUp 0.7s ease both;
   }
+  .no-anim .hero,
+  .no-anim .section-row { animation: none; opacity: 1; transform: none; }
 
   .hero-eyebrow {
     font-size: 11px;
@@ -131,8 +132,7 @@
     display: flex;
     gap: 48px;
     flex-wrap: wrap;
-    padding-top: 32px;
-    border-top: 1px solid var(--rule);
+    padding-top: 16px;
   }
 
   .meta-block { display: flex; flex-direction: column; gap: 4px; }
@@ -140,6 +140,20 @@
   .meta-block dd { font-size: 14px; font-weight: 500; color: var(--ink); }
   .meta-block dd a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 1px; transition: border-color 0.15s; }
   .meta-block dd a:hover { border-color: var(--ink); }
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0 0 0 6px;
+    cursor: pointer;
+    color: var(--mid);
+    transition: color 0.15s;
+    vertical-align: middle;
+  }
+  .copy-btn:hover { color: var(--ink); }
+  .copy-btn svg { display: block; }
+  .copy-btn.copied { color: var(--ink); }
 
   /* SECTION ROW */
   .section-row {
@@ -320,19 +334,22 @@
 <div class="page">
 
   <div class="hero">
-    <div class="hero-eyebrow">Resume</div>
-    <h1 class="hero-name">aditi singh</h1>
+    <h1 class="hero-name"><strong>aditi singh</strong></h1>
     <p class="hero-summary">AI-native product designer with experience in 0-to-1 product development, B2B SaaS, agentic workflows, and analytics.</p>
     <a class="btn-download" href="Images/Aditi_Singh_Resume.pdf" download="Aditi_Singh_Resume.pdf">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      Download PDF
+      Download Resume
     </a>
     <dl class="hero-meta">
-      <div class="meta-block"><dt>Email</dt><dd><a href="mailto:aditisingh.design@gmail.com">aditisingh.design@gmail.com</a></dd></div>
+      <div class="meta-block">
+        <dt>Email</dt>
+        <dd>
+          <a href="mailto:aditisingh.design@gmail.com">aditisingh.design@gmail.com</a><button class="copy-btn" aria-label="Copy email" title="Copy email" onclick="copyEmail(this)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="4.5" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.1"/><path d="M3 8.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button>
+        </dd>
+      </div>
       <div class="meta-block"><dt>LinkedIn</dt><dd><a href="https://linkedin.com/in/aditising" target="_blank">linkedin.com/in/aditising</a></dd></div>
-      <div class="meta-block"><dt>Portfolio</dt><dd><a href="https://aditisingh.ca" target="_blank">aditisingh.ca</a></dd></div>
       <div class="meta-block"><dt>Location</dt><dd>Ontario, Canada</dd></div>
     </dl>
   </div>
@@ -348,10 +365,9 @@
           <span class="role-period">2022 – Present · Canada (Remote)</span>
         </div>
         <ul>
-          <li>Currently leading design for the Go-to-Market Agent, a specialized AI agent that surfaces data-driven GTM insights across rep activity, content performance, and revenue outcomes.</li>
-          <li>Led end-to-end design for Highspot's analytics platform — owning IA, interaction patterns, and visual systems for dashboards and reports.</li>
+          <li>Led end-to-end design for HIghspot's analytics platform — owning IA, interaction patterns, and visual systems for dahsboards and reports.</li>
           <li>Designed Initiatives from 0→1, a key competitive differentiator enabling sales leaders to track, measure, and act on rep activity data.</li>
-          <li>Led design for several key features across search, content governance, and content management.</li>
+          <li>Led the design several key features for search, content governance and management features.</li>
           <li>Mentored junior designers and contributed to design system standards across product areas.</li>
         </ul>
       </div>
@@ -409,10 +425,12 @@
       <div class="edu-item">
         <div class="edu-degree">MASc, Human-Computer Interaction</div>
         <div class="edu-school">Carleton University, Canada</div>
+        <div class="edu-year">2017 – 2019</div>
       </div>
       <div class="edu-item">
         <div class="edu-degree">Bachelor of Architecture</div>
         <div class="edu-school">Birla Institute of Technology, India</div>
+        <div class="edu-year">2007 – 2011</div>
       </div>
     </div>
   </div>
@@ -457,6 +475,28 @@
   </div>
 
 </div>
+
+<script>
+  // Skip hero animation when returning from Work
+  if (sessionStorage.getItem('portfolio_nav') === '1') {
+    document.body.classList.add('no-anim');
+    sessionStorage.removeItem('portfolio_nav');
+  }
+
+  document.querySelectorAll('a[href="index.html"]')
+    .forEach(a => a.addEventListener('click', () => sessionStorage.setItem('portfolio_nav', '1')));
+
+  function copyEmail(btn) {
+    navigator.clipboard.writeText('aditisingh.design@gmail.com').then(() => {
+      btn.classList.add('copied');
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6.5l3.5 3.5 5.5-6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="4.5" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.1"/><path d="M3 8.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>';
+      }, 2000);
+    });
+  }
+</script>
 
 </body>
 </html>
