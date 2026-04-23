@@ -95,7 +95,7 @@
   .img-caption--center { text-align: center; }
 
   /* Embedded prototype: smooth iframe resize when dropdown state changes */
-  .scoped-search-prototype-frame { margin-top: 12px; transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+  .scoped-search-prototype-frame { margin-top: 12px; border-radius: 10px; overflow: hidden; transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
 
   @media (max-width: 700px) {
     .ss-signal-grid { grid-template-columns: 1fr; }
@@ -132,12 +132,13 @@
 </nav>
 
 <div class="hero fade-in">
-  <div class="hero-year">2025</div>
+  <div class="hero-year">2024</div>
   <h1 class="hero-title">Scoped Search</h1>
   <p class="hero-desc">Sales reps in large organizations spend more time finding content than selling. Scoped Search gives reps a fast, low-friction way to search within the content that's relevant to them.</p>
   <dl class="hero-meta">
     <div class="meta-block"><dt>Role</dt><dd>Solo Product Designer</dd></div>
-    <div class="meta-block"><dt>Timeline</dt><dd>2025</dd></div>
+    <div class="meta-block"><dt>Timeline</dt><dd>Oct 2024 - Feb 2025</dd></div>
+    <div class="meta-block"><dt>Team</dt><dd>1 Product Manager, 1 FE Engineer</dd></div>
   </dl>
 </div>
 
@@ -187,10 +188,10 @@
     </div>
     <div class="section-text">
       <div class="section-label">A NEW FILTERING CONSTRUCT</div>
-      <h2 class="section-title">Content Collections make searching within a broad area possible</h2>
+      <h2 class="section-title">Content Collections: a new construct for organizing and filtering content</h2>
       <div class="section-body">
-        <p>To make scoped search possible, we first introduced <strong>content collections</strong> — an admin-defined grouping of related spots. Once an admin configures a collection, item-to-collection association becomes automatic.</p>
-        <p>Collections can map naturally to how large orgs already think: by sub-org, product line, or region. This becomes a useful construct for reps to limit their search results to a broader area.</p>
+        <p>Since existing filters were too many and too granular to be useful, the solution required a construct one level up: something that would first group content into meaningful areas, then allow filtering by that group. To make scoped search possible, we introduced <strong>content collections</strong>, an admin-defined grouping of related spots. Once an admin configures a collection, item-to-collection association becomes automatic.</p>
+        <p>Collections map naturally to how large organisations already think: by sub-org, product line, or region. This gives reps a useful construct for limiting search results to the content area most relevant to their role.</p>
       </div>
     </div>
   </div>
@@ -326,9 +327,9 @@
 <!-- PROTOTYPE -->
 <div class="ss-problem-section fade-in">
   <div class="section-label">The Solution</div>
-  <h2 class="section-title">Search dropdown: An interactive prototype</h2>
+  <h2 class="section-title">Engineering handoff: An interactive prototype</h2>
   <div class="section-body">
-    <p>The interactive prototype shows the search experience in action.</p>
+    <p>I delivered a Figma prototype covering every micro-interaction and state transition, giving engineering an unambiguous reference for the quality of experience the design required. The prototype embedded below shows what I handed off to engineering as the implementation spec.</p>
   </div>
 
     <!-- Interactive prototype markup/CSS/JS: scoped-search-prototype.html (embedded below) -->
@@ -340,9 +341,9 @@
       width="100%"
       height="560"
       loading="lazy"
-      style="border:0;display:block;max-width:100%;"
+      style="border:0;display:block;max-width:100%;border-radius:10px;overflow:hidden;"
     ></iframe>
-    <p class="img-caption img-caption--center">Vibe-coded prototype to demonstrate the search interaction</p>
+    <p class="img-caption img-caption--center">Fully-working prototype of the search dropdown</p>
 </div>
 
 
