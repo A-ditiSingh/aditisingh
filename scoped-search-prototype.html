@@ -30,6 +30,8 @@ html, body { margin: 0; background: #ece7df; }
 .search-shell2 { width: 100%; max-width: 400px; position: relative; display: flex; flex-direction: column; align-items: stretch; }
 .sbar2 { display: flex; align-items: center; background: #fff; border: 1px solid #dfdfdf; border-radius: 6px; padding: 0 12px; height: 40px; gap: 8px; transition: box-shadow 0.25s, border-color 0.25s; font-family: 'Source Sans 3', sans-serif; }
 .sbar2.focused2 { border-color: #afafaf; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+.sbar2.rest2 { transition: border-color 0.2s; }
+.sbar2.rest2:hover { border-color: #b8b8b8; cursor: text; }
 .si2 { color: #666; flex-shrink: 0; display: flex; }
 .scope-pill2 { display: flex; align-items: center; gap: 6px; background: #eee; border-radius: 6px; padding: 2px 6px; flex-shrink: 0; }
 .scope-pill2 span { font-size: 14px; font-weight: 400; color: #202020; white-space: nowrap; font-family: 'Source Sans 3', sans-serif; line-height: 20px; }
@@ -278,16 +280,66 @@ html, body { margin: 0; background: #ece7df; }
   .state-strip2 { flex-wrap: wrap; }
   .ss-item2 { min-width: 50%; }
 }
+
+/* Help accordion — sits inside the prototype frame, below the UI */
+.ss-help-accordion {
+  margin: 16px 0 0;
+  background: rgba(0,0,0,0.04);
+  border-radius: 8px;
+  border: 1px solid #dfdfdf;
+  font-family: 'Source Sans 3', sans-serif;
+}
+.ss-help-accordion[open] { padding-bottom: 6px; }
+.ss-help-accordion > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #202020;
+  user-select: none;
+}
+.ss-help-accordion > summary::-webkit-details-marker { display: none; }
+.ss-help-accordion > summary::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid #666;
+  border-bottom: 1.5px solid #666;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+.ss-help-accordion[open] > summary::after { transform: rotate(-135deg); }
+.ss-help-accordion ul {
+  margin: 0;
+  padding: 0 20px 14px 38px;
+  list-style: disc;
+}
+.ss-help-accordion li {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.75;
+  padding: 2px 0;
+}
+.ss-help-accordion li strong { color: #202020; font-weight: 600; }
 </style>
 </head>
 <body>
+<div class="pw2-wrap">
 <div class="pw2">
   <div class="state-strip2">
-    <div class="ss-item2 active" id="sl0"><span class="ss-tag2">01</span><span class="ss-name2">Zero</span></div>
+    <div class="ss-item2 active" id="sl5"><span class="ss-tag2">01</span><span class="ss-name2">Rest</span></div>
+    <div class="ss-item2" id="sl0"><span class="ss-tag2">02</span><span class="ss-name2">Zero</span></div>
     <div class="ss-item2" id="sl1"><span class="ss-tag2">02</span><span class="ss-name2">Scope + Zero</span></div>
     <div class="ss-item2" id="sl2"><span class="ss-tag2">03</span><span class="ss-name2">Auto-suggest</span></div>
-    <div class="ss-item2" id="sl3"><span class="ss-tag2">04</span><span class="ss-name2">Scope + Auto-suggest</span></div>
-    <div class="ss-item2" id="sl4"><span class="ss-tag2">05</span><span class="ss-name2">End State</span></div>
+    <div class="ss-item2" id="sl3"><span class="ss-tag2">03</span><span class="ss-name2">Scope + Auto-suggest</span></div>
+    <div class="ss-item2" id="sl4"><span class="ss-tag2">04</span><span class="ss-name2">End State</span></div>
   </div>
   <div class="ui-area2">
     <div class="search-shell2">
@@ -344,11 +396,22 @@ html, body { margin: 0; background: #ece7df; }
     </div>
   </div>
 </div>
+<details class="ss-help-accordion">
+  <summary><span style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#666" stroke-width="1.4" style="flex-shrink:0"><circle cx="7" cy="7" r="6"/><path d="M7 10v-.5" stroke-linecap="round"/><path d="M7 8c0-1.5 2-1.5 2-3a2 2 0 10-4 0" stroke-linecap="round" stroke-linejoin="round"/></svg>How to interact with this prototype</span></summary>
+  <ul>
+    <li>All elements in the prototype are interactive — go ahead and play with it</li>
+    <li>Click the numbered tabs (01–04) to jump between states</li>
+    <li>Type in the search bar to see the transition and auto-suggest</li>
+    <li>Click a collection chip to add a scope, and the × to remove it</li>
+    <li>Click outside the dropdown to dismiss it</li>
+  </ul>
+</details>
+</div>
 <script>
   /** Tell parent iframe to match real content height (scrollHeight includes the iframe viewport and breaks shrink). */
   function notifyParentPrototypeHeight() {
     if (window.parent === window) return;
-    var root = document.querySelector('.pw2');
+    var root = document.querySelector('.pw2-wrap');
     if (!root) return;
     var h = Math.ceil(root.getBoundingClientRect().height);
     window.parent.postMessage({ type: 'scoped-prototype-height', height: h }, '*');
@@ -361,9 +424,10 @@ html, body { margin: 0; background: #ece7df; }
 
   // Interactive prototype v2
   (function() {
-    var state2 = 'zero', scope2 = '', query2 = '';
+    var state2 = 'rest', scope2 = '', query2 = '';
+    var preRestState = 'zero';
     var allSecs2 = ['s2-colls','s2-recent','s2-sugg','s2-sugg-scoped','s2-end'];
-    var allLbls2 = ['sl0','sl1','sl2','sl3','sl4'];
+    var allLbls2 = ['sl5','sl0','sl1','sl2','sl3','sl4'];
 
     var SUGG_POOL = [
       { text: 'Cloud PBX in Cloud PBX Marketing', badge: '12', badgeScoped: '12' },
@@ -687,28 +751,37 @@ html, body { margin: 0; background: #ece7df; }
       var dd = document.getElementById('dd2');
 
       var isSerp = (state2 === 'serp' || state2 === 'serp-scoped');
-      if (!isSerp) query2 = readQueryFromInput();
+      var isRest = state2 === 'rest';
+      if (!isSerp && !isRest) query2 = readQueryFromInput();
 
       if (state2 !== 'auto-suggest' && state2 !== 'scope-auto-suggest') clearSuggestTimer();
 
-      var hasScope = (state2 === 'scope-zero' || state2 === 'scope-auto-suggest' || state2 === 'serp-scoped');
+      var hasScope = (state2 === 'scope-zero' || state2 === 'scope-auto-suggest' || state2 === 'serp-scoped' || (isRest && !!scope2));
       var hasQuery = query2.trim().length > 0;
 
       if (pill) { pill.style.display = hasScope ? 'flex' : 'none'; if (pillTxt) pillTxt.textContent = scope2; }
       syncInputValue();
       var inpEl = inp2();
-      if (inpEl) { inpEl.readOnly = isSerp; }
+      if (inpEl) { inpEl.readOnly = isSerp || isRest; }
 
       if (xcl) xcl.style.display = (hasQuery || hasScope) ? 'flex' : 'none';
-      if (dd) {
-        dd.classList.toggle('open2', !isSerp);
+
+      var sbarEl = document.getElementById('sbar2');
+      if (sbarEl) {
+        sbarEl.classList.toggle('focused2', !isSerp && !isRest);
+        sbarEl.classList.toggle('rest2', isRest);
       }
 
-      if (state2 === 'zero') { show2(['s2-colls','s2-recent']); setLbl2(0); }
-      else if (state2 === 'scope-zero') { show2(['s2-recent']); setLbl2(1); }
-      else if (state2 === 'auto-suggest') { show2(['s2-colls','s2-sugg']); setLbl2(2); }
-      else if (state2 === 'scope-auto-suggest') { show2(['s2-colls','s2-sugg-scoped']); setLbl2(3); }
-      else if (isSerp) { show2([]); setLbl2(4); }
+      if (dd) {
+        dd.classList.toggle('open2', !isSerp && !isRest);
+      }
+
+      if (state2 === 'zero') { show2(['s2-colls','s2-recent']); setLbl2(1); }
+      else if (state2 === 'scope-zero') { show2(['s2-recent']); setLbl2(2); }
+      else if (state2 === 'auto-suggest') { show2(['s2-colls','s2-sugg']); setLbl2(3); }
+      else if (state2 === 'scope-auto-suggest') { show2(['s2-colls','s2-sugg-scoped']); setLbl2(4); }
+      else if (isSerp) { show2([]); setLbl2(5); }
+      else if (isRest) { show2([]); setLbl2(0); }
 
       var recentHr = document.getElementById('s2-recent-hr');
       if (recentHr) recentHr.style.display = (state2 === 'zero') ? '' : 'none';
@@ -754,6 +827,12 @@ html, body { margin: 0; background: #ece7df; }
     var px2 = document.getElementById('pillX2');
     if (px2) px2.addEventListener('click', function(e) {
       e.stopPropagation();
+      if (state2 === 'rest') {
+        scope2 = '';
+        preRestState = 'zero';
+        render2();
+        return;
+      }
       if (state2 === 'scope-zero' || state2 === 'scope-auto-suggest' || state2 === 'serp-scoped') {
         clearScopeKeepQuery();
         render2();
@@ -767,6 +846,7 @@ html, body { margin: 0; background: #ece7df; }
       if (i) { i.value = ''; i.readOnly = false; }
       state2 = 'zero';
       scope2 = '';
+      preRestState = 'zero';
       clearSuggestTimer();
       render2();
       if (i) i.focus();
@@ -784,9 +864,30 @@ html, body { margin: 0; background: #ece7df; }
 
     var sbar = document.getElementById('sbar2');
     if (sbar) sbar.addEventListener('click', function(e) {
-      if (e.target.closest('#xclear2') || e.target.closest('#pillX2') || e.target.closest('#scopePill2')) return;
+      if (e.target.closest('#xclear2') || e.target.closest('#pillX2')) return;
+      if (state2 === 'rest') {
+        state2 = preRestState || 'zero';
+        if (state2 === 'auto-suggest' || state2 === 'scope-auto-suggest') resetSuggestTimer();
+        render2();
+        var i = inp2();
+        if (i) { i.readOnly = false; i.focus(); }
+        return;
+      }
+      if (e.target.closest('#scopePill2')) return;
       var i = inp2();
       if (i && !i.readOnly) i.focus();
+    });
+
+    var dropdownActiveStates = ['zero', 'scope-zero', 'auto-suggest', 'scope-auto-suggest'];
+    document.addEventListener('click', function(e) {
+      if (dropdownActiveStates.indexOf(state2) === -1) return;
+      var shell = document.querySelector('.search-shell2');
+      if (shell && shell.contains(e.target)) return;
+      var strip = document.querySelector('.state-strip2');
+      if (strip && strip.contains(e.target)) return;
+      preRestState = state2;
+      state2 = 'rest';
+      render2();
     });
 
     var si = inp2();
@@ -838,22 +939,38 @@ html, body { margin: 0; background: #ece7df; }
     });
 
     // Allow direct navigation by clicking top state tabs.
-    function jumpToStateFromTab(targetState, targetScope) {
-      query2 = CANONICAL_QUERY;
-      // render2() pulls query from the input first; set the field here or the read wipes query2.
+    function jumpToStateFromTab(targetState, targetScope, targetQuery) {
+      var q = (targetQuery !== undefined) ? targetQuery : CANONICAL_QUERY;
+      query2 = q;
       var el = inp2();
-      if (el) el.value = CANONICAL_QUERY;
+      if (el) el.value = q;
       scope2 = targetScope || '';
       state2 = targetState;
       if (state2 === 'auto-suggest' || state2 === 'scope-auto-suggest') resetSuggestTimer();
       render2();
     }
     var tabMap = {
-      sl0: function() { jumpToStateFromTab('zero', ''); },
-      sl1: function() { jumpToStateFromTab('scope-zero', 'APAC'); },
+      sl0: function() { jumpToStateFromTab('zero', '', ''); },
+      sl1: function() { jumpToStateFromTab('scope-zero', 'APAC', ''); },
       sl2: function() { jumpToStateFromTab('auto-suggest', ''); },
       sl3: function() { jumpToStateFromTab('scope-auto-suggest', 'APAC'); },
-      sl4: function() { jumpToStateFromTab('serp-scoped', 'APAC'); }
+      sl4: function() { jumpToStateFromTab('serp-scoped', 'APAC'); },
+      sl5: function() {
+        if (state2 !== 'rest') {
+          if (state2 === 'serp' || state2 === 'serp-scoped') {
+            preRestState = 'zero';
+            query2 = '';
+            scope2 = '';
+            var el = inp2();
+            if (el) { el.value = ''; el.readOnly = false; }
+          } else {
+            preRestState = state2;
+            query2 = readQueryFromInput();
+          }
+        }
+        state2 = 'rest';
+        render2();
+      }
     };
     Object.keys(tabMap).forEach(function(id) {
       var el = document.getElementById(id);
@@ -865,7 +982,7 @@ html, body { margin: 0; background: #ece7df; }
   })();
 
 (function() {
-  var root = document.querySelector('.pw2');
+  var root = document.querySelector('.pw2-wrap');
   if (!root) return;
   function send() {
     notifyParentPrototypeHeight();
@@ -877,6 +994,8 @@ html, body { margin: 0; background: #ece7df; }
     var dd = document.getElementById('dd2');
     if (dd) ro.observe(dd);
   }
+  var helpAcc = document.querySelector('.ss-help-accordion');
+  if (helpAcc) helpAcc.addEventListener('toggle', scheduleNotifyParentPrototypeHeight);
   window.addEventListener('load', function() { scheduleNotifyParentPrototypeHeight(); });
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function() { scheduleNotifyParentPrototypeHeight(); });
