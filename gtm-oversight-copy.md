@@ -72,9 +72,9 @@ This was an expansive project that evolved significantly from inception to gener
 
 **Label:** Customer feedback
 
-**Title:** A couple of pivots after shipping
+**Title:** Two major pivots between the pilot and the launch
 
-**Body:** After the product shipped to a pilot cohort, customer feedback surfaced two areas where the design needed to change.
+**Body:** The product was first released to a pilot cohort of 10 customers ahead of general availability. Feedback from that cohort surfaced two areas where the design needed substantial change, so the experience at launch reflects those pivots rather than the build the pilot customers used.
 
 **Card 1 — Pivot 01 — From blank canvas to a structured object:** A blank-slate WYSIWYG editor made defining an initiative overwhelming. We replaced it with a structured drag-and-drop scaffold.
 
