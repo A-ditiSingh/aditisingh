@@ -56,8 +56,8 @@
 .section-image-card.lilac  { background: var(--lilac); }
 .section-image-card.yellow { background: var(--yellow); }
 .section-image-card.warm   { background: #d4c5b0; }
-.section-image-card.sage   { background: #b5c4b1; }
-.section-image-card.clay   { background: #dbcfc8; }
+.section-image-card.sage   { background: #c3cdc0; }
+.section-image-card.clay   { background: #dfd5cf; }
 .section-image-card .img-slot { aspect-ratio: 4/3; }
 
 /* TEXT */
