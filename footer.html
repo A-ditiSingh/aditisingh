@@ -231,6 +231,36 @@
   .hero-fade.visible { opacity: 1; transform: translateY(0); }
   .no-anim .hero-fade { transition: none; }
 
+  /* FOOTER */
+  footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 60px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--ink); }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--mid);
+  }
+
   @media (max-width: 768px) {
     .hero, .section-label-row, .projects {
       padding-left: 24px;
@@ -238,6 +268,7 @@
     }
     .project-row { grid-template-columns: 1fr; gap: 32px; }
     .hero-name { font-size: 42px; }
+    footer { padding-left: 24px; padding-right: 24px; flex-direction: column; gap: 16px; }
   }
 </style>
 </head>
@@ -255,7 +286,7 @@
 <!-- HERO -->
 <div class="hero hero-fade">
  <h1 class="hero-name"><strong>aditi singh</strong></h1>
-  <p class="hero-summary">Product designer with 6+ years of experience in B2B SaaS. I led design at Highspot for zero-to-one products, enterprise search, and an analytics platform that scaled across 8+ feature teams.</p>
+  <p class="hero-summary">AI-native product designer with experience in 0-to-1, B2B SaaS, agentic workflows, and analytics.</p>
 </div>
 
 <!-- PROJECTS LABEL -->
@@ -350,6 +381,7 @@
 
 
 </div>
+
 
 <!-- FOOTER -->
 <footer>
