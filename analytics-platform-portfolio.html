@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="Images/favicon.svg">
+<title>Designing coherence for the analytics platform — Aditi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="case-study.css">
+<script>
+  if (localStorage.getItem('aditi_portfolio_auth') === 'true')
+    document.documentElement.classList.add('pw-authed');
+</script>
+<style>
+  /* PASSWORD OVERLAY */
+  #pw-overlay { display: flex; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; }
+  .pw-authed #pw-overlay { display: none; }
+
+  /* HERO */
+  .hero-title { margin-bottom: 24px; }
+  .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 560px; margin-bottom: 40px; }
+  .hero-image-card { background: #b5c4b1; }
+
+  /* No corner radius on hero & content imagery */
+  .hero-image-card,
+  .hero-image-card .img-slot,
+  .content .section-image-card,
+  .content .section-image-card .img-slot,
+  .content .section-image-card .img-slot img,
+  .content .full-image img {
+    border-radius: 0;
+  }
+
+  /* FULL WIDTH SECTION */
+  .section-full { padding: 72px 0; border-top: 1px solid var(--rule); }
+  .section-full .section-body { max-width: none; }
+
+  /* CHAIN */
+  .chain { margin-top: 20px; }
+  .chain-item { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+  .chain-item:last-child { border-bottom: none; }
+  .chain-num { font-size: 11px; color: var(--mid); font-weight: 400; flex-shrink: 0; padding-top: 2px; width: 20px; }
+  .chain-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .chain-text p { font-size: 14px; color: var(--mid); line-height: 1.75; max-width: none; }
+
+  /* SIGNAL CARDS */
+  .sc-signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+  .signal-card { background: rgba(0,0,0,0.03); border-radius: 8px; padding: 28px 28px 8px; }
+  .signal-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 20px; }
+  .signal-row { padding: 14px 0; border-bottom: 1px solid var(--rule); font-size: 14px; color: var(--mid); line-height: 1.75; }
+  .signal-row:last-child { border-bottom: none; }
+
+  /* TWO COLUMN SECTION */
+  .sc-section { border-top: 1px solid var(--rule); padding: 80px 0; }
+  .sc-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+
+  /* PRINCIPLE LIST */
+  .sc-principles-list { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--rule); border-radius: 8px; overflow: hidden; margin-top: 20px; }
+  .sc-principle-item { background: var(--bg); padding: 24px 28px; }
+  .sc-principle-item .t-num { margin-bottom: 10px; }
+  .sc-principle-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+  .sc-principle-body { font-size: 14px; color: var(--mid); line-height: 1.75; }
+
+  /* DUAL IMAGE */
+  .dual-image { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .dual-image .section-image-card .img-slot { height: 220px; }
+
+  /* LAYER MARKER */
+  .layer-marker {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--bg);
+    background: var(--ink);
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-bottom: 16px;
+  }
+
+  /* TIER LIST (for data viz guidance) */
+  .tier-list { margin-top: 20px; }
+  .tier-item { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+  .tier-item:last-child { border-bottom: none; }
+  .tier-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); flex-shrink: 0; width: 60px; padding-top: 2px; }
+  .tier-content h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .tier-content p { font-size: 14px; color: var(--mid); line-height: 1.75; }
+
+  /* TOOLTIP CARDS */
+  .tooltip-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 24px; }
+  .tooltip-card { background: rgba(0,0,0,0.03); border-radius: 8px; padding: 24px; }
+  .tooltip-card .t-num { margin-bottom: 10px; }
+  .tooltip-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+  .tooltip-card-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+
+  /* TAKEAWAYS */
+  .takeaway-section { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .takeaway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+  .takeaway-card { background: rgba(0,0,0,0.03); padding: 32px; border-radius: 6px; }
+  .t-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 16px; }
+  .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
+  .t-body { font-size: 14px; color: var(--mid); line-height: 1.75; }
+
+  /* Edge-aligned image variant */
+  .section-image-card.sc-edge-visual { padding: 24px 0 0 24px; }
+  .section-image-card.sc-edge-visual .img-slot { aspect-ratio: auto; display: block; }
+  .section-image-card.sc-edge-visual .img-slot img { position: static; width: 100%; height: auto; display: block; object-fit: unset; object-position: unset; }
+
+  @media (max-width: 768px) {
+    .sc-signal-grid { grid-template-columns: 1fr; }
+    .sc-two-col { grid-template-columns: 1fr; gap: 40px; }
+    .takeaway-grid { grid-template-columns: 1fr; }
+    .tooltip-grid { grid-template-columns: 1fr; }
+    .dual-image { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay">
+  <div style="max-width:380px;width:100%;padding:0 32px;">
+    <div style="font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:8px;">This work is protected</div>
+    <div style="font-size:14px;color:var(--mid);line-height:1.65;margin-bottom:32px;">Enter the password to view this case study. If you don't have it, reach out at aditisingh.design@gmail.com.</div>
+    <input id="pw-input" type="password" placeholder="Password" style="width:100%;font-size:14px;font-family:inherit;padding:12px 14px;border:1px solid var(--rule);border-radius:4px;background:transparent;color:var(--ink);outline:none;margin-bottom:8px;" />
+    <div id="pw-error" style="font-size:12px;color:#c0392b;min-height:18px;margin-bottom:12px;"></div>
+    <button id="pw-submit" style="width:100%;font-size:14px;font-family:inherit;font-weight:500;padding:12px;background:var(--ink);color:var(--bg);border:none;border-radius:4px;cursor:pointer;">Continue</button>
+    <button id="pw-cancel" style="width:100%;font-size:13px;font-family:inherit;color:var(--mid);background:none;border:none;cursor:pointer;margin-top:16px;">Cancel</button>
+  </div>
+</div>
+
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero fade-in">
+  <div class="hero-year">2024–2025</div>
+  <h1 class="hero-title">Designing coherence for the analytics platform</h1>
+  <p class="hero-desc">When I joined the analytics team, the experience was a collection of components without platform-level guidance. Individual scorecards had been built independently, each with its own structure, chart conventions, and interaction patterns. I worked across three layers to bring coherence to the platform: modernizing the component foundation, improving quality-of-life interactions, and proposing a system-level information architecture for scorecards.</p>
+  <dl class="hero-meta">
+    <div class="meta-block"><dt>Role</dt><dd>Lead Product Designer</dd></div>
+    <div class="meta-block"><dt>Timeline</dt><dd>2024 onward</dd></div>
+    <div class="meta-block"><dt>Scope</dt><dd>Platform-wide analytics experience</dd></div>
+    <div class="meta-block"><dt>Team</dt><dd>Product Area SMEs, Analytics SMEs, Design, Engineering</dd></div>
+  </dl>
+</div>
+
+<div class="hero-image-wrap fade-in">
+  <div class="hero-image-card">
+    <div class="img-slot" style="border: none;">
+      <input type="file" accept="image/*" onchange="loadImage(this)">
+      <div class="upload-hint"><div class="plus">+</div><div>Upload analytics platform hero image</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- STARTING STATE -->
+  <div class="section-full fade-in">
+    <div class="section-label">Starting State</div>
+    <h2 class="section-title">Design was contributing components, not direction</h2>
+    <div class="section-body">
+      <p>The working model before I joined was a two-SME collaboration: a Product Area SME who understood the customer questions being asked, paired with an Analytics SME who knew the platform capabilities and data availability. Design contributed by supplying components, but did not own large-scale guidance, information architecture, or experience consistency across scorecards.</p>
+      <p>The result was a set of scorecards where each one had been designed somewhat independently. Chart conventions, tooltip behavior, empty states, and tab structures varied across item types. Customers had to re-learn the experience every time they encountered a new scorecard.</p>
+    </div>
+  </div>
+
+  <!-- THREE LAYERS OVERVIEW -->
+  <div class="sc-section fade-in">
+    <div class="section-label">The Approach</div>
+    <h2 class="section-title">Three layers of work, ordered by altitude</h2>
+    <div class="section-body" style="margin-bottom: 8px;">
+      <p>I structured my contribution across three layers, each building on the one below it. The first layer addressed the component foundation. The second layer improved interaction patterns that affected every scorecard. The third layer proposed a system-level structure for how scorecards should be organized.</p>
+    </div>
+    <div class="chain">
+      <div class="chain-item">
+        <div class="chain-num">01</div>
+        <div class="chain-text">
+          <h4>Component modernization and data visualization guidance</h4>
+          <p>Extend the existing component work, address accessibility, and introduce a tiered guidance system so charts follow consistent logic across scorecards</p>
+        </div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num">02</div>
+        <div class="chain-text">
+          <h4>Quality of life improvements</h4>
+          <p>Redesign tooltips and empty states at the system level, shifting the organizing principle from chart type to data type</p>
+        </div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num">03</div>
+        <div class="chain-text">
+          <h4>Information architecture and system-level vision</h4>
+          <p>Propose a scalable scorecard framework that defines tab structure, overview-to-detail mapping, and ordering principles</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- LAYER 1: COMPONENT MODERNIZATION & DATA VIZ -->
+  <!-- ================================================ -->
+
+  <div class="section-row fade-in">
+    <div>
+      <div class="section-image-card warm">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><div class="plus">+</div><div>Upload: component modernization example</div></div>
+        </div>
+      </div>
+      <p class="img-caption">Component updates addressing accessibility and design system alignment</p>
+    </div>
+    <div class="section-text">
+      <div class="layer-marker">Layer 1</div>
+      <div class="section-label">Component Modernization</div>
+      <h2 class="section-title">Extending component work to include guidance, not just building blocks</h2>
+      <div class="section-body">
+        <p>The existing component library needed updates to meet accessibility standards and align with the broader design system. I completed that work, but components alone were not preventing inconsistency. Different designers and PMs were making different charting decisions for the same kinds of data.</p>
+        <p>I introduced a tiered data visualization guidance system on top of the components. The tiers were ordered deliberately so that anyone building a new scorecard would exhaust existing patterns before creating a new chart.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA VIZ TIERS -->
+  <div class="sc-section fade-in" style="padding-top: 40px;">
+    <div class="section-label">Data Visualization Guidance</div>
+    <h2 class="section-title">Three tiers, ordered to prevent unnecessary variation</h2>
+    <div class="section-body" style="margin-bottom: 8px;">
+      <p>The ordering was the design decision. By prioritizing scenario-based guidance first, the system directed people toward reuse before they reached the tier where new chart decisions were needed.</p>
+    </div>
+    <div class="tier-list">
+      <div class="tier-item">
+        <div class="tier-label">Tier 1</div>
+        <div class="tier-content">
+          <h4>Scenario-based</h4>
+          <p>For data about items that already exist in Highspot, the chart type, color mapping, and segment order were fully specified. For example, course completion status used the same colors and segment order in every scorecard. These charts were used as-is with no design decisions required.</p>
+        </div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-label">Tier 2</div>
+        <div class="tier-content">
+          <h4>Analysis-type</h4>
+          <p>For common analytical patterns, the visual treatment was standardized by analysis type rather than by data domain. Trend charts looked the same everywhere. Distribution charts looked the same everywhere. Comparison charts looked the same everywhere. The underlying data varied, but the visual pattern did not.</p>
+        </div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-label">Tier 3</div>
+        <div class="tier-content">
+          <h4>Chart-type defaults</h4>
+          <p>For genuinely new scenarios that did not fit Tier 1 or Tier 2, the guidance provided defaults for bar, line, horizontal, stacked, and segmented charts. This tier gave designers and PMs the flexibility to create new visualizations while still starting from a consistent baseline.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA VIZ VISUAL -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="dual-image">
+        <div>
+          <div class="section-image-card sage">
+            <div class="img-slot">
+              <input type="file" accept="image/*" onchange="loadImage(this)">
+              <div class="upload-hint"><div class="plus">+</div><div>Upload: scenario-based example</div></div>
+            </div>
+          </div>
+          <p class="img-caption">Tier 1 — scenario-based guidance with fixed color and segment order</p>
+        </div>
+        <div>
+          <div class="section-image-card lilac">
+            <div class="img-slot">
+              <input type="file" accept="image/*" onchange="loadImage(this)">
+              <div class="upload-hint"><div class="plus">+</div><div>Upload: analysis-type example</div></div>
+            </div>
+          </div>
+          <p class="img-caption">Tier 2 — analysis-type guidance applied consistently across data domains</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-text">
+      <div class="section-label">The Effect</div>
+      <h2 class="section-title">New scorecards inherited consistency by default</h2>
+      <div class="section-body">
+        <p>The tiered system changed the working model for building new scorecards. Product Area SMEs and Analytics SMEs still defined the customer questions and data sources, but the visualization decisions were no longer open-ended. Most charts fell into Tier 1 or Tier 2, which meant the majority of visual decisions were already made before a designer was involved.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- LAYER 2: QUALITY OF LIFE -->
+  <!-- ================================================ -->
+
+  <div class="section-row fade-in">
+    <div>
+      <div class="section-image-card clay">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><div class="plus">+</div><div>Upload: tooltip redesign example</div></div>
+        </div>
+      </div>
+      <p class="img-caption">Tooltip taxonomy — single value, multi-value, and comparison</p>
+    </div>
+    <div class="section-text">
+      <div class="layer-marker">Layer 2</div>
+      <div class="section-label">Quality of Life Improvements</div>
+      <h2 class="section-title">Shifting tooltips from chart-type to data-type</h2>
+      <div class="section-body">
+        <p>Tooltips across the platform varied by chart type. A bar chart tooltip looked different from a line chart tooltip, even when both were displaying the same kind of data. The result was visual inconsistency that made the experience feel fragmented at the interaction level.</p>
+        <p>I mentored a junior designer to classify all existing tooltips and propose a new taxonomy based on data type rather than chart type. The classification produced three categories: single value, multi-value, and comparison. This meant tooltip behavior became predictable for users regardless of which chart they were interacting with.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLTIP CATEGORIES -->
+  <div class="sc-section fade-in" style="padding-top: 40px;">
+    <div class="section-label">Tooltip Taxonomy</div>
+    <h2 class="section-title">Three categories based on what the user is reading, not which chart they are in</h2>
+    <div class="tooltip-grid">
+      <div class="tooltip-card">
+        <div class="t-num">Category 01</div>
+        <div class="tooltip-card-title">Single value</div>
+        <div class="tooltip-card-body">The user is reading one data point. The tooltip displays the value, its label, and any relevant unit or date context.</div>
+      </div>
+      <div class="tooltip-card">
+        <div class="t-num">Category 02</div>
+        <div class="tooltip-card-title">Multi-value</div>
+        <div class="tooltip-card-body">The user is reading multiple related data points at once, such as segments in a stacked chart. The tooltip groups all values with their labels in a consistent vertical layout.</div>
+      </div>
+      <div class="tooltip-card">
+        <div class="t-num">Category 03</div>
+        <div class="tooltip-card-title">Comparison</div>
+        <div class="tooltip-card-body">The user is comparing two values. The tooltip displays both values with their labels and the difference between them, using a consistent format for delta display.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPTY STATES -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="section-image-card orange">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><div class="plus">+</div><div>Upload: empty states redesign</div></div>
+        </div>
+      </div>
+      <p class="img-caption">Redesigned empty states — consistent messaging and action paths</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Empty States</div>
+      <h2 class="section-title">Redesigning empty states at the system level</h2>
+      <div class="section-body">
+        <p>Empty states across scorecards had been treated as an afterthought, with inconsistent messaging and no clear guidance on what the user should do next. I redesigned empty states as a system-level pattern, establishing consistent messaging, visual treatment, and action paths that applied to every scorecard in the platform.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- LAYER 3: SCORECARD FRAMEWORK -->
+  <!-- ================================================ -->
+
+  <div class="section-full fade-in">
+    <div class="layer-marker">Layer 3</div>
+    <div class="section-label">Information Architecture and System-Level Vision</div>
+    <h2 class="section-title">A scalable scorecard framework</h2>
+    <div class="section-body">
+      <p>Scorecards give GTM teams visibility into whether product items are meeting the objectives they were created for. When the team was tasked with scaling beyond the original five scorecards, I proposed a systematic structure that layered on top of the existing system of components so that every new scorecard would follow a predictable pattern customers could rely on regardless of which item type they opened.</p>
+    </div>
+  </div>
+
+  <!-- THE ORIGINAL FIVE -->
+  <div class="section-row fade-in">
+    <div class="section-text">
+      <div class="section-label">How It Started: The Original Five</div>
+      <h2 class="section-title">Five scorecards, each with its own structure</h2>
+      <div class="section-body">
+        <p>When the effort began, five scorecards existed in the product. The two-SME collaboration model had shipped them, but each scorecard had been designed somewhat independently. Customers had to re-learn the structure every time they encountered a new one.</p>
+        <p>The question shifted from how to build more scorecards to whether a systematic structure could be layered on top of the existing components, bringing consistency to what had previously been bespoke.</p>
+      </div>
+    </div>
+    <div>
+      <div class="section-image-card warm">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><div class="plus">+</div><div>Upload: the original five scorecards</div></div>
+        </div>
+      </div>
+      <p class="img-caption">Before — the original five scorecards, each with its own structure</p>
+    </div>
+  </div>
+
+  <!-- USER BEHAVIOR -->
+  <div class="sc-section fade-in">
+    <div class="sc-two-col">
+      <div>
+        <div class="section-label">What We Knew About User Behavior</div>
+        <h2 class="section-title">Personas use scorecards in two distinct modes</h2>
+        <div class="section-body">
+          <p>Two things were clear about how personas actually use scorecards. Most of the time they want a quick health check. If everything looks fine, they leave. When something is off, they need a clear path to drill down into the details.</p>
+          <p>The framework had to serve both modes without forcing one to carry the weight of the other.</p>
+        </div>
+      </div>
+      <div>
+        <div class="sc-signal-grid" style="grid-template-columns: 1fr;">
+          <div class="signal-card">
+            <div class="t-num">Mode 01</div>
+            <div class="signal-card-title">Quick health check</div>
+            <div class="signal-row">Persona opens the scorecard, scans the top-level data, and leaves if everything looks fine</div>
+          </div>
+          <div class="signal-card">
+            <div class="t-num">Mode 02</div>
+            <div class="signal-card-title">Drill-down</div>
+            <div class="signal-row">When a signal looks off, the persona needs a fast, predictable path into the detail behind it</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE PROPOSED STRUCTURE -->
+  <div class="sc-section fade-in">
+    <div class="section-label">The Proposed Structure</div>
+    <h2 class="section-title">A framework designed around how personas actually read scorecards</h2>
+    <div class="section-body" style="margin-bottom: 8px;">
+      <p>Every scorecard would open with an overview tab built for the high-level check-in. Subsequent tabs would be organized around the specific questions customers ask, following identifiable high-level categories that share a common structural pattern across item types.</p>
+    </div>
+  </div>
+
+  <!-- TWO PRINCIPLES -->
+  <div class="sc-section fade-in" style="padding-top: 40px;">
+    <div class="section-label">Two principles tied the experience together</div>
+    <div class="sc-principles-list">
+      <div class="sc-principle-item">
+        <div class="t-num">Principle 01</div>
+        <div class="sc-principle-title">The overview tab maps directly to the subsequent tabs</div>
+        <div class="sc-principle-body">Each section in the overview corresponds to a tab and surfaces the most important data from that tab. A persona can scan the overview, spot what needs attention, and know exactly where to go next.</div>
+      </div>
+      <div class="sc-principle-item">
+        <div class="t-num">Principle 02</div>
+        <div class="sc-principle-title">Sections and tabs are ordered by walk-to-value</div>
+        <div class="sc-principle-body">Both the overview sections and their corresponding tabs are ordered according to the walk-to-value for that scorecard, ensuring the most critical milestones in a customer's journey appear first.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRAMEWORK VISUAL -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="section-image-card sage">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><div class="plus">+</div><div>Upload: overview-to-tabs mapping diagram</div></div>
+        </div>
+      </div>
+      <p class="img-caption">Overview sections map section-by-section to the subsequent tabs, ordered by walk-to-value</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">How the Framework Reads</div>
+      <h2 class="section-title">The overview becomes the map for the rest of the scorecard</h2>
+      <div class="section-body">
+        <p>A persona in check-in mode reads the overview top to bottom and sees the health of the customer journey in the order the customer walks it. A persona in drill-down mode sees the section that needs attention, reads the corresponding tab label, and moves straight into the detail.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- TAKEAWAYS -->
+  <!-- ================================================ -->
+
+  <div class="takeaway-section fade-in">
+    <div class="section-label">Key Learnings</div>
+    <h2 class="section-title">What this work taught me</h2>
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <div class="t-num">Learning 01</div>
+        <div class="t-title">Guidance at the right altitude prevents inconsistency that components alone cannot</div>
+        <div class="t-body">Components provide building blocks, but they do not encode decisions about when and how to use them. The tiered data visualization guidance reduced variation across scorecards because it operated at the scenario level, not the component level. The framework reduced variation further because it operated at the information architecture level.</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="t-num">Learning 02</div>
+        <div class="t-title">Mentoring is a design tool, not a management activity</div>
+        <div class="t-body">The tooltip taxonomy emerged through structured mentorship of a junior designer. Classifying every tooltip in the platform required close reading of the existing experience that would have been difficult to do alone. The mentorship produced a better artifact than a solo exercise would have, and it built the junior designer's systems-level thinking at the same time.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.content -->
+
+<script>
+  // Password gate
+  (function() {
+    const PASS = 'seeproject';
+    const STORAGE_KEY = 'aditi_portfolio_auth';
+    const overlay = document.getElementById('pw-overlay');
+    const pwInput = document.getElementById('pw-input');
+    const pwError = document.getElementById('pw-error');
+
+    if (localStorage.getItem(STORAGE_KEY) !== 'true') {
+      setTimeout(() => pwInput.focus(), 50);
+    }
+
+    function attempt() {
+      if (pwInput.value === PASS) {
+        localStorage.setItem(STORAGE_KEY, 'true');
+        overlay.style.display = 'none';
+      } else {
+        pwError.textContent = 'Incorrect password. Please try again.';
+        pwInput.value = '';
+        pwInput.focus();
+      }
+    }
+
+    document.getElementById('pw-submit').addEventListener('click', attempt);
+    pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+    document.getElementById('pw-cancel').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  })();
+</script>
+
+<script>
+  const els = document.querySelectorAll('.fade-in');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  els.forEach(el => io.observe(el));
+
+  function loadImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const slot = input.closest('.img-slot');
+      const hint = slot.querySelector('.upload-hint');
+      if (hint) hint.style.display = 'none';
+      let img = slot.querySelector('img');
+      if (!img) { img = document.createElement('img'); slot.appendChild(img); }
+      img.src = ev.target.result;
+      slot.style.border = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+
+<!-- FOOTER -->
+<footer>
+  <ul class="footer-links">
+    <li><a href="mailto:aditisingh.design@gmail.com">Email</a></li>
+    <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+  </ul>
+  <span class="footer-copy">Aditi Singh · Ontario, Canada</span>
+</footer>
+</body>
+</html>
