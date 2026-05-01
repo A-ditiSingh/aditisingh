@@ -837,6 +837,8 @@ html, body { margin: 0; background: #ece7df; }
       if (state2 === 'scope-zero' || state2 === 'scope-auto-suggest' || state2 === 'serp-scoped') {
         clearScopeKeepQuery();
         render2();
+        var i = inp2();
+        if (i && !i.readOnly) i.focus();
       }
     });
     var xc2 = document.getElementById('xclear2');
