@@ -812,15 +812,16 @@ html, body { margin: 0; background: #ece7df; }
     function clearScopeKeepQuery() {
       if (!scope2) return;
       scope2 = '';
+      var hasQuery = readQueryFromInput().length > 0;
       if (state2 === 'scope-zero') {
-        state2 = 'auto-suggest';
-        resetSuggestTimer();
+        state2 = hasQuery ? 'auto-suggest' : 'zero';
+        if (state2 === 'auto-suggest') resetSuggestTimer();
       } else if (state2 === 'scope-auto-suggest') {
-        state2 = 'auto-suggest';
-        resetSuggestTimer();
+        state2 = hasQuery ? 'auto-suggest' : 'zero';
+        if (state2 === 'auto-suggest') resetSuggestTimer();
       } else if (state2 === 'serp-scoped') {
-        state2 = 'auto-suggest';
-        resetSuggestTimer();
+        state2 = hasQuery ? 'auto-suggest' : 'zero';
+        if (state2 === 'auto-suggest') resetSuggestTimer();
       }
     }
 
