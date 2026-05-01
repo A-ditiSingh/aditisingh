@@ -94,6 +94,25 @@
   /* Centered caption (prototype section) */
   .img-caption--center { text-align: center; }
 
+  /* Before / After dropdown comparison */
+  .ss-before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; }
+  .ss-ba-col { display: flex; flex-direction: column; }
+  .ss-ba-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 12px; font-weight: 500; }
+  .ss-ba-label span { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 10px; }
+  .ss-ba-label .label-before { background: rgba(0,0,0,0.06); color: var(--mid); }
+  .ss-ba-label .label-after  { background: rgba(var(--accent-rgb, 80,100,200), 0.1); color: var(--accent, #3a5bd9); }
+  .ss-ba-img { border-radius: 6px; overflow: hidden; border: 1px solid var(--rule); background: #f5f5f5; }
+  .ss-ba-img img { width: 100%; height: auto; display: block; }
+  .ss-ba-caption { font-size: 13px; color: var(--mid); line-height: 1.6; margin-top: 12px; }
+
+  /* GIF stack in right column */
+  .ss-gif-stack { display: flex; flex-direction: column; gap: 40px; margin-top: 40px; }
+  .ss-gif-stack .ss-ba-col { width: 100%; }
+
+  @media (max-width: 700px) {
+    .ss-before-after { grid-template-columns: 1fr; }
+  }
+
   /* Embedded prototype: smooth iframe resize when dropdown state changes */
   .scoped-search-prototype-frame { margin-top: 12px; border-radius: 10px; overflow: hidden; transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
 
@@ -291,41 +310,95 @@
         <div class="section-body">
           <p>The search dropdown goes through multiple states in a matter of seconds. The existing experience felt clunky because the dropdown disappeared entirely while suggestions were loading, breaking the user's sense of continuity.</p>
           <p>In addition to solving the scoping problem, I saw an opportunity to modernize the interaction with the goal of a seamless experience. Because of the dynamic nature of the interaction, I broke the interaction into distinct states. Stitching those states together with deliberate transitions makes the interaction feel responsive and smooth throughout.</p>
-        <p> <strong>Type in the search bar below to see the interaction in action.</strong></p>
+          <p><strong>Type in the search bar below to see the interaction in action.</strong></p>
         </div>
       </div>
-      <div class="chain">
-        <div class="chain-item">
-          <div class="chain-num">01</div>
-          <div class="chain-text">
-            <h4>Rest — no interaction has happened yet</h4>
-            <p>The search bar is visible and discoverable. The design goal is to make search easy to find and invite interaction without introducing distraction.</p>
+      <div>
+        <div class="chain">
+          <div class="chain-item">
+            <div class="chain-num">01</div>
+            <div class="chain-text">
+              <h4>Rest — no interaction has happened yet</h4>
+              <p>The search bar is visible and discoverable. The design goal is to make search easy to find and invite interaction without introducing distraction.</p>
+            </div>
           </div>
-        </div>
-        <div class="chain-item">
-          <div class="chain-num">02</div>
-          <div class="chain-text">
-            <h4>Zero state — the user has clicked in</h4>
-            <p>Intent is unknown. The dropdown surfaces recent searches to give the user a fast path back to queries they have already run.</p>
+          <div class="chain-item">
+            <div class="chain-num">02</div>
+            <div class="chain-text">
+              <h4>Zero state — the user has clicked in</h4>
+              <p>Intent is unknown. The dropdown surfaces recent searches to give the user a fast path back to queries they have already run.</p>
+            </div>
           </div>
-        </div>
-        <div class="chain-item">
-          <div class="chain-num">03</div>
-          <div class="chain-text">
-            <h4>Auto-suggest — the user is actively typing</h4>
-            <p>The dropdown surfaces keyword and entity suggestions that update with every keystroke. Transitions need to be smooth enough that the surface feels continuously responsive.</p>
+          <div class="chain-item">
+            <div class="chain-num">03</div>
+            <div class="chain-text">
+              <h4>Auto-suggest — the user is actively typing</h4>
+              <p>The dropdown surfaces keyword and entity suggestions that update with every keystroke. Transitions need to be smooth enough that the surface feels continuously responsive.</p>
+            </div>
           </div>
-        </div>
-        <div class="chain-item">
-          <div class="chain-num">04</div>
-          <div class="chain-text">
-            <h4>End state — the user has submitted a query</h4>
-            <p>The dropdown displays search results in this state. The design provides clear affordances for adjusting the query, changing the scope, or starting a new search with minimal steps.</p>
+          <div class="chain-item">
+            <div class="chain-num">04</div>
+            <div class="chain-text">
+              <h4>End state — the user has submitted a query</h4>
+              <p>The dropdown displays search results in this state. The design provides clear affordances for adjusting the query, changing the scope, or starting a new search with minimal steps.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="ss-before-after" style="margin-top: 48px;">
+      <div class="ss-ba-col">
+        <div class="ss-ba-label"><span class="label-before">Before</span></div>
+        <div class="ss-ba-img ss-gif-wrap" data-gif="Images/before_dropdown.gif" data-still="Images/before_dropdown_still.png">
+          <img class="ss-gif-img" src="Images/before_dropdown_still.png" alt="Before: search dropdown shows a flat list of recent searches with no scoping option">
+        </div>
+        <p class="ss-ba-caption">Recent searches only — no way to narrow scope before submitting the query.</p>
+      </div>
+      <div class="ss-ba-col">
+        <div class="ss-ba-label"><span class="label-after">After</span></div>
+        <div class="ss-ba-img ss-gif-wrap" data-gif="Images/after_dropdown.gif" data-still="Images/after_dropdown_still.png">
+          <img class="ss-gif-img" src="Images/after_dropdown_still.png" alt="After: search dropdown shows promoted content collection tabs — Official, All GTM Content, Intranet, Training & Enablement — above recent searches">
+        </div>
+        <p class="ss-ba-caption">Promoted collection tabs appear immediately on focus, letting reps scope to the relevant content area before they type.</p>
+      </div>
+    </div>
   </div>
+
+  <script>
+  (function() {
+    var GIF_DURATIONS = { 'before': 10000, 'after': 8000 };
+
+    function playGif(wrap) {
+      var img = wrap.querySelector('.ss-gif-img');
+      var gif = wrap.dataset.gif;
+      var still = wrap.dataset.still;
+      var dur = gif.indexOf('before') !== -1 ? GIF_DURATIONS.before : GIF_DURATIONS.after;
+      img.src = gif + '?t=' + Date.now();
+      clearTimeout(wrap._gifTimer);
+      wrap._gifTimer = setTimeout(function() {
+        img.src = still;
+      }, dur);
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          playGif(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.ss-gif-wrap').forEach(function(wrap) {
+      observer.observe(wrap);
+      wrap.addEventListener('mouseenter', function() { playGif(wrap); });
+      wrap.addEventListener('mouseleave', function() {
+        clearTimeout(wrap._gifTimer);
+        wrap.querySelector('.ss-gif-img').src = wrap.dataset.still;
+      });
+    });
+  })();
+  </script>
 
 <!-- PROTOTYPE -->
 <div class="ss-problem-section fade-in">
