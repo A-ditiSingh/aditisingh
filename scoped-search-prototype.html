@@ -951,6 +951,15 @@ html, body { margin: 0; background: #ece7df; }
       state2 = targetState;
       if (state2 === 'auto-suggest' || state2 === 'scope-auto-suggest') resetSuggestTimer();
       render2();
+      var focusStates = ['zero', 'scope-zero', 'auto-suggest', 'scope-auto-suggest'];
+      if (focusStates.indexOf(state2) !== -1) {
+        var fi = inp2();
+        if (fi && !fi.readOnly) {
+          fi.focus();
+          var len = fi.value.length;
+          try { fi.setSelectionRange(len, len); } catch (e) {}
+        }
+      }
     }
     var tabMap = {
       sl0: function() { jumpToStateFromTab('zero', '', ''); },
