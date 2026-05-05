@@ -75,9 +75,21 @@
   .ss-principle-item .t-num { margin-bottom: 10px; }
   .ss-principle-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
 
-  /* Problem — full-width text within content column */
+  /* Problem — half-width text within content column */
   .ss-problem-section { padding: 80px 0; border-top: 1px solid var(--rule); }
-  .ss-problem-section .section-body { max-width: none; }
+  .ss-problem-section .section-label,
+  .ss-problem-section .section-title,
+  .ss-problem-section .section-body { max-width: 50%; }
+
+  /* Takeaway sections — half-width text */
+  .takeaway-section .section-label,
+  .takeaway-section .section-title,
+  .takeaway-section .section-body { max-width: 50%; }
+
+  /* ss-section single-col text blocks — half-width */
+  .ss-section > .section-label,
+  .ss-section > .section-title,
+  .ss-section > .section-body { max-width: 50%; }
 
   /* Finding visual column label spacing */
   .ss-finding-visual-col > .section-label { margin-bottom: 20px; }
@@ -173,25 +185,20 @@
 
 <div class="content">
 
-<!-- PROBLEM -->
+<!-- CONTEXT -->
 <div class="ss-problem-section fade-in">
-  <div class="section-label">The Problem</div>
-  <h2 class="section-title">Existing filters were too granular for how enterprise reps think about content</h2>
-  <div class="section-body">
-    <div class="ss-signal-grid">
-      <div class="signal-card">
-        <div class="t-num">customer signal</div>
-        <div class="t-title">Poor search relevance was driving down customer satisfaction</div>
-        <div class="signal-row">Approximately <strong>70%</strong> of NPS detractors mentioned poor search relevance as the top reason for rating the product negatively</div>
-        <div class="signal-row">Larger and older customer accounts with a high volume of content items mentioned poor search relevance more frequently, putting enterprise customers at risk of churn</div>
-        <div class="signal-row">Search submission to click conversion was lower in larger, older accounts than in smaller ones</div>
-      </div>
-      <div class="signal-card">
-        <div class="t-num">existing paradigm</div>
-        <div class="t-title">Narrowing search results was too difficult</div>
-        <div class="signal-row">The only way to narrow search results was to use filters. The number of filters was too many and too granular to be useful. <strong>Less than 2% of users were using filters</strong> to narrow their search results</div>
-        <div class="signal-row">Reps thought about content in terms of broad areas: a product line, a region, or a vertical. There was no way to limit search to the content area most relevant to their role</div>
-      </div>
+  <div class="section-label">Context</div>
+  <h2 class="section-title">Understanding business and user needs</h2>
+  <div class="ss-signal-grid" style="margin-top: 40px;">
+    <div class="signal-card">
+      <div class="t-num">Business problem</div>
+      <div class="t-title">Poor search relevance was driving customer dissatisfaction</div>
+      <div class="signal-row">Approximately <strong>70%</strong> of NPS detractors cited search relevance as their top reason for rating the product negatively. The issue was most acute in larger, older accounts with high content volume, the same accounts that represented the greatest churn risk. Search submission-to-click conversion rates in these accounts were measurably lower than in smaller ones, indicating that users were submitting searches but not finding results they trusted.</div>
+    </div>
+    <div class="signal-card">
+      <div class="t-num">User Needs</div>
+      <div class="t-title">Filtering facets were too granular for how reps thought about narrowing search results</div>
+      <div class="signal-row">UX research surfaced a mismatch between how users thought about their work and what the system supported. Sales reps wanted to filter by high-level organizational constructs such as sub-org, region, and product line, but the system only supported filtering by the spot where a content item lived and any metadata the publisher had added at upload time. As a result, <strong>less than 2% of users were using filters</strong> to narrow their search results.</div>
     </div>
   </div>
 </div>
@@ -207,8 +214,8 @@
       <p class="img-caption">Content Collections as promoted filters in the search results page</p>
     </div>
     <div class="section-text">
-      <div class="section-label">A NEW FILTERING CONSTRUCT</div>
-      <h2 class="section-title">Content Collections: a new construct for organizing and filtering content</h2>
+      <div class="section-label">Foundation for a new filtering construct</div>
+      <h2 class="section-title">Content Collections: a grouping construct that maps to how organizations are structured</h2>
       <div class="section-body">
         <p>Since existing filters were too numerous and granular to be useful, customer conversations pointed to the need for a new construct: a way to tag items at a level above the spots where they lived. I designed content collections, admin-defined groupings of related spots. Admins create a collection and assign spots to it, so that when publishers add items to any of those spots, the items are automatically tagged to the right collection.</p>
         <p>Collections map naturally to how large organisations already think: by sub-org, product line, or region. This gives reps a useful construct for limiting search results to the content area most relevant to their role. Next,<strong>we needed to design the experience where reps could limit searchs results to a collection.</strong></p>
@@ -231,8 +238,8 @@
       </div>
     </div>
     <div class="section-text">
-      <div class="section-label">The Design Challenge</div>
-      <h2 class="section-title">Two interaction models. One dropdown that couldn't hold both.</h2>
+      <div class="section-label">Limiting search results to a content collection</div>
+      <h2 class="section-title">Evaluating two approaches: scoping the query versus filtering the results</h2>
       <div class="section-body">
         <p>I explored two distinct models for how a rep could limit search results to a content area. Both were valid — but each had a real cost, and a single dropdown couldn't cleanly support both.</p>
       </div>
@@ -257,43 +264,36 @@
 
   <!-- FINDING -->
   <div class="ss-section fade-in">
-    <div class="ss-two-col">
+    <!-- Full-width text block -->
+    <div class="section-label">Customer insight that shaped the design</div>
+    <h2 class="section-title">Most sales reps will frequently engage with 1–3 collections</h2>
+    <div class="section-body">
+      <p>The team returned to customers with a focused question: how many collections do users actually have access to, and how many do they use when searching?</p>
+      <p>The data showed that users with access to many collections consistently engaged with only 1–3. This finding established the core design principle for the interaction: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
+    </div>
+  </div>
+
+  <!-- DESIGN IMPLICATION -->
+  <div class="ss-section fade-in">
+    <div class="section-label">Design implication of the customer insight</div>
+    <h2 class="section-title">Limiting collections in the dropdown for simplicity, and deferring to filters for scalability</h2>
+    <!-- Two-column: each with title, body, image -->
+    <div class="ss-signal-grid" style="margin-top: 40px;">
       <div>
-        <div class="section-label">The Research Finding</div>
-        <h2 class="section-title">Most sales reps will frequently engage with 1–3 collections</h2>
-        <div class="section-body">
-          <p>The team returned to customers with a focused question: how many collections do users actually have access to, and how many do they use when searching?</p>
-          <p>The data showed that users with access to many collections consistently engaged with only 1–3. This finding established the core design principle for the interaction: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
-        </div>
-        <div class="ss-finding-copy">
-          <div class="ss-finding-item">
-            <div class="fi-title">Promote scoping to frequent collections — in the dropdown</div>
-            <div class="t-body">The dropdown surfaces the 1–3 collections most relevant to the user directly, allowing the user to scope before submitting. Fast, contextual, low friction.</div>
-          </div>
-          <div class="ss-finding-item">
-            <div class="fi-title">Allow filtering to other collections post-search</div>
-            <div class="t-body">For less frequent cross-collection searches, the sidebar filter handles it — exactly like any other facet. The dropdown stays clean. The sidebar scales to edge cases.</div>
+        <div class="fi-title" style="margin-bottom: 6px;"><span style="color: var(--mid); font-weight: 400; margin-right: 8px;">01</span>Promote scoping to frequent collections — in the dropdown</div>
+        <div class="t-body" style="margin-bottom: 16px;">The dropdown limits the scoping to 1–3 collections most relevant to the user directly. The dropdown stays clean.</div>
+        <div class="section-image-card warm ss-edge-visual">
+          <div class="img-slot">
+            <img src="Images/promoted content collection.png" alt="Search UI with collection scope: promoted collections in the dropdown before submit.">
           </div>
         </div>
       </div>
-      <div class="ss-finding-visual-col">
-        <div class="section-label">How this shaped the design</div>
-        <div class="ss-finding-visual-stack">
-          <div>
-            <div class="section-image-card warm ss-edge-visual">
-              <div class="img-slot">
-                <img src="Images/promoted content collection.png" alt="Search UI with collection scope: promoted collections in the dropdown before submit.">
-              </div>
-            </div>
-            <p class="img-caption">Promoted collections in the search dropdown</p>
-          </div>
-          <div>
-            <div class="section-image-card warm ss-edge-visual">
-              <div class="img-slot">
-                <img src="Images/content-collections.png" alt="Search results with Content Collection filter in the sidebar.">
-              </div>
-            </div>
-            <p class="img-caption">Collection filter in the results sidebar</p>
+      <div>
+        <div class="fi-title" style="margin-bottom: 6px;"><span style="color: var(--mid); font-weight: 400; margin-right: 8px;">02</span>Allow filtering to other collections post-search</div>
+        <div class="t-body" style="margin-bottom: 16px;">Defer to the filters for limiting results to rarely used content collections. This scales to edge cases.</div>
+        <div class="section-image-card warm ss-edge-visual">
+          <div class="img-slot">
+            <img src="Images/content-collections.png" alt="Search results with Content Collection filter in the sidebar.">
           </div>
         </div>
       </div>
@@ -303,109 +303,61 @@
 
   <!-- SEARCH STATES — full width -->
   <div class="ss-section fade-in">
-    <div class="section-label">redesigning for a seamless experience</div>
+    <div class="section-label">Scoping queries in the search dropdown</div>
     <div class="ss-two-col ss-state-model-intro">
       <div>
-        <h2 class="section-title">An opportunity to modernize the search experience</h2>
+        <h2 class="section-title">Using the scoping requirement as an opportunity to modernize the search dropdown</h2>
         <div class="section-body">
           <p>The search dropdown goes through multiple states in a matter of seconds. The existing experience felt clunky because the dropdown disappeared entirely while suggestions were loading, breaking the user's sense of continuity.</p>
           <p>In addition to solving the scoping problem, I saw an opportunity to modernize the interaction with the goal of a seamless experience. Because of the dynamic nature of the interaction, I broke the interaction into distinct states. Stitching those states together with deliberate transitions makes the interaction feel responsive and smooth throughout.</p>
-          <p><strong>Type in the search bar below to see the interaction in action.</strong></p>
         </div>
       </div>
       <div>
-        <div class="chain">
-          <div class="chain-item">
-            <div class="chain-num">01</div>
-            <div class="chain-text">
-              <h4>Rest — no interaction has happened yet</h4>
-              <p>The search bar is visible and discoverable. The design goal is to make search easy to find and invite interaction without introducing distraction.</p>
+        <div class="takeaway-card">
+          <div class="t-num">Redesigning each state of the search dropdown</div>
+          <div class="chain">
+            <div class="chain-item">
+              <div class="chain-num">01</div>
+              <div class="chain-text">
+                <h4>Rest — no interaction has happened yet</h4>
+                <p>The search bar is visible and discoverable. The design goal is to make search easy to find and invite interaction without introducing distraction.</p>
+              </div>
             </div>
-          </div>
-          <div class="chain-item">
-            <div class="chain-num">02</div>
-            <div class="chain-text">
-              <h4>Zero state — the user has clicked in</h4>
-              <p>Intent is unknown. The dropdown surfaces recent searches to give the user a fast path back to queries they have already run.</p>
+            <div class="chain-item">
+              <div class="chain-num">02</div>
+              <div class="chain-text">
+                <h4>Zero state — the user has clicked in</h4>
+                <p>Intent is unknown. The dropdown surfaces recent searches to give the user a fast path back to queries they have already run.</p>
+              </div>
             </div>
-          </div>
-          <div class="chain-item">
-            <div class="chain-num">03</div>
-            <div class="chain-text">
-              <h4>Auto-suggest — the user is actively typing</h4>
-              <p>The dropdown surfaces keyword and entity suggestions that update with every keystroke. Transitions need to be smooth enough that the surface feels continuously responsive.</p>
+            <div class="chain-item">
+              <div class="chain-num">03</div>
+              <div class="chain-text">
+                <h4>Auto-suggest — the user is actively typing</h4>
+                <p>The dropdown surfaces keyword and entity suggestions that update with every keystroke. Transitions need to be smooth enough that the surface feels continuously responsive.</p>
+              </div>
             </div>
-          </div>
-          <div class="chain-item">
-            <div class="chain-num">04</div>
-            <div class="chain-text">
-              <h4>End state — the user has submitted a query</h4>
-              <p>The dropdown displays search results in this state. The design provides clear affordances for adjusting the query, changing the scope, or starting a new search with minimal steps.</p>
+            <div class="chain-item">
+              <div class="chain-num">04</div>
+              <div class="chain-text">
+                <h4>End state — the user has submitted a query</h4>
+                <p>The dropdown displays search results in this state. The design provides clear affordances for adjusting the query, changing the scope, or starting a new search with minimal steps.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="ss-before-after" style="margin-top: 48px;">
-      <div class="ss-ba-col">
-        <div class="ss-ba-label"><span class="label-before">Before</span></div>
-        <div class="ss-ba-img ss-gif-wrap" data-gif="Images/before_dropdown.gif" data-still="Images/before_dropdown_still.png">
-          <img class="ss-gif-img" src="Images/before_dropdown_still.png" alt="Before: search dropdown shows a flat list of recent searches with no scoping option">
-        </div>
-        <p class="ss-ba-caption">Recent searches only — no way to narrow scope before submitting the query.</p>
-      </div>
-      <div class="ss-ba-col">
-        <div class="ss-ba-label"><span class="label-after">After</span></div>
-        <div class="ss-ba-img ss-gif-wrap" data-gif="Images/after_dropdown.gif" data-still="Images/after_dropdown_still.png">
-          <img class="ss-gif-img" src="Images/after_dropdown_still.png" alt="After: search dropdown shows promoted content collection tabs — Official, All GTM Content, Intranet, Training & Enablement — above recent searches">
-        </div>
-        <p class="ss-ba-caption">Promoted collection tabs appear immediately on focus, letting reps scope to the relevant content area before they type.</p>
       </div>
     </div>
   </div>
 
-  <script>
-  (function() {
-    var GIF_DURATIONS = { 'before': 10000, 'after': 8000 };
-
-    function playGif(wrap) {
-      var img = wrap.querySelector('.ss-gif-img');
-      var gif = wrap.dataset.gif;
-      var still = wrap.dataset.still;
-      var dur = gif.indexOf('before') !== -1 ? GIF_DURATIONS.before : GIF_DURATIONS.after;
-      img.src = gif + '?t=' + Date.now();
-      clearTimeout(wrap._gifTimer);
-      wrap._gifTimer = setTimeout(function() {
-        img.src = still;
-      }, dur);
-    }
-
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          playGif(entry.target);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-
-    document.querySelectorAll('.ss-gif-wrap').forEach(function(wrap) {
-      observer.observe(wrap);
-      wrap.addEventListener('mouseenter', function() { playGif(wrap); });
-      wrap.addEventListener('mouseleave', function() {
-        clearTimeout(wrap._gifTimer);
-        wrap.querySelector('.ss-gif-img').src = wrap.dataset.still;
-      });
-    });
-  })();
-  </script>
 
 <!-- PROTOTYPE -->
 <div class="ss-problem-section fade-in">
-  <div class="section-label">The Solution</div>
-  <h2 class="section-title">Engineering handoff: An interactive prototype</h2>
+  <div class="section-label">Handoff</div>
+  <h2 class="section-title">Delivering microinteractions and state transitions through an interactive prototype</h2>
   <div class="section-body">
-    <p>I delivered a Figma prototype covering every micro-interaction and state transition, giving engineering an unambiguous reference for the quality of experience the design required. The prototype embedded below shows what I handed off to engineering as the implementation spec.</p>
+    <p>An interactive prototype was essential to capture the microinteractions and state transitions, to ensure high-quality engineering implementation.</p>
+    <p>I created it in Figma at the time. The embedded prototype below is a recreation built with Cursor to demonstrate the same deliverable in an AI-first prototyping environment.</p>
   </div>
 
     <!-- Interactive prototype markup/CSS/JS: scoped-search-prototype.html (embedded below) -->
@@ -423,13 +375,37 @@
 </div>
 
 
-<!-- TAKEAWAYS -->
+<!-- RESULTS -->
 <div class="takeaway-section fade-in">
-  <div class="section-label">Results</div>
-  <div class="takeaway-card" style="margin-top: 40px;">
-    <div class="t-num">Search to click conversion</div>
-    <div class="t-title">Scoped searches convert 15% higher</div>
-    <div class="t-body">Not every search needs to be scoped. A rep searching for a specific document by name has no reason to narrow scope. The meaningful measure is whether scoping helps when reps choose to use it. In organizations with content collections configured, scoped searches produce 15% more clicks on results than unscoped searches. When reps narrow their search to relevant content, they find what they need.</div>
+  <div class="section-label">Impact 01</div>
+  <h2 class="section-title">The redesign produced a modern and more seamless search interaction</h2>
+  <div class="section-body" style="margin-top: 24px;">
+    <p>The before and after below show the experience of submitting a search query in the product before and after the redesign.</p>
+  </div>
+  <div class="ss-before-after" style="margin-top: 40px;">
+    <div class="ss-ba-col">
+      <div class="ss-ba-label"><span class="label-before">Before</span></div>
+      <div class="ss-ba-img ss-gif-wrap" data-gif="Images/before_dropdown.gif" data-still="Images/before_dropdown_still.png">
+        <img class="ss-gif-img" src="Images/before_dropdown_still.png" alt="Before: search dropdown shows a flat list of recent searches with no scoping option">
+      </div>
+      <p class="ss-ba-caption">Recent searches only — no way to narrow scope before submitting the query.</p>
+    </div>
+    <div class="ss-ba-col">
+      <div class="ss-ba-label"><span class="label-after">After</span></div>
+      <div class="ss-ba-img ss-gif-wrap" data-gif="Images/after_dropdown.gif" data-still="Images/after_dropdown_still.png">
+        <img class="ss-gif-img" src="Images/after_dropdown_still.png" alt="After: search dropdown shows promoted content collection tabs — Official, All GTM Content, Intranet, Training & Enablement — above recent searches">
+      </div>
+      <p class="ss-ba-caption">Promoted collection tabs appear immediately on focus, letting reps scope to the relevant content area before they type.</p>
+    </div>
+  </div>
+</div>
+
+<!-- IMPACT -->
+<div class="takeaway-section fade-in">
+  <div class="section-label">Impact 02</div>
+  <h2 class="section-title">Search to click conversion is higher when queries are scoped to content collections</h2>
+  <div class="section-body" style="margin-top: 24px;">
+    <p>Not every search needs to be scoped. A rep searching for a specific document by name has no reason to narrow scope. The meaningful measure is whether scoping helps when reps choose to use it. In organizations with content collections configured, scoped searches produce 15% more clicks on results than unscoped searches. When reps narrow their search to relevant content, they find what they need.</p>
   </div>
 </div>
 
@@ -490,6 +466,42 @@
       if (e.source !== iframe.contentWindow) return;
       pendingH = Math.max(200, Math.ceil(e.data.height));
       if (rafId == null) rafId = requestAnimationFrame(applyPendingHeight);
+    });
+  })();
+</script>
+
+<script>
+  (function() {
+    var GIF_DURATIONS = { 'before': 10000, 'after': 8000 };
+
+    function playGif(wrap) {
+      var img = wrap.querySelector('.ss-gif-img');
+      var gif = wrap.dataset.gif;
+      var still = wrap.dataset.still;
+      var dur = gif.indexOf('before') !== -1 ? GIF_DURATIONS.before : GIF_DURATIONS.after;
+      img.src = gif + '?t=' + Date.now();
+      clearTimeout(wrap._gifTimer);
+      wrap._gifTimer = setTimeout(function() {
+        img.src = still;
+      }, dur);
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          playGif(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.ss-gif-wrap').forEach(function(wrap) {
+      observer.observe(wrap);
+      wrap.addEventListener('mouseenter', function() { playGif(wrap); });
+      wrap.addEventListener('mouseleave', function() {
+        clearTimeout(wrap._gifTimer);
+        wrap.querySelector('.ss-gif-img').src = wrap.dataset.still;
+      });
     });
   })();
 </script>
