@@ -54,13 +54,54 @@ nav {
 
 /* IMAGE CAPTION */
 .img-caption {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--mid);
   letter-spacing: 0.04em;
   margin-top: 10px;
   padding: 0 2px;
   line-height: 1.5;
 }
+
+/* LIGHTBOX */
+.lightbox-trigger {
+  cursor: zoom-in;
+  display: block;
+}
+.lightbox-trigger img { display: block; width: 100%; }
+
+#lightbox-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+#lightbox-overlay.active { display: flex; }
+#lightbox-overlay img {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+}
+#lightbox-close {
+  position: fixed;
+  top: 24px;
+  right: 32px;
+  font-size: 28px;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.7;
+  background: none;
+  border: none;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+#lightbox-close:hover { opacity: 1; }
 
 /* FOOTER */
 footer {

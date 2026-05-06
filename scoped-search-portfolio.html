@@ -183,12 +183,12 @@
 <div class="hero fade-in">
   <div class="hero-year">2024–2025</div>
   <h1 class="hero-title">Scoped Search</h1>
-  <p class="hero-desc">Sales reps in large organizations spend more time finding content than selling. Scoped Search gives reps a fast, low-friction way to search within the content that's relevant to them.</p>
+  <p class="hero-desc">Poor search relevance was the top reason enterprise customers rated Highspot negatively. I redesigned search to let reps scope results to content that's actually relevant to their role.</p>
   <dl class="hero-meta">
     <div class="meta-block"><dt>Role</dt><dd>Solo Product Designer</dd></div>
     <div class="meta-block"><dt>Timeline</dt><dd>Oct 2024 - Feb 2025</dd></div>
     <div class="meta-block"><dt>Team</dt><dd>1 Product Manager, 3 Engineers</dd></div>
-    <div class="meta-block"><dt>Company</dt><dd>Highspot</dd></div>
+    <div class="meta-block"><dt>Persona</dt><dd>Sales Representatives</dd></div>
   </dl>
 </div>
 
@@ -198,7 +198,7 @@
       <img src="Images/Scoped Search_hero.png" alt="Scoped Search">
     </div>
   </div>
-  <p class="img-caption">Scoped Search — search UI with collection scope selector</p>
+  <p class="img-caption">Enterprise search experience in Highspot, a sales enablement platform that helps go-to-market (GTM) teams improve revenue growth by equipping, training, and coaching sales representatives.</p>
 </div>
 
 <div class="content">
@@ -211,12 +211,16 @@
     <div class="signal-card">
       <div class="t-num">Business problem</div>
       <div class="t-title">Poor search relevance was driving customer dissatisfaction</div>
-      <div class="signal-row">Approximately <strong>70%</strong> of NPS detractors cited search relevance as their top reason for rating the product negatively. The issue was most acute in larger, older accounts with high content volume, the same accounts that represented the greatest churn risk. Search submission-to-click conversion rates in these accounts were measurably lower than in smaller ones, indicating that users were submitting searches but not finding results they trusted.</div>
+      <div class="signal-row">Approximately <strong>70%</strong> of NPS detractors cited search relevance as their top reason for rating the product negatively.</div>
+      <div class="signal-row">The issue was most acute in larger, older accounts with high content volume — the same accounts that represented the greatest churn risk.</div>
+      <div class="signal-row">Search submission-to-click conversion rates in these accounts were lower than the average, indicating that users were not finding the items they searched for.</div>
     </div>
     <div class="signal-card">
       <div class="t-num">User Needs</div>
-      <div class="t-title">Filtering facets were too granular for how reps thought about narrowing search results</div>
-      <div class="signal-row">UX research surfaced a mismatch between how users thought about their work and what the system supported. Sales reps wanted to filter by high-level organizational constructs such as sub-org, region, and product line, but the system only supported filtering by the spot where a content item lived and any metadata the publisher had added at upload time. As a result, <strong>less than 2% of users were using filters</strong> to narrow their search results.</div>
+      <div class="t-title">Filtering facets did not match how reps thought about narrowing search results</div>
+      <div class="signal-row">Sales reps wanted to filter by high-level organizational constructs such as sub-org, region, and product line.</div>
+      <div class="signal-row">The system only supported more granular filtering facets that were tied to the spots and lists the items were added to.</div>
+      <div class="signal-row">The filter bar had too many facets, each too granular to be useful, and filter usage was very low.</div>
     </div>
   </div>
 </div>
@@ -227,7 +231,10 @@
       <div class="section-label">Foundational work</div>
       <h2 class="section-title">The need for a higher-level filtering construct</h2>
       <div class="section-body">
-        <p>A research study focused on the search experience identified a consistent rep behavior: when search results weren't relevant, reps wanted to narrow by broad content areas such as business units, regions, or product lines. There was no straightforward way to associate items across a customer's domain with these organizational groupings, making that filtering path unavailable.</p>
+        <ul>
+          <li>Research identified a consistent rep behavior: when results weren't relevant, reps wanted to narrow by broad content areas — business units, regions, or product lines.</li>
+          <li>The platform had no way to associate content with these organizational groupings, so the filtering path didn't exist.</li>
+        </ul>
       </div>
     </div>
     <div>
@@ -299,8 +306,17 @@
       <div class="section-label">The filtering experience</div>
       <h2 class="section-title">Evaluating two approaches: scoping the query versus filtering the results</h2>
       <div class="section-body">
-        <p>I explored two models for how a rep could limit search results to a content area: scoping before submitting a search, and filtering post-search. Through initial design explorations, I found that the interaction became too complex when designed to scale to the maximum. The largest customer had 17 content collections, and designing for that volume made the tradeoffs clear.</p>
-        <p>I demonstrated the complexity through working prototypes to align the team on two design principles. First, the interaction of submitting a scoped search query should remain quick and simple. Second, the search dropdown is prime real estate and should be reserved for high-value interactions.</p>
+        <ul>
+          <li>I explored two models: scoping before submitting a query, and filtering post-search.</li>
+          <li>Scoping before submission in the search dropdown was an opportunity for quick and discoverable scoping.</li>
+          <li>When I designed the scoping experience for the maximum, it made the interaction very complex.</li>
+          <li>I used a working prototype to demonstrate the complexity and aligned the team on two principles:
+            <ol>
+              <li>Submitting a scoped query should remain quick and simple.</li>
+              <li>The search dropdown is high-value real estate and should not be cluttered.</li>
+            </ol>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -313,8 +329,11 @@
       <div>
         <h2 class="section-title">Most sales reps will frequently engage with 1–3 collections</h2>
         <div class="section-body">
-          <p>In the interest of keeping the experience of scoping a search query before submission simple, my PM partner and I returned to users with a focused question: how many collections do users actually have access to, and how many do they use when searching?</p>
-          <p>The data showed that users with access to many collections consistently engaged with only 1–3. This finding established the core design principle for the interaction: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
+          <ul>
+            <li>To keep pre-submission scoping simple, my PM partner and I returned to users with a focused question: how many collections do reps actually access when searching?</li>
+            <li>The data showed that even users with access to many collections consistently engaged with only 1–3.</li>
+            <li>This established the core design principle: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></li>
+          </ul>
         </div>
       </div>
       <div class="ss-stat-callout">
@@ -361,8 +380,11 @@
       <div>
         <h2 class="section-title">Using the scoping requirement as an opportunity to modernize the search dropdown</h2>
         <div class="section-body">
-          <p>The search dropdown goes through multiple states in a matter of seconds. The existing experience felt clunky because the dropdown disappeared entirely while suggestions were loading, breaking the user's sense of continuity.</p>
-          <p>In addition to solving the scoping problem, I saw an opportunity to modernize the interaction with the goal of a seamless experience. Because of the dynamic nature of the interaction, I broke the interaction into distinct states. Stitching those states together with deliberate transitions makes the interaction feel responsive and smooth throughout.</p>
+          <ul>
+            <li>The existing dropdown disappeared entirely while suggestions were loading, breaking the user's sense of continuity.</li>
+            <li>Adding scoping to the dropdown created an opportunity to redesign each state of the interaction for a more seamless experience.</li>
+            <li>I mapped the interaction into four distinct states and designed deliberate transitions between them, so the dropdown feels responsive throughout.</li>
+          </ul>
         </div>
       </div>
       <div>
@@ -409,8 +431,7 @@
   <div class="section-label">Handoff</div>
   <h2 class="section-title">Delivering microinteractions and state transitions through an interactive prototype</h2>
   <div class="section-body">
-    <p>An interactive prototype was essential to capture the microinteractions and state transitions, to ensure high-quality engineering implementation.</p>
-    <p>I created it in Figma at the time. The embedded prototype below is a recreation built with Cursor to demonstrate the same deliverable in an AI-first prototyping environment.</p>
+    <p>An interactive prototype was essential for communicating the microinteractions and state transitions to engineering. The original was built in Figma. The embedded version below is a recreation built in Cursor to demonstrate the same deliverable in an AI-first prototyping environment.</p>
   </div>
 
     <!-- Interactive prototype markup/CSS/JS: scoped-search-prototype.html (embedded below) -->
@@ -460,7 +481,11 @@
     <div>
       <h2 class="section-title">Search to click conversion is higher when queries are scoped to content collections</h2>
       <div class="section-body" style="margin-top: 24px;">
-        <p>Not every search needs to be scoped. A rep searching for a specific document by name has no reason to narrow scope. The meaningful measure is whether scoping helps when reps choose to use it. In organizations with content collections configured, scoped searches produce 15% more clicks on results than unscoped searches. When reps narrow their search to relevant content, they find what they need.</p>
+        <ul>
+          <li>Not every search needs to be scoped — a rep searching for a document by name has no reason to narrow scope.</li>
+          <li>The meaningful measure is whether scoping helps when reps choose to use it.</li>
+          <li>In organizations with content collections configured, scoped searches produce <strong>15% more clicks on results</strong> than unscoped searches.</li>
+        </ul>
       </div>
     </div>
     <div class="ss-stat-callout">
@@ -569,6 +594,7 @@
   })();
 </script>
 
+<script src="lightbox.js"></script>
 <!-- FOOTER -->
 <footer>
   <ul class="footer-links">
