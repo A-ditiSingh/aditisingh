@@ -81,15 +81,33 @@
   .ss-problem-section .section-title,
   .ss-problem-section .section-body { max-width: 50%; }
 
-  /* Takeaway sections — half-width text */
-  .takeaway-section .section-label,
-  .takeaway-section .section-title,
-  .takeaway-section .section-body { max-width: 50%; }
+  /* Takeaway sections — constrain standalone text; two-col layout handles its own width */
+  .takeaway-section > .section-label,
+  .takeaway-section > .section-title,
+  .takeaway-section > .section-body { max-width: 60%; }
 
-  /* ss-section single-col text blocks — half-width */
+  /* ss-section single-col text blocks — slightly wider for readability */
   .ss-section > .section-label,
   .ss-section > .section-title,
-  .ss-section > .section-body { max-width: 50%; }
+  .ss-section > .section-body { max-width: 60%; }
+
+  /* ss-section two-col layout for sections that pair text with a callout */
+  .ss-section-two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 64px; align-items: start; margin-top: 40px; }
+  .ss-section-two-col .section-body { max-width: none; }
+
+  /* Stat callout card */
+  .ss-stat-callout { background: rgba(0,0,0,0.03); border-radius: 8px; padding: 32px; }
+  .ss-stat-callout .sc-num { font-family: 'Lora', serif; font-size: clamp(44px, 5vw, 64px); font-weight: 400; line-height: 1; color: var(--ink); margin-bottom: 12px; }
+  .ss-stat-callout .sc-label { font-size: 13px; color: var(--mid); line-height: 1.65; }
+  .ss-stat-callout .sc-rule { width: 32px; height: 1px; background: var(--rule); margin: 20px 0; }
+  .ss-stat-callout .sc-secondary { font-size: 12px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--mid); }
+
+  @media (max-width: 768px) {
+    .ss-section-two-col { grid-template-columns: 1fr; gap: 32px; }
+    .ss-section > .section-label,
+    .ss-section > .section-title,
+    .ss-section > .section-body { max-width: 100%; }
+  }
 
   /* Finding visual column label spacing */
   .ss-finding-visual-col > .section-label { margin-bottom: 20px; }
@@ -291,10 +309,20 @@
   <!-- FINDING -->
   <div class="ss-section fade-in">
     <div class="section-label">Customer insight that shaped the design</div>
-    <h2 class="section-title">Most sales reps will frequently engage with 1–3 collections</h2>
-    <div class="section-body">
-      <p>In the interest of keeping the experience of scoping a search query before submission simple, my PM partner and I returned to users with a focused question: how many collections do users actually have access to, and how many do they use when searching?</p>
-      <p>The data showed that users with access to many collections consistently engaged with only 1–3. This finding established the core design principle for the interaction: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
+    <div class="ss-section-two-col">
+      <div>
+        <h2 class="section-title">Most sales reps will frequently engage with 1–3 collections</h2>
+        <div class="section-body">
+          <p>In the interest of keeping the experience of scoping a search query before submission simple, my PM partner and I returned to users with a focused question: how many collections do users actually have access to, and how many do they use when searching?</p>
+          <p>The data showed that users with access to many collections consistently engaged with only 1–3. This finding established the core design principle for the interaction: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
+        </div>
+      </div>
+      <div class="ss-stat-callout">
+        <div class="sc-num">1–3</div>
+        <div class="sc-label">Collections actively used by reps, even when many more were available</div>
+        <div class="sc-rule"></div>
+        <div class="sc-secondary">Key insight</div>
+      </div>
     </div>
   </div>
 
@@ -345,28 +373,28 @@
               <div class="chain-num">01</div>
               <div class="chain-text">
                 <h4>Rest — no interaction has happened yet</h4>
-                <p>The search bar is visible and discoverable. The design goal is to make search easy to find and invite interaction without introducing distraction.</p>
+                <p>The search bar is visible and discoverable.</p>
               </div>
             </div>
             <div class="chain-item">
               <div class="chain-num">02</div>
               <div class="chain-text">
                 <h4>Zero state — the user has clicked in</h4>
-                <p>Intent is unknown. The dropdown surfaces recent searches to give the user a fast path back to queries they have already run.</p>
+                <p>Intent is unknown. The dropdown surfaces recent searches to give the user a fast path to requerying.</p>
               </div>
             </div>
             <div class="chain-item">
               <div class="chain-num">03</div>
               <div class="chain-text">
                 <h4>Auto-suggest — the user is actively typing</h4>
-                <p>The dropdown surfaces keyword and entity suggestions that update with every keystroke. Transitions need to be smooth enough that the surface feels continuously responsive.</p>
+                <p>The dropdown surfaces keyword and entity suggestions that update with every keystroke. Transitions need to be smooth for a high-quality experience.</p>
               </div>
             </div>
             <div class="chain-item">
               <div class="chain-num">04</div>
               <div class="chain-text">
                 <h4>End state — the user has submitted a query</h4>
-                <p>The dropdown displays search results in this state. The design provides clear affordances for adjusting the query, changing the scope, or starting a new search with minimal steps.</p>
+                <p>The dropdown displays search query. The search box has quick paths for adjusting the query, changing the scope, or starting a new search.</p>
               </div>
             </div>
           </div>
@@ -428,9 +456,19 @@
 <!-- IMPACT -->
 <div class="takeaway-section fade-in">
   <div class="section-label">Impact 02</div>
-  <h2 class="section-title">Search to click conversion is higher when queries are scoped to content collections</h2>
-  <div class="section-body" style="margin-top: 24px;">
-    <p>Not every search needs to be scoped. A rep searching for a specific document by name has no reason to narrow scope. The meaningful measure is whether scoping helps when reps choose to use it. In organizations with content collections configured, scoped searches produce 15% more clicks on results than unscoped searches. When reps narrow their search to relevant content, they find what they need.</p>
+  <div class="ss-section-two-col" style="margin-top: 0;">
+    <div>
+      <h2 class="section-title">Search to click conversion is higher when queries are scoped to content collections</h2>
+      <div class="section-body" style="margin-top: 24px;">
+        <p>Not every search needs to be scoped. A rep searching for a specific document by name has no reason to narrow scope. The meaningful measure is whether scoping helps when reps choose to use it. In organizations with content collections configured, scoped searches produce 15% more clicks on results than unscoped searches. When reps narrow their search to relevant content, they find what they need.</p>
+      </div>
+    </div>
+    <div class="ss-stat-callout">
+      <div class="sc-num">+15%</div>
+      <div class="sc-label">More clicks on results when the search query is scoped to a content collection</div>
+      <div class="sc-rule"></div>
+      <div class="sc-secondary">vs. unscoped searches</div>
+    </div>
   </div>
 </div>
 
