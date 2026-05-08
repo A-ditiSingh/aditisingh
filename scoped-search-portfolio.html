@@ -139,18 +139,12 @@
   .ss-gif-stack { display: flex; flex-direction: column; gap: 40px; margin-top: 40px; }
   .ss-gif-stack .ss-ba-col { width: 100%; }
 
-  @media (max-width: 700px) {
-    .ss-before-after { grid-template-columns: 1fr; }
-  }
-
   /* Embedded prototype: smooth iframe resize when dropdown state changes */
   .scoped-search-prototype-frame { margin-top: 12px; border-radius: 10px; overflow: hidden; transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
 
-  @media (max-width: 700px) {
-    .ss-signal-grid { grid-template-columns: 1fr; }
-  }
-
   @media (max-width: 768px) {
+    .ss-before-after { grid-template-columns: 1fr; }
+    .ss-signal-grid { grid-template-columns: 1fr; }
     .ss-two-col { grid-template-columns: 1fr; gap: 40px; }
     .takeaway-grid { grid-template-columns: 1fr; }
     .ss-finding-copy { max-width: 100%; }
