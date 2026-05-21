@@ -62,17 +62,6 @@ nav {
   line-height: 1.5;
 }
 
-/* LIGHTBOX HOVER — images that open in lightbox */
-img[data-lightbox-init] {
-  transition: transform 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              box-shadow 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-img[data-lightbox-init]:hover {
-  transform: scale(1.025);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.14);
-}
-
 /* LIGHTBOX */
 .lightbox-trigger {
   cursor: zoom-in;
