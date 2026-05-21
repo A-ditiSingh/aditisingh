@@ -343,7 +343,7 @@
   <div class="hero">
     <h1 class="hero-name"><strong>aditi singh</strong></h1>
     <p class="hero-summary">Product designer with 6+ years of experience in B2B SaaS. At Highspot, I design for our enablement and marketing personas to make sense of large volumes of data, helping them identify the actions most likely to accelerate revenue outcomes. Currently, I am designing the experience for a specialized AI agent that surfaces data-driven insights.</p>
-    <a class="btn-download" href="Images/Aditi_Singh_Resume.pdf" download="Aditi_Singh_Resume.pdf">
+    <a class="btn-download" href="Images/Aditi_Singh_Resume.pdf" download="Aditi_Singh_Resume.pdf" onclick="downloadResume(event)">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -503,6 +503,30 @@
 
   document.querySelectorAll('a[href="index.html"]')
     .forEach(a => a.addEventListener('click', () => sessionStorage.setItem('portfolio_nav', '1')));
+
+  async function downloadResume(e) {
+    // Force a real download even when the browser would otherwise open the PDF inline (Safari, in-app browsers, etc.)
+    const link = e.currentTarget;
+    const url = link.getAttribute('href');
+    const filename = link.getAttribute('download') || 'Aditi_Singh_Resume.pdf';
+    try {
+      e.preventDefault();
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Network response was not ok');
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    } catch (err) {
+      // Fallback: let the browser handle the original link
+      window.location.href = url;
+    }
+  }
 
   function copyEmail(btn) {
     navigator.clipboard.writeText('aditisingh.design@gmail.com').then(() => {
