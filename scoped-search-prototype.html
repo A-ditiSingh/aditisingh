@@ -334,10 +334,10 @@ html, body { margin: 0; background: #ece7df; }
 <div class="pw2-wrap">
 <div class="pw2">
   <div class="state-strip2">
-    <div class="ss-item2 active" id="sl5"><span class="ss-tag2">01</span><span class="ss-name2">Rest</span></div>
+    <div class="ss-item2" id="sl5"><span class="ss-tag2">01</span><span class="ss-name2">Rest</span></div>
     <div class="ss-item2" id="sl0"><span class="ss-tag2">02</span><span class="ss-name2">Zero</span></div>
     <div class="ss-item2" id="sl1"><span class="ss-tag2">02</span><span class="ss-name2">Scope + Zero</span></div>
-    <div class="ss-item2" id="sl2"><span class="ss-tag2">03</span><span class="ss-name2">Auto-suggest</span></div>
+    <div class="ss-item2 active" id="sl2"><span class="ss-tag2">03</span><span class="ss-name2">Auto-suggest</span></div>
     <div class="ss-item2" id="sl3"><span class="ss-tag2">03</span><span class="ss-name2">Scope + Auto-suggest</span></div>
     <div class="ss-item2" id="sl4"><span class="ss-tag2">04</span><span class="ss-name2">End State</span></div>
   </div>
@@ -349,7 +349,7 @@ html, body { margin: 0; background: #ece7df; }
           <span id="scopePillText2">Compete Materials</span>
           <div class="pill-x2" id="pillX2"><svg viewBox="0 0 8 8" fill="none" stroke="#202020" stroke-width="1.5" width="8" height="8"><path d="M1 1l6 6M7 1l-6 6"/></svg></div>
         </div>
-        <input type="text" class="squery2" id="searchInput2" placeholder="Search for content" autocomplete="off" aria-label="Search">
+        <input type="text" class="squery2" id="searchInput2" placeholder="Search for content" autocomplete="off" aria-label="Search" value="Cloud PBX">
         <div class="xclear2" id="xclear2" style="display:none"><svg viewBox="0 0 8 8" fill="none" stroke="#fff" stroke-width="1.5" width="8" height="8"><path d="M1 1l6 6M7 1l-6 6"/></svg></div>
       </div>
       <div class="dropdown2 open2" id="dd2">
@@ -424,8 +424,8 @@ html, body { margin: 0; background: #ece7df; }
 
   // Interactive prototype v2
   (function() {
-    var state2 = 'rest', scope2 = '', query2 = '';
-    var preRestState = 'zero';
+    var state2 = 'auto-suggest', scope2 = '', query2 = 'Cloud PBX';
+    var preRestState = 'auto-suggest';
     var allSecs2 = ['s2-colls','s2-recent','s2-sugg','s2-sugg-scoped','s2-end'];
     var allLbls2 = ['sl5','sl0','sl1','sl2','sl3','sl4'];
 
@@ -990,6 +990,7 @@ html, body { margin: 0; background: #ece7df; }
       el.addEventListener('click', tabMap[id]);
     });
 
+    if (state2 === 'auto-suggest' || state2 === 'scope-auto-suggest') resetSuggestTimer();
     render2();
   })();
 
