@@ -320,6 +320,89 @@
     </div>
   </div>
 
+  <!-- QUERY PHASE -->
+  <div class="section-row fade-in">
+    <div>
+      <div class="dual-image">
+        <div>
+          <div class="section-image-card warm">
+            <div class="img-slot">
+              <input type="file" accept="image/*" onchange="loadImage(this)">
+              <div class="upload-hint"><span class="plus">+</span><span>Query with filters</span></div>
+            </div>
+          </div>
+          <p class="img-caption">Query phase — agent proposes filters for human approval</p>
+        </div>
+        <div>
+          <div class="section-image-card sage">
+            <div class="img-slot">
+              <input type="file" accept="image/*" onchange="loadImage(this)">
+              <div class="upload-hint"><span class="plus">+</span><span>Entity disambiguation</span></div>
+            </div>
+          </div>
+          <p class="img-caption">Entity disambiguation — agent asks which item when ambiguity exists</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Phase 01 — Query</div>
+      <h2 class="section-title">The agent interprets the question. Humans refine the filters.</h2>
+      <div class="section-body">
+        <p>The agent parses the user's question into a structured query, but it doesn't execute blindly. Two human-in-the-loop components give users control before the data runs.</p>
+      </div>
+      <div class="chain">
+        <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Filter proposal</h4><p>The agent proposes filters based on the question (time range, scope, exclusions). Users accept, adjust, or reject before query execution.</p></div></div>
+        <div class="chain-item"><div class="chain-num">02</div><div class="chain-text"><h4>Entity disambiguation</h4><p>If the query references something ambiguous ("Show me top reps" but the user has access to 15 teams), the agent asks for clarification rather than guessing.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTION PHASE -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="section-image-card clay">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><span class="plus">+</span><span>Action from table row</span></div>
+        </div>
+      </div>
+      <p class="img-caption">Action phase — user selects a row, actionable next step appears</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Phase 03 — Action</div>
+      <h2 class="section-title">Selecting a row surfaces the next logical step</h2>
+      <div class="section-body">
+        <p>The response table isn't a dead artifact. When a user clicks a row, that item becomes the context for what happens next. The UI surfaces one clear, contextual action tied to the selected item—not a generic menu, but a specific outcome shaped by the data.</p>
+        <p>If a rep shows low activity completion, the action might be to view their coaching history. If a content piece has high engagement, the action might be to check replication patterns. The action flows from the insight.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE LOOP -->
+  <div class="section-row fade-in">
+    <div>
+      <div class="section-image-card lilac">
+        <div class="img-slot">
+          <input type="file" accept="image/*" onchange="loadImage(this)">
+          <div class="upload-hint"><span class="plus">+</span><span>Full three-phase loop</span></div>
+        </div>
+      </div>
+      <p class="img-caption">The full loop — Query to Response to Action</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Putting It Together</div>
+      <h2 class="section-title">From insight to action in three phases</h2>
+      <div class="section-body">
+        <p>The three phases form a coherent loop. The user doesn't just ask a question and receive a passive answer. They refine the query, evaluate the response in context, select what matters to them, and move directly into action—all without leaving the conversational interface.</p>
+      </div>
+      <div class="chain">
+        <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Query</h4><p>User asks a question; agent proposes filters and disambiguates ambiguity</p></div></div>
+        <div class="chain-item"><div class="chain-num">02</div><div class="chain-text"><h4>Response</h4><p>Agent returns the answer in the appropriate format (table, chart, list, stat), with full context on how it derived the dataset</p></div></div>
+        <div class="chain-item"><div class="chain-num">03</div><div class="chain-text"><h4>Action</h4><p>User selects a specific item or insight; the UI surfaces a contextual next step they can take immediately</p></div></div>
+      </div>
+    </div>
+  </div>
+
   <!-- TAKEAWAYS -->
   <div class="takeaway-section fade-in">
     <div class="section-label">Key Learnings</div>
@@ -346,6 +429,23 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.06 });
   els.forEach(el => io.observe(el));
+
+  function loadImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const slot = input.closest('.img-slot');
+      const hint = slot.querySelector('.upload-hint');
+      if (hint) hint.style.display = 'none';
+      let img = slot.querySelector('img');
+      if (!img) { img = document.createElement('img'); slot.appendChild(img); }
+      img.src = ev.target.result;
+      img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;';
+      slot.style.border = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
 </script>
 
 <!-- FOOTER -->
