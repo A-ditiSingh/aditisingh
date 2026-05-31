@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="Images/favicon.svg">
+<title>Play Evaluation — Aditi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="case-study.css">
+<style>
+  .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
+  .hero-image-card { background: #BED2D5; }
+
+  /* OPTIONS GRID */
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 20px; }
+  .option-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 20px; }
+  .option-num { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 8px; }
+  .option-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+  .option-body { font-size: 12px; color: var(--mid); line-height: 1.6; }
+  .option-card.chosen { background: rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.12); }
+  .option-chosen-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); font-weight: 500; margin-top: 10px; }
+
+  /* PROPOSAL BLOCKS */
+  .proposal-section { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .proposal-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 12px; }
+  .proposal-title { font-family: 'Lora', serif; font-size: clamp(22px, 2.8vw, 32px); font-weight: 400; line-height: 1.2; margin-bottom: 16px; }
+  .proposal-body { font-size: 14px; color: var(--mid); line-height: 1.75; max-width: 600px; }
+  .proposal-body p + p { margin-top: 12px; }
+
+  .proto-frame {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    background: #fff;
+    margin-top: 28px;
+  }
+  .proto-frame iframe {
+    width: 100%;
+    height: 520px;
+    border: none;
+    display: block;
+  }
+
+  .proposals-intro { padding: 80px 0 40px; border-top: 1px solid var(--rule); }
+
+  /* DECISION TABLE */
+  .decision-wrap { margin-top: 24px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding: 8px 16px 8px 0; text-align: left; border-bottom: 1px solid var(--rule); font-weight: 400; }
+  tbody td { padding: 12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; font-size: 13px; }
+  tbody td:first-child { color: var(--mid); width: 140px; }
+  tbody td:nth-child(2), tbody td:nth-child(3) { color: #aaa; }
+  tbody td:last-child { color: var(--ink); font-weight: 500; }
+
+  /* CHAIN */
+  .chain { margin-top: 20px; }
+  .chain-item { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+  .chain-item:last-child { border-bottom: none; }
+  .chain-num { font-size: 11px; color: var(--mid); font-weight: 400; flex-shrink: 0; padding-top: 2px; width: 20px; }
+  .chain-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .chain-text p { font-size: 13px; color: var(--mid); line-height: 1.5; }
+
+  /* TAKEAWAYS */
+  .takeaway-section { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .takeaway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+  .takeaway-card { background: rgba(0,0,0,0.03); padding: 32px; border-radius: 6px; }
+  .t-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 16px; }
+  .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
+  .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+
+  @media (max-width: 768px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .takeaway-grid { grid-template-columns: 1fr; }
+    .proto-frame iframe { height: 400px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+  </ul>
+</nav>
+
+<div class="hero fade-in">
+  <div class="hero-year">2026</div>
+  <h1 class="hero-title">Play evaluation</h1>
+  <p class="hero-desc">Sellers use a Deal Agent to get recommendations during active opportunities. The quality of those recommendations depends entirely on the quality of the sales plays behind them — so I designed a system to help play authors improve their content before it reaches the field.</p>
+  <dl class="hero-meta">
+    <div class="meta-block"><dt>Role</dt><dd>Design Lead, Deal Agent</dd></div>
+    <div class="meta-block"><dt>Stage</dt><dd>Zero to One</dd></div>
+    <div class="meta-block"><dt>Domain</dt><dd>Agentic AI · Content Authoring</dd></div>
+    <div class="meta-block"><dt>Timeline</dt><dd>2026</dd></div>
+  </dl>
+</div>
+
+<div class="hero-image-wrap fade-in">
+  <div class="hero-image-card">
+    <div class="img-slot" style="aspect-ratio:15/7;">
+      <div class="upload-hint"><div class="plus">+</div><span>Add hero image</span></div>
+      <input type="file" accept="image/*">
+    </div>
+  </div>
+  <p class="img-caption">Play evaluation panel — single-turn improvement cards in the Play viewer</p>
+</div>
+
+<div class="content">
+
+  <!-- CONTEXT -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="section-image-card lilac">
+        <div class="img-slot">
+          <div class="upload-hint"><div class="plus">+</div><span>Add image</span></div>
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+      <p class="img-caption">Deal Agent — seller asking for next steps within an active deal</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Context</div>
+      <h2 class="section-title">Sellers ask the Deal Agent what to do next. The answer depends on the play.</h2>
+      <div class="section-body">
+        <p>Highspot's Deal Agent lives inside active sales opportunities. One of the most common queries sellers ask is what to do next to increase the chances of closing a deal.</p>
+        <p>The agent's responses draw on company-specific sales plays — playbooks authored by experts that contain competitive intelligence, talk tracks, and recommended actions. When the play is strong, the agent gives specific, contextual guidance. When it isn't, the agent falls back on generic sales advice that could have come from anywhere.</p>
+        <p>The design problem was not the agent itself — it was the content feeding it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <div class="section-row fade-in">
+    <div>
+      <div class="section-image-card warm">
+        <div class="img-slot">
+          <div class="upload-hint"><div class="plus">+</div><span>Add image</span></div>
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+      <p class="img-caption">The gap — generalized agent output vs. company-specific recommendations</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">The AI can only be as specific as the play it draws from</h2>
+      <div class="section-body">
+        <p>When a play lacks clear action items, actionable talk tracks, or competitive context, the agent cannot extract anything useful from it. The result is a response indistinguishable from a general-purpose sales coach — which defeats the purpose of having company-specific plays at all.</p>
+        <p>I identified two root causes: plays were not structured to be machine-readable, and authors had no signal that their plays were underperforming in the agent context.</p>
+      </div>
+      <div class="chain">
+        <div class="chain-item">
+          <div class="chain-num">—</div>
+          <div class="chain-text">
+            <h4>Plays are written for human readers</h4>
+            <p>Authors optimize for readability, not for action extraction. Recommendations are often embedded in prose rather than structured as discrete steps.</p>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-num">—</div>
+          <div class="chain-text">
+            <h4>Authors have no feedback loop</h4>
+            <p>There is no signal connecting play quality to agent output quality. Authors publish and move on — they never see how the play performs when a seller asks the agent a question.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TWO PATHS -->
+  <div class="section-row reverse fade-in">
+    <div>
+      <div class="section-image-card clay">
+        <div class="img-slot">
+          <div class="upload-hint"><div class="plus">+</div><span>Add image</span></div>
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+      <p class="img-caption">Two intervention points — editing extracted actions vs. improving the source play</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Two Paths</div>
+      <h2 class="section-title">Fix the output, or fix the source</h2>
+      <div class="section-body">
+        <p>There are two places to intervene. The first is downstream: let authors edit the action items the agent has already extracted from the play. The second is upstream: evaluate the play itself, surface what's missing or weak, and help authors improve the content before it reaches the agent.</p>
+        <p>The downstream approach gives authors direct control over what sellers see, but it creates a maintenance burden — every time the play changes, the extracted actions have to be re-reviewed. The upstream approach treats the play as the source of truth and lets improvements propagate automatically.</p>
+      </div>
+      <div class="discovery">
+        <div class="d-label">Design direction</div>
+        <p>Evaluate the play against a quality framework, surface specific improvement suggestions to the author, and automatically promote the play to the deal agent when it crosses a quality threshold.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSALS INTRO -->
+  <div class="proposals-intro fade-in">
+    <div class="section-label">Proposals</div>
+    <h2 class="section-title" style="font-family:'Lora',serif;font-size:clamp(22px,2.8vw,32px);font-weight:400;line-height:1.2;margin-bottom:16px;">Three ways to surface improvement suggestions in the Play viewer</h2>
+    <p style="font-size:14px;color:var(--mid);line-height:1.75;max-width:640px;">I explored three levels of suggestion interaction — from read-only text to structured cards to a free-form chat. The proposals below are all scoped to the Play viewer (where authors review published content), not the editor experience.</p>
+
+    <div class="options-grid" style="margin-top:28px;">
+      <div class="option-card">
+        <div class="option-num">Option 1</div>
+        <div class="option-title">Static suggestions</div>
+        <div class="option-body">The agent evaluates the play and returns plain-text improvement notes in a sidebar panel. No structured interaction — authors read and act on suggestions manually in the editor.</div>
+      </div>
+      <div class="option-card chosen">
+        <div class="option-num">Option 2</div>
+        <div class="option-title">Single-turn cards</div>
+        <div class="option-body">The agent returns structured improvement cards with accept and dismiss actions. Authors can accept a suggested rewrite or fill in missing information directly inside the panel.</div>
+        <div class="option-chosen-tag">→ Selected</div>
+      </div>
+      <div class="option-card">
+        <div class="option-num">Option 3</div>
+        <div class="option-title">Multi-turn chat</div>
+        <div class="option-body">A free-form chat interface where authors can ask the agent follow-up questions and explore improvements conversationally. Highest flexibility, highest engineering complexity.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSAL 1: STATIC -->
+  <div class="proposal-section fade-in">
+    <div class="proposal-label">Proposal 1 · Viewer</div>
+    <h2 class="proposal-title">Static suggestions</h2>
+    <div class="proposal-body">
+      <p>The agent evaluates the play after it reaches a usage threshold and surfaces plain-text suggestions in a sidebar panel. Authors see what could be improved but take action entirely within the editor — there is no structured interaction inside the panel itself.</p>
+      <p>This is the lowest-effort implementation. The tradeoff is friction: the gap between reading a suggestion and acting on it is large enough that many authors won't follow through.</p>
+    </div>
+    <div class="proto-frame">
+      <iframe srcdoc="" id="frame-static" title="Static suggestions prototype"></iframe>
+    </div>
+    <p class="img-caption" style="margin-top:12px;">Prototype — play evaluation panel with plain-text suggestions</p>
+  </div>
+
+  <!-- PROPOSAL 2: SINGLE-TURN -->
+  <div class="proposal-section fade-in">
+    <div class="proposal-label">Proposal 2 · Viewer · Selected</div>
+    <h2 class="proposal-title">Single-turn improvement cards</h2>
+    <div class="proposal-body">
+      <p>The agent evaluates the play and returns structured cards — each card identifies a specific weakness, shows the current text, and offers either a suggested replacement the author can accept, or a question the author answers to fill in missing information. Accepting or submitting updates the play and moves the quality score toward the threshold needed to surface in the Deal Agent.</p>
+      <p>This was selected over the other options because it reduces the distance between reading a suggestion and acting on it, while remaining feasible to build. The multi-turn chat offered more flexibility but introduced significant engineering complexity and made it harder to guide authors toward the specific improvements the framework required.</p>
+    </div>
+    <div class="proto-frame">
+      <iframe srcdoc="" id="frame-cards" title="Single-turn cards prototype"></iframe>
+    </div>
+    <p class="img-caption" style="margin-top:12px;">Prototype — structured improvement cards with accept and dismiss actions</p>
+  </div>
+
+  <!-- DECISION -->
+  <div class="section-row fade-in" style="grid-template-columns:1fr 1fr;">
+    <div>
+      <div class="section-image-card sage">
+        <div class="img-slot">
+          <div class="upload-hint"><div class="plus">+</div><span>Add image</span></div>
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+      <p class="img-caption">Evaluation framework — Know-Say-Show-Do scoring model</p>
+    </div>
+    <div class="section-text">
+      <div class="section-label">Decision</div>
+      <h2 class="section-title">Option 2 balanced author effort with engineering feasibility</h2>
+      <div class="section-body">
+        <p>The decision was made in partnership with engineering. Option 3 (multi-turn chat) was the strongest from a flexibility standpoint, but building a stateful conversation inside the Play viewer introduced scope that the team couldn't absorb in the current cycle.</p>
+        <p>Option 1 (static) was feasible but put too much burden on the author to translate a suggestion into an edit. Option 2 reduced that gap by making the suggested change explicit and accepting it with a single action.</p>
+      </div>
+      <div class="decision-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>Static</th><th>Multi-turn</th><th>Single-turn</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Author effort</td><td>High — manual action required</td><td>Low — conversational</td><td>Low — one click to accept</td></tr>
+            <tr><td>Eng complexity</td><td>Low</td><td>High</td><td>Medium</td></tr>
+            <tr><td>Specificity</td><td>Low — free text only</td><td>High</td><td>High — structured cards</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAKEAWAYS -->
+  <div class="takeaway-section fade-in">
+    <div class="section-label">Takeaways</div>
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <div class="t-num">01</div>
+        <h3 class="t-title">Content quality is a product design problem</h3>
+        <p class="t-body">When AI surfaces content, the design surface extends beyond the UI into the content itself. In this case, improving seller-facing recommendations required designing a feedback loop for the authors who create that content — not just the interface sellers interact with.</p>
+      </div>
+      <div class="takeaway-card">
+        <div class="t-num">02</div>
+        <h3 class="t-title">The distance between suggestion and action determines follow-through</h3>
+        <p class="t-body">Static recommendations are easy to produce and easy to ignore. Structured cards that make the required action explicit — and executable within the same panel — meaningfully reduce that gap. The format of feedback shapes whether it gets acted on.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+/* ── SHARED PIECES ── */
+var LOFI_HEADER = `
+  <div style="padding:10px 20px;border-bottom:1px solid #E2E0DB;display:flex;align-items:center;gap:5px;background:#fff;position:sticky;top:0;z-index:10;">
+    <div style="display:flex;align-items:center;gap:5px;">
+      <div class="lofi" style="width:18px;height:18px;border-radius:3px;"></div>
+      <div class="lofi" style="width:18px;height:18px;border-radius:3px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:72px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:36px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:110px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:60px;height:10px;border-radius:10px;"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;margin-left:auto;">
+      <div class="lofi" style="width:80px;height:22px;border-radius:4px;"></div>
+      <div class="lofi" style="width:22px;height:22px;border-radius:4px;"></div>
+      <div class="lofi" style="width:22px;height:22px;border-radius:4px;"></div>
+    </div>
+  </div>`;
+
+var LOFI_DOC_BODY = `
+    <div style="display:flex;gap:20px;padding:24px 28px 20px;align-items:flex-start;">
+      <div class="lofi" style="width:180px;height:110px;border-radius:6px;flex-shrink:0;"></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:10px;padding-top:8px;">
+        <div class="lofi" style="width:70%;height:13px;border-radius:3px;"></div>
+        <div class="lofi" style="width:90%;height:10px;border-radius:3px;"></div>
+        <div class="lofi" style="width:80%;height:10px;border-radius:3px;"></div>
+        <div class="lofi" style="width:55%;height:10px;border-radius:3px;"></div>
+      </div>
+    </div>
+    <div style="background:#EBF2FF;padding:14px 28px;">
+      <div class="lofi" style="width:120px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto 14px;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:400px;margin:0 auto;">
+        <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+        <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+        <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+        <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+      </div>
+    </div>
+    <div style="border-top:2px solid #D0DFF5;">
+      <div style="background:#EBF2FF;padding:10px 28px;"><div class="lofi" style="width:100px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto;"></div></div>
+      <div style="display:flex;gap:24px;padding:18px 28px;">
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+          <div class="lofi" style="width:100px;height:10px;border-radius:3px;background:#C8D8EE;"></div>
+          <div class="lofi" style="width:95%;height:9px;border-radius:3px;"></div>
+          <div class="lofi" style="width:88%;height:9px;border-radius:3px;"></div>
+          <div class="lofi" style="width:75%;height:9px;border-radius:3px;"></div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+          <div class="lofi" style="width:110px;height:10px;border-radius:3px;background:#C8D8EE;"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div class="lofi" style="width:52px;height:52px;border-radius:4px;flex-shrink:0;"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:7px;padding-top:2px;">
+              <div class="lofi" style="width:90%;height:9px;border-radius:3px;background:#C8D8EE;"></div>
+              <div class="lofi" style="width:40px;height:14px;border-radius:10px;background:#3A9E5F;"></div>
+              <div class="lofi" style="width:85%;height:9px;border-radius:3px;"></div>
+              <div class="lofi" style="width:70%;height:9px;border-radius:3px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:2px solid #D0DFF5;">
+      <div style="background:#EBF2FF;padding:10px 28px;"><div class="lofi" style="width:90px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto;"></div></div>
+      <div style="padding:16px 28px;display:flex;flex-direction:column;gap:10px;">
+        <div class="lofi" style="width:100px;height:11px;border-radius:3px;margin:0 auto;"></div>
+        <div class="lofi" style="width:100%;height:34px;border-radius:4px;"></div>
+        <div class="lofi" style="width:75%;height:9px;border-radius:3px;margin:0 auto;"></div>
+        <div style="display:flex;gap:12px;margin-top:4px;">
+          <div style="flex:1;display:flex;justify-content:center;"><div class="lofi" style="width:80%;height:10px;border-radius:3px;"></div></div>
+          <div style="flex:1;display:flex;justify-content:center;"><div class="lofi" style="width:80%;height:10px;border-radius:3px;"></div></div>
+        </div>
+      </div>
+    </div>`;
+
+var SHARED_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:#F0EEE9;height:100vh;display:flex;overflow:hidden;font-size:13px;color:#1A1A2E;}
+  .lofi{background:#EDEAE4;border-radius:3px;display:inline-block;}
+  .main{flex:1;overflow-y:auto;background:#fff;border-right:1px solid #E2E0DB;min-width:0;}
+  .panel{width:300px;flex-shrink:0;background:#FAFAF8;border-left:1px solid #E2E0DB;display:flex;flex-direction:column;}
+  .panel-header{padding:12px 14px 10px;border-bottom:1px solid #E2E0DB;background:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .panel-header h2{font-size:13px;font-weight:600;color:#1A1A2E;}
+  .panel-close{background:none;border:none;cursor:pointer;color:#9A9690;font-size:18px;line-height:1;padding:0 2px;}
+  .panel-score{padding:12px 14px 13px;background:#fff;border-bottom:1px solid #E2E0DB;flex-shrink:0;}
+  .score-context{font-size:11px;color:#6B6760;line-height:1.55;margin-bottom:10px;}
+  .score-context strong{color:#1A1A2E;}
+  .score-bar-wrap{display:flex;align-items:center;gap:9px;}
+  .score-bar-bg{flex:1;height:7px;background:#E8E5DF;border-radius:100px;overflow:hidden;}
+  .score-bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#E05C2A,#F0A500);transition:width 0.8s cubic-bezier(.16,1,.3,1);}
+  .score-number{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:#E05C2A;min-width:30px;text-align:right;}
+  .score-threshold{font-size:10px;color:#9A9690;margin-top:4px;}
+  .score-updated{font-size:10px;color:#5A9E6F;text-align:right;margin-top:3px;opacity:0;transition:opacity 0.3s;}
+  .score-updated.visible{opacity:1;}
+  .panel-cards{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;}
+  .card{background:#fff;border:1px solid #E2E0DB;border-radius:7px;transition:border-color 0.3s,background 0.3s,box-shadow 0.2s;}
+  .card:hover{box-shadow:0 1px 6px rgba(0,0,0,0.07);}
+  .card.accepted{border-color:#5A9E6F;background:#F4FAF6;}
+  .card.dismissed{max-height:0!important;opacity:0!important;margin-bottom:0!important;overflow:hidden!important;border:none!important;pointer-events:none;}
+  .card-top{padding:10px 10px 7px;}
+  .card-type-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;letter-spacing:0.07em;padding:2px 7px;border-radius:100px;margin-bottom:5px;text-transform:uppercase;}
+  .badge-replace{background:#FFF0E8;color:#C44A2C;}
+  .badge-add{background:#EBF2FF;color:#2E5EAA;}
+  .card-title{font-size:11.5px;font-weight:600;color:#1A1A2E;padding-right:20px;position:relative;line-height:1.4;}
+  .card-dismiss{position:absolute;top:0;right:0;background:none;border:none;cursor:pointer;color:#C0BCB5;font-size:14px;line-height:1;padding:0;}
+  .card-dismiss:hover{color:#6B6760;}
+  .card-divider{height:1px;background:#F0EEE9;}
+  .card-body{padding:9px 10px 11px;}
+  .field-label{font-size:9px;font-weight:700;letter-spacing:0.08em;color:#9A9690;text-transform:uppercase;margin-bottom:4px;margin-top:8px;}
+  .field-label:first-child{margin-top:0;}
+  .field-quote{font-size:11px;color:#6B6760;background:#FAFAF8;border:1px solid #E8E5DF;border-radius:4px;padding:5px 8px;line-height:1.5;font-style:italic;}
+  .field-text{font-size:11px;color:#3A3830;line-height:1.6;}
+  .card-question{font-size:11px;color:#3A3830;line-height:1.6;margin-bottom:6px;}
+  .answer-textarea{width:100%;border:1px solid #D8D4CE;border-radius:5px;padding:6px 8px;font-family:inherit;font-size:11px;color:#1A1A2E;background:#FAFAF8;resize:vertical;outline:none;line-height:1.5;transition:border-color 0.15s;min-height:56px;}
+  .answer-textarea:focus{border-color:#2E5EAA;background:#fff;}
+  .answer-textarea.error{border-color:#E05C2A;}
+  .card-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:9px;}
+  .btn-primary{background:#006DC7;color:#fff;border:none;padding:5px 13px;border-radius:5px;font-family:inherit;font-size:11px;font-weight:500;cursor:pointer;transition:background 0.15s;}
+  .btn-primary:hover{background:#0056A8;}
+  .btn-secondary{background:none;color:#6B6760;border:1px solid #D8D4CE;padding:5px 10px;border-radius:5px;font-family:inherit;font-size:11px;cursor:pointer;}
+  .btn-secondary:hover{border-color:#9A9690;color:#3A3830;}
+  .state-tag{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:10px 11px 12px;}
+  .state-tag.accepted{color:#5A9E6F;}
+  .state-tag.submitted{color:#2E5EAA;}
+  .panel-empty{text-align:center;padding:36px 18px;color:#9A9690;font-size:11.5px;line-height:1.7;}
+  .icon-rail{width:44px;background:#FAFAF8;border-left:1px solid #E2E0DB;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:10px;flex-shrink:0;}
+  .rail-active-wrap{position:relative;width:100%;display:flex;justify-content:center;align-items:center;padding:2px 0;}
+  .rail-active-wrap::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:24px;background:#00A99D;border-radius:0 2px 2px 0;}
+  .rail-star{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#00A99D;flex-shrink:0;}
+  .rail-skel{width:24px;height:24px;border-radius:6px;background:#EDEAE4;flex-shrink:0;}
+  .rail-divider{width:28px;height:1px;background:#E2E0DB;flex-shrink:0;margin:2px 0;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .spinner{width:16px;height:16px;border:2px solid #E2E0DB;border-top-color:#1A1A2E;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
+  .suggestion-card{background:#fff;border:1px solid #E2E0DB;border-radius:7px;padding:12px 13px;font-size:11.5px;color:#3A3830;line-height:1.65;}
+  .suggestion-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;}
+  .type-replace{color:#C44A2C;}
+  .type-add{color:#2E5EAA;}`;
+
+var PANEL_DEFAULT = `
+  <div id="evalDefault" style="padding:16px 14px;display:flex;flex-direction:column;gap:14px;">
+    <div style="font-size:12px;color:#3A3830;line-height:1.6;">Is your Play ready for execution? Let's run a quick check to ensure your sales reps get the best recommendations in the Deal Agent.</div>
+    <button onclick="runEvaluate()" style="background:#006DC7;color:#fff;border:none;padding:9px 14px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;width:fit-content;align-self:flex-start;" onmouseover="this.style.background='#0056A8'" onmouseout="this.style.background='#006DC7'">Evaluate play</button>
+  </div>`;
+
+var PANEL_LOADING = `
+  <div id="evalLoading" style="display:none;padding:20px 14px;flex-direction:column;gap:12px;align-items:flex-start;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="spinner"></div>
+      <div style="font-size:12px;color:#3A3830;font-weight:500;">Evaluating your Play…</div>
+    </div>
+    <div style="font-size:11px;color:#9A9690;line-height:1.6;">Checking against the Know-Say-Show-Do framework.</div>
+    <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+      <div style="height:8px;border-radius:100px;background:#EDEAE4;width:90%;"></div>
+      <div style="height:8px;border-radius:100px;background:#EDEAE4;width:70%;"></div>
+      <div style="height:8px;border-radius:100px;background:#EDEAE4;width:80%;"></div>
+    </div>
+  </div>`;
+
+var PANEL_CARDS = `
+  <div id="evalResults" style="display:none;flex:1;overflow:hidden;flex-direction:column;">
+    <div class="panel-score">
+      <div class="score-context">How your play scores against <strong>Know-Say-Show-Do</strong>. A score of at least <strong>80</strong> is needed to surface in Deals.</div>
+      <div class="score-bar-wrap">
+        <div class="score-bar-bg"><div class="score-bar-fill" id="scoreBarFill" style="width:0%;"></div></div>
+        <div class="score-number" id="scoreNumber">—</div>
+      </div>
+      <div class="score-threshold">Minimum to surface in Deals: 80</div>
+      <div class="score-updated" id="scoreUpdated">↑ Score updated</div>
+    </div>
+    <div class="panel-cards" id="panelCards">
+      <div class="card" id="card1">
+        <div class="card-top">
+          <div class="card-type-badge badge-replace">✶ Replace text</div>
+          <div class="card-title">Sharpen the competitive differentiation claim<button class="card-dismiss" onclick="dismissCard('card1')">✕</button></div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-body" id="body1">
+          <div class="field-label">Current text</div>
+          <div class="field-quote">"Aggressive sales culture with heavy involvement from their exec team &amp; board"</div>
+          <div class="field-label">Replace with</div>
+          <div class="field-text">A specific, evidence-backed claim from a recent competitive win — e.g. how Highspot's analytics depth outperformed Seismic in a live deal.</div>
+          <div class="card-actions">
+            <button class="btn-secondary" onclick="dismissCard('card1')">Dismiss</button>
+            <button class="btn-primary" onclick="acceptCard('card1')">Accept</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="card2">
+        <div class="card-top">
+          <div class="card-type-badge badge-add">+ Add information</div>
+          <div class="card-title">Add Seismic's recent pricing changes<button class="card-dismiss" onclick="dismissCard('card2')">✕</button></div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-body" id="body2">
+          <div class="card-question">What changes has Seismic made to their pricing model in the past 6 months?</div>
+          <textarea class="answer-textarea" id="ans2" placeholder="e.g. Seismic moved to seat-based pricing in Q1 2025…" rows="3"></textarea>
+          <div class="card-actions">
+            <button class="btn-secondary" onclick="dismissCard('card2')">Dismiss</button>
+            <button class="btn-primary" onclick="submitAnswer('card2','ans2')">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="card3">
+        <div class="card-top">
+          <div class="card-type-badge badge-add">+ Add information</div>
+          <div class="card-title">Add a champion enablement talk track<button class="card-dismiss" onclick="dismissCard('card3')">✕</button></div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-body" id="body3">
+          <div class="card-question">What specific language can a champion use to justify Highspot over Seismic internally?</div>
+          <textarea class="answer-textarea" id="ans3" placeholder="e.g. 'Highspot gives me one place to see what content is actually moving deals…'" rows="3"></textarea>
+          <div class="card-actions">
+            <button class="btn-secondary" onclick="dismissCard('card3')">Dismiss</button>
+            <button class="btn-primary" onclick="submitAnswer('card3','ans3')">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="card4">
+        <div class="card-top">
+          <div class="card-type-badge badge-replace">✶ Replace text</div>
+          <div class="card-title">Make the intro action-oriented<button class="card-dismiss" onclick="dismissCard('card4')">✕</button></div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-body" id="body4">
+          <div class="field-label">Current text</div>
+          <div class="field-quote">"If you feel something is missing — send feedback!"</div>
+          <div class="field-label">Replace with</div>
+          <div class="field-text">A concrete first action: "Start with the Land Early Differentiation talk track, then work through the objection handlers below."</div>
+          <div class="card-actions">
+            <button class="btn-secondary" onclick="dismissCard('card4')">Dismiss</button>
+            <button class="btn-primary" onclick="acceptCard('card4')">Accept</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+var PANEL_PLAIN = `
+  <div id="evalResults" style="display:none;flex:1;overflow-y:auto;flex-direction:column;padding:12px;gap:8px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9A9690;margin-bottom:4px;">Suggestions</div>
+    <div class="suggestion-card"><div class="suggestion-type type-replace">⚠ Sharpen your differentiation</div>Replace "aggressive sales culture" with a specific, evidence-backed win story that shows how Highspot's analytics depth beat Seismic in a live deal.</div>
+    <div class="suggestion-card"><div class="suggestion-type type-add">+ Add pricing context</div>Include Seismic's recent move to seat-based pricing so reps can counter "they're cheaper now" directly instead of deflecting to TCO.</div>
+    <div class="suggestion-card"><div class="suggestion-type type-add">+ Add champion talk track</div>Give champions specific language to justify Highspot internally — a "say this to your CFO" script would directly improve deal progression.</div>
+    <div class="suggestion-card"><div class="suggestion-type type-replace">⚠ Make the intro actionable</div>Start with a concrete first step — e.g. "Open with the Land Early Differentiation talk track" — so reps know exactly what to do in the first 30 seconds.</div>
+  </div>`;
+
+var ICON_RAIL = `
+  <div class="icon-rail">
+    <div class="rail-active-wrap">
+      <div class="rail-star">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2.5L13.4 10.1L21 12L13.4 13.9L12 21.5L10.6 13.9L3 12L10.6 10.1L12 2.5Z"/>
+        </svg>
+      </div>
+    </div>
+    <div class="rail-skel"></div>
+    <div class="rail-skel"></div>
+    <div class="rail-skel"></div>
+    <div class="rail-divider"></div>
+    <div class="rail-skel"></div>
+  </div>`;
+
+var JS_CARDS = `
+  var score=58;
+  function updateScore(d){
+    score=Math.min(100,score+d);
+    var f=document.getElementById('scoreBarFill'),n=document.getElementById('scoreNumber'),u=document.getElementById('scoreUpdated');
+    f.style.width=score+'%';n.textContent=score;
+    if(score>=80){n.style.color='#5A9E6F';f.style.background='linear-gradient(90deg,#3A9E5F,#5AC47A)';}
+    u.classList.add('visible');setTimeout(function(){u.classList.remove('visible');},2400);
+  }
+  function acceptCard(id){
+    var n=id.replace('card','');
+    document.getElementById('body'+n).innerHTML='<div class="state-tag accepted">✓ Accepted — this play will be updated</div>';
+    document.getElementById(id).classList.add('accepted');updateScore(8);
+  }
+  function submitAnswer(cid,iid){
+    var ta=document.getElementById(iid);
+    if(!ta.value.trim()){ta.classList.add('error');ta.placeholder='Please add an answer before submitting';return;}
+    var n=cid.replace('card','');
+    document.getElementById('body'+n).innerHTML='<div class="state-tag submitted">✓ Submitted — info added to play queue</div>';
+    document.getElementById(cid).classList.add('accepted');updateScore(10);
+  }
+  function dismissCard(id){
+    var c=document.getElementById(id),h=c.scrollHeight;
+    c.style.maxHeight=h+'px';c.style.overflow='hidden';c.style.opacity='1';c.style.transition='none';
+    c.getBoundingClientRect();
+    c.style.transition='max-height 0.38s ease,opacity 0.28s ease,margin-bottom 0.35s ease';
+    c.style.maxHeight='0';c.style.opacity='0';c.style.marginBottom='0';
+    setTimeout(function(){c.classList.add('dismissed');checkAllDone();},400);
+  }
+  function checkAllDone(){
+    var all=document.querySelectorAll('#panelCards .card');
+    var gone=Array.prototype.every.call(all,function(c){return c.classList.contains('dismissed');});
+    if(gone)setTimeout(function(){document.getElementById('panelCards').innerHTML='<div class="panel-empty">✓ <strong>All improvements reviewed</strong><br>No more suggestions right now.</div>';},100);
+  }`;
+
+function buildViewer(panelResults, jsEvaluate, jsExtra) {
+  var withScore = panelResults === PANEL_CARDS;
+  var scoreInit = withScore ? `
+    setTimeout(function(){
+      var f=document.getElementById('scoreBarFill'),n=document.getElementById('scoreNumber');
+      if(f)f.style.width='58%';if(n)n.textContent='58';
+    },150);` : '';
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${SHARED_CSS}</style></head><body>
+<div class="main">${LOFI_HEADER}<div style="overflow-y:auto;">${LOFI_DOC_BODY}</div></div>
+<div class="panel" id="panel">
+  <div class="panel-header"><h2>Improve Play</h2><button class="panel-close">✕</button></div>
+  ${PANEL_DEFAULT}
+  ${PANEL_LOADING}
+  ${panelResults}
+</div>
+${ICON_RAIL}
+<script>
+  window.__manualTrigger=true;
+  function runEvaluate(){
+    document.getElementById('evalDefault').style.display='none';
+    document.getElementById('evalLoading').style.display='flex';
+    setTimeout(function(){
+      document.getElementById('evalLoading').style.display='none';
+      var r=document.getElementById('evalResults');r.style.display='flex';r.style.flexDirection='column';
+      ${scoreInit}
+    },3500);
+  }
+  function closePanel(){}
+  ${jsExtra || ''}
+  (function(){
+    var d=document.getElementById('evalDefault');if(d)d.style.display='flex';
+    var l=document.getElementById('evalLoading');if(l)l.style.display='none';
+    var r=document.getElementById('evalResults');if(r)r.style.display='none';
+  })();
+<\/script></body></html>`;
+}
+
+document.getElementById('frame-static').srcdoc = buildViewer(PANEL_PLAIN, '', '');
+document.getElementById('frame-cards').srcdoc  = buildViewer(PANEL_CARDS, '', JS_CARDS);
+
+/* fade-in on scroll */
+var obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(function(el){ obs.observe(el); });
+</script>
+</body>
+</html>

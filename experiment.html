@@ -14,17 +14,17 @@
     document.documentElement.classList.add('pw-authed');
 </script>
 <style>
-  /* PAGE BACKGROUND */
-  :root { --bg: #eaf0f4; }
-
   /* PASSWORD OVERLAY */
   #pw-overlay { display: flex; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; }
   .pw-authed #pw-overlay { display: none; }
   /* HERO */
-  .hero-title { margin-bottom: 24px; }
-  .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
-  .hero-image-card { background: #b0c8d4; }
-  .section-image-card.warm { background: #b0c8d4; }
+  .hero-eyebrow { font-family: 'Lora', serif; font-size: clamp(28px, 5vw, 48px); font-weight: 400; line-height: 1.2; color: var(--ink); margin-bottom: 20px; }
+  .hero-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--mid); font-weight: 400; margin-bottom: 0; }
+  .hero-tldr { display: inline-flex; gap: 10px; align-items: flex-start; background: rgba(0,0,0,0.04); border-radius: 6px; padding: 14px 18px; margin-top: 12px; margin-bottom: 40px; max-width: 520px; }
+  .hero-tldr-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); font-weight: 500; flex-shrink: 0; padding-top: 3px; }
+  .hero-tldr-text { font-size: 14px; color: var(--mid); line-height: 1.65; }
+  .hero-desc { display: none; }
+  .hero-image-card { background: var(--lilac); }
 
   /* No corner radius on hero & content imagery / prototype */
   .hero-image-card,
@@ -180,8 +180,12 @@
 
 <div class="hero fade-in">
   <div class="hero-year">2024–2025</div>
-  <h1 class="hero-title">Making content findable for sellers in large orgs</h1>
-  <p class="hero-desc">Poor search relevance was the top reason enterprise customers rated Highspot negatively. I redesigned search to let reps scope results to content that's actually relevant to their role.</p>
+  <h1 class="hero-eyebrow">Making content findable for sellers in large orgs</h1>
+  <p class="hero-title">Scoped Search — Highspot</p>
+  <div class="hero-tldr">
+    <span class="hero-tldr-label">TLDR</span>
+    <span class="hero-tldr-text">Poor search relevance was the top reason enterprise customers rated Highspot negatively. I redesigned search to let reps scope results to content that's actually relevant to their role.</span>
+  </div>
   <dl class="hero-meta">
     <div class="meta-block"><dt>Role</dt><dd>Solo Product Designer</dd></div>
     <div class="meta-block"><dt>Timeline</dt><dd>Oct 2024 - Feb 2025</dd></div>
