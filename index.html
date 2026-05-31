@@ -239,9 +239,24 @@
     .project-row { grid-template-columns: 1fr; gap: 32px; }
     .hero-name { font-size: 42px; }
   }
+
+  /* Let gradient show through nav */
+  nav { background: transparent !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+  /* DYNAMIC GRADIENT */
+  #gradient-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
+
+<canvas id="gradient-canvas"></canvas>
 
 <!-- NAV -->
 <nav>
@@ -276,7 +291,7 @@
       </div>
     </div>
     <div class="project-text">
-      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">Company | Highspot</span>
+      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">Highspot</span>
       <h2 class="project-title">Transforming fragmented data into insights</h2>
       <p class="project-desc">GTM teams invest in plays, training, and content to drive revenue, but have no reliable way to know if any of it is working. I designed the end-to-end product to close that gap.</p>
       <div class="project-links">
@@ -291,14 +306,14 @@
 
   <!-- PROJECT 3: Scoped Search -->
   <div class="project-row">
-    <div class="project-card lilac">
-      <div class="img-slot">
+    <div class="project-card" style="background:#a8c4d8;">
+      <div class="img-slot" style="padding: 24px 24px 0;">
         <img src="Images/Cover_SS.png" alt="Scoped Search">
 
       </div>
     </div>
     <div class="project-text">
-      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">Company | Highspot</span>
+      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">Highspot</span>
       <h2 class="project-title">Making content findable for sellers in large orgs</h2>
       <p class="project-desc">Poor search relevance was the top reason enterprise customers rated Highspot negatively. I redesigned search to let reps scope results to content that's actually relevant to their role.</p>
       <div class="project-links">
@@ -319,7 +334,7 @@
       </div>
     </div>
     <div class="project-text">
-      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">Vibe-coded</span>
+      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">personal project</span>
       <h2 class="project-title">Building an app for our home library</h2>
       <p class="project-desc">After trying to catalogue 1,000+ books in two failed tracking attempts, I designed and built a fully deployed app from scratch, with auth, a real database, AI enrichment, and a live URL.</p>
       <div class="project-links">
@@ -416,6 +431,74 @@
       window.location.href = btn.getAttribute('data-dest');
     });
   });
+</script>
+
+<script>
+  // Dynamic gradient — soft orbs that drift slowly
+  (function() {
+    const canvas = document.getElementById('gradient-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Palette: warm cream base + accent orbs
+    const orbs = [
+      { x: 0.15, y: 0.2,  r: 0.55, color: [247, 182, 129], speed: 0.00018, phase: 0 },      // orange/peach
+      { x: 0.75, y: 0.15, r: 0.50, color: [190, 210, 213], speed: 0.00013, phase: 1.8 },     // lilac/teal
+      { x: 0.5,  y: 0.8,  r: 0.60, color: [239, 213, 213], speed: 0.00016, phase: 3.5 },     // blush
+      { x: 0.85, y: 0.65, r: 0.45, color: [245, 240, 232], speed: 0.00020, phase: 0.9 },     // cream
+    ];
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Mouse tracking — smooth lerp target
+    let mouseX = 0.5, mouseY = 0.3;
+    let smoothX = 0.5, smoothY = 0.3;
+    window.addEventListener('mousemove', e => {
+      mouseX = e.clientX / window.innerWidth;
+      mouseY = e.clientY / window.innerHeight;
+    });
+
+    let t = 0;
+    function draw(ts) {
+      t = ts;
+      const W = canvas.width, H = canvas.height;
+
+      // Lerp mouse position for smooth tracking
+      smoothX += (mouseX - smoothX) * 0.07;
+      smoothY += (mouseY - smoothY) * 0.07;
+
+      // Fill base
+      ctx.fillStyle = '#f5f0e8';
+      ctx.fillRect(0, 0, W, H);
+
+      // Draw each orb as a radial gradient
+      orbs.forEach((o, i) => {
+        const drift = 0.12;
+        // First orb follows mouse most strongly, others less so
+        const mouseInfluence = [0.45, 0.28, 0.18, 0.12][i];
+        const cx = (o.x + Math.sin(t * o.speed + o.phase) * drift + (smoothX - 0.5) * mouseInfluence) * W;
+        const cy = (o.y + Math.cos(t * o.speed * 0.7 + o.phase) * drift + (smoothY - 0.3) * mouseInfluence) * H;
+        const radius = o.r * Math.max(W, H);
+
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+        const [r, g, b] = o.color;
+        grad.addColorStop(0,   `rgba(${r},${g},${b},0.45)`);
+        grad.addColorStop(0.5, `rgba(${r},${g},${b},0.18)`);
+        grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    requestAnimationFrame(draw);
+  })();
 </script>
 </body>
 </html>
