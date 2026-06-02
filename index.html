@@ -11,7 +11,7 @@
 <style>
   /* HERO */
   .hero {
-    max-width: 1100px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 96px 60px 40px;
   }
@@ -72,7 +72,7 @@
 
   /* SECTION LABEL */
   .section-label-row {
-    max-width: 1100px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 60px;
   }
@@ -88,7 +88,7 @@
 
   /* PROJECT LIST */
   .projects {
-    max-width: 1100px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 60px;
   }
@@ -96,8 +96,8 @@
   /* PROJECT ROW */
   .project-row {
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 64px;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 80px;
     align-items: center;
     padding: 72px 0;
     border-bottom: 1px solid var(--rule);
@@ -133,7 +133,8 @@
     gap: 8px;
   }
   .project-card .img-slot input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .project-card .img-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .project-card .img-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transform: scale(1); transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .project-row.in-focus .project-card .img-slot img { transform: scale(1.05); }
 
   /* PROJECT TEXT */
   .project-text { padding: 8px 0; }
@@ -556,6 +557,8 @@
 
     // IntersectionObserver — track most visible project
     let activeKey = null;
+    let hasScrolled = false;
+    window.addEventListener('scroll', () => { hasScrolled = true; }, { once: true });
     const observer = new IntersectionObserver(entries => {
       // Find the most visible project row
       let best = null, bestRatio = 0;
@@ -571,6 +574,9 @@
       if (newKey !== activeKey) {
         activeKey = newKey;
         setTarget(activeKey);
+        projectRows.forEach(({ el, key }) => {
+          if (el) el.classList.toggle('in-focus', hasScrolled && key === newKey);
+        });
       }
     }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
 
