@@ -10,10 +10,13 @@
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="case-study.css">
 <style>
+  :root { --bg: #f5fafb; }
+  body { background: linear-gradient(160deg, #ffffff 0%, #d6ecef 100%); }
   /* HERO */
   .hero-title { margin-bottom: 24px; }
   .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
-  .hero-image-card { background: var(--lilac); }
+  .hero-image-card { background: #BED2D5; }
+  .section-image-card { background: #d8e8ea !important; }
 
   /* DUAL IMAGE */
   .dual-image { display: grid; grid-template-columns: 1fr; gap: 16px; }
@@ -75,6 +78,14 @@
     .takeaway-grid { grid-template-columns: 1fr; }
   }
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WR6V9DTCJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3WR6V9DTCJ');
+</script>
 </head>
 <body>
 

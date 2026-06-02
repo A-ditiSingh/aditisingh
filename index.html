@@ -293,6 +293,14 @@
     opacity: 1;
   }
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WR6V9DTCJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3WR6V9DTCJ');
+</script>
 </head>
 <body>
 
@@ -326,7 +334,7 @@
 
   <!-- PROJECT 1: GTM Initiatives -->
   <div class="project-row">
-    <div class="project-card orange">
+    <div class="project-card orange" style="background:#e8c9a8;">
       <div class="img-slot" style="border: none;">
         <input type="file" accept="image/*" onchange="loadImage(this)">
 
@@ -493,18 +501,80 @@
 </script>
 
 <script>
-  // Dynamic gradient — soft orbs that drift slowly
+  // Dynamic gradient — soft orbs that drift slowly, tinted by project in view
   (function() {
     const canvas = document.getElementById('gradient-canvas');
     const ctx = canvas.getContext('2d');
 
-    // Palette: warm cream base + accent orbs
-    const orbs = [
-      { x: 0.15, y: 0.2,  r: 0.55, color: [247, 182, 129], speed: 0.00018, phase: 0 },      // orange/peach
-      { x: 0.75, y: 0.15, r: 0.50, color: [190, 210, 213], speed: 0.00013, phase: 1.8 },     // lilac/teal
-      { x: 0.5,  y: 0.8,  r: 0.60, color: [239, 213, 213], speed: 0.00016, phase: 3.5 },     // blush
-      { x: 0.85, y: 0.65, r: 0.45, color: [245, 240, 232], speed: 0.00020, phase: 0.9 },     // cream
+    // Default palette: warm cream base + accent orbs
+    const defaultOrbs = [
+      { x: 0.15, y: 0.2,  r: 0.55, color: [247, 182, 129], speed: 0.00018, phase: 0 },
+      { x: 0.75, y: 0.15, r: 0.50, color: [190, 210, 213], speed: 0.00013, phase: 1.8 },
+      { x: 0.5,  y: 0.8,  r: 0.60, color: [239, 213, 213], speed: 0.00016, phase: 3.5 },
+      { x: 0.85, y: 0.65, r: 0.45, color: [245, 240, 232], speed: 0.00020, phase: 0.9 },
     ];
+
+    // Per-project tint colours (from thumbnail fills)
+    const projectTints = {
+      'initiatives':    { base: [252, 246, 238], orbs: [[232, 180, 120], [240, 210, 175], [245, 225, 200], [250, 240, 225]] },
+      'play-eval':      { base: [240, 245, 238], orbs: [[170, 195, 165], [195, 215, 190], [210, 225, 205], [230, 238, 228]] },
+      'scoped-search':  { base: [235, 245, 252], orbs: [[130, 175, 210], [168, 200, 225], [185, 215, 235], [220, 235, 245]] },
+      'library':        { base: [252, 242, 242], orbs: [[220, 175, 175], [239, 200, 200], [245, 215, 215], [250, 230, 230]] },
+    };
+
+    // Map project rows to tint keys
+    const projectRows = [
+      { el: null, key: 'initiatives' },
+      { el: null, key: 'play-eval' },
+      { el: null, key: 'scoped-search' },
+      { el: null, key: 'library' },
+    ];
+
+    document.querySelectorAll('.project-row').forEach((el, i) => {
+      if (projectRows[i]) projectRows[i].el = el;
+    });
+
+    // Current lerp state
+    let currentBase = [...defaultOrbs[0].color]; // unused directly but tracked
+    let orbColors = defaultOrbs.map(o => [...o.color]);
+    let baseColor = [245, 240, 232];
+
+    // Target state
+    let targetBase = [...baseColor];
+    let targetOrbColors = defaultOrbs.map(o => [...o.color]);
+
+    function setTarget(key) {
+      const tint = key ? projectTints[key] : null;
+      if (tint) {
+        targetBase = [...tint.base];
+        targetOrbColors = tint.orbs.map(c => [...c]);
+      } else {
+        targetBase = [245, 240, 232];
+        targetOrbColors = defaultOrbs.map(o => [...o.color]);
+      }
+    }
+
+    // IntersectionObserver — track most visible project
+    let activeKey = null;
+    const observer = new IntersectionObserver(entries => {
+      // Find the most visible project row
+      let best = null, bestRatio = 0;
+      projectRows.forEach(({ el, key }) => {
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const viewH = window.innerHeight;
+        const visible = Math.max(0, Math.min(rect.bottom, viewH) - Math.max(rect.top, 0));
+        const ratio = visible / el.offsetHeight;
+        if (ratio > bestRatio) { bestRatio = ratio; best = key; }
+      });
+      const newKey = bestRatio > 0.15 ? best : null;
+      if (newKey !== activeKey) {
+        activeKey = newKey;
+        setTarget(activeKey);
+      }
+    }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
+
+    projectRows.forEach(({ el }) => { if (el) observer.observe(el); });
 
     function resize() {
       canvas.width  = window.innerWidth;
@@ -513,7 +583,7 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // Mouse tracking — smooth lerp target
+    // Mouse tracking
     let mouseX = 0.5, mouseY = 0.3;
     let smoothX = 0.5, smoothY = 0.3;
     window.addEventListener('mousemove', e => {
@@ -521,30 +591,39 @@
       mouseY = e.clientY / window.innerHeight;
     });
 
+    const lerpSpeed = 0.018; // slow, smooth fade
+
+    function lerpArr(cur, tgt, k) {
+      return cur.map((v, i) => v + (tgt[i] - v) * k);
+    }
+
     let t = 0;
     function draw(ts) {
       t = ts;
       const W = canvas.width, H = canvas.height;
 
-      // Lerp mouse position for smooth tracking
       smoothX += (mouseX - smoothX) * 0.07;
       smoothY += (mouseY - smoothY) * 0.07;
 
+      // Lerp colours toward target
+      baseColor = lerpArr(baseColor, targetBase, lerpSpeed);
+      orbColors = orbColors.map((c, i) => lerpArr(c, targetOrbColors[i], lerpSpeed));
+
       // Fill base
-      ctx.fillStyle = '#f5f0e8';
+      const [br, bg, bb] = baseColor.map(Math.round);
+      ctx.fillStyle = `rgb(${br},${bg},${bb})`;
       ctx.fillRect(0, 0, W, H);
 
-      // Draw each orb as a radial gradient
-      orbs.forEach((o, i) => {
+      // Draw orbs
+      defaultOrbs.forEach((o, i) => {
         const drift = 0.12;
-        // First orb follows mouse most strongly, others less so
         const mouseInfluence = [0.45, 0.28, 0.18, 0.12][i];
         const cx = (o.x + Math.sin(t * o.speed + o.phase) * drift + (smoothX - 0.5) * mouseInfluence) * W;
         const cy = (o.y + Math.cos(t * o.speed * 0.7 + o.phase) * drift + (smoothY - 0.3) * mouseInfluence) * H;
         const radius = o.r * Math.max(W, H);
 
         const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-        const [r, g, b] = o.color;
+        const [r, g, b] = orbColors[i].map(Math.round);
         grad.addColorStop(0,   `rgba(${r},${g},${b},0.45)`);
         grad.addColorStop(0.5, `rgba(${r},${g},${b},0.18)`);
         grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);

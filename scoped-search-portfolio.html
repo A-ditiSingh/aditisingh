@@ -15,8 +15,8 @@
 </script>
 <style>
   /* PAGE BACKGROUND */
-  :root { --bg: #eaf0f4; }
-  body { background-image: radial-gradient(ellipse 80% 50% at 60% -10%, rgba(100, 160, 190, 0.18) 0%, transparent 70%); }
+  :root { --bg: #f5f9fc; }
+  body { background: linear-gradient(160deg, #ffffff 0%, #d8eaf3 100%); }
 
   /* PASSWORD OVERLAY */
   #pw-overlay { display: flex; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; }
@@ -27,8 +27,8 @@
   .badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
   .badge { display: inline-flex; align-items: center; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; font-family: 'Inter', sans-serif; padding: 4px 11px; border-radius: 999px; position: relative; background: linear-gradient(135deg, rgba(247,182,129,0.32) 0%, rgba(190,210,213,0.36) 50%, rgba(239,213,213,0.32) 100%); color: #6b6157; border: 1px solid transparent; background-clip: padding-box; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55), 0 1px 3px rgba(0,0,0,0.07); backdrop-filter: blur(4px); }
   .badge::before { content: ''; position: absolute; inset: -1px; border-radius: 999px; padding: 1px; background: linear-gradient(135deg, rgba(247,182,129,0.7), rgba(190,210,213,0.6), rgba(239,213,213,0.7)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
-  .hero-image-card { background: #b0c8d4; }
-  .section-image-card.warm { background: #b0c8d4; }
+  .hero-image-card { background: #a8c4d8; }
+  .section-image-card { background: #ccdee9 !important; }
 
   /* No corner radius on hero & content imagery / prototype */
   .hero-image-card,
@@ -159,6 +159,14 @@
   }
 
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WR6V9DTCJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3WR6V9DTCJ');
+</script>
 </head>
 <body>
 

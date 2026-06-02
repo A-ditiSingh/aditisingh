@@ -72,12 +72,12 @@
 
 /* IMAGE CARDS */
 .section-image-card { border-radius: 8px; padding: 32px 32px 0; overflow: hidden; }
-.section-image-card.orange { background: var(--orange); }
-.section-image-card.lilac  { background: var(--lilac); }
-.section-image-card.yellow { background: var(--yellow); }
-.section-image-card.warm   { background: #d4c5b0; }
-.section-image-card.sage   { background: #c3cdc0; }
-.section-image-card.clay   { background: #dfd5cf; }
+.section-image-card.orange { background: #FAD4B0; }
+.section-image-card.lilac  { background: #D8E8EA; }
+.section-image-card.yellow { background: #F5E5E5; }
+.section-image-card.warm   { background: #E4D9CC; }
+.section-image-card.sage   { background: #D8DFD6; }
+.section-image-card.clay   { background: #EDE7E3; }
 .section-image-card .img-slot { aspect-ratio: 4/3; }
 
 /* TEXT */

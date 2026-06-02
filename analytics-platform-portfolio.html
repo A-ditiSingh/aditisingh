@@ -15,13 +15,16 @@
 </script>
 <style>
   /* PASSWORD OVERLAY */
+  :root { --bg: #f7f9f7; }
+  body { background: linear-gradient(160deg, #ffffff 0%, #e3ebe1 100%); }
   #pw-overlay { display: flex; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; }
   .pw-authed #pw-overlay { display: none; }
 
   /* HERO */
   .hero-title { margin-bottom: 24px; }
   .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 560px; margin-bottom: 40px; }
-  .hero-image-card { background: #b5c4b1; }
+  .hero-image-card { background: #c3cdc0; }
+  .section-image-card { background: #dce4da !important; }
 
   /* No corner radius on hero & content imagery */
   .hero-image-card,
@@ -116,6 +119,14 @@
     .dual-image { grid-template-columns: 1fr; }
   }
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WR6V9DTCJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3WR6V9DTCJ');
+</script>
 </head>
 <body>
 
