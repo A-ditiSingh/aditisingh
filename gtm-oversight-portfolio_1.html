@@ -31,7 +31,7 @@
   .badge { display: inline-flex; align-items: center; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; font-family: 'Inter', sans-serif; padding: 4px 11px; border-radius: 999px; position: relative; background: linear-gradient(135deg, rgba(247,182,129,0.32) 0%, rgba(190,210,213,0.36) 50%, rgba(239,213,213,0.32) 100%); color: #6b6157; border: 1px solid transparent; background-clip: padding-box; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55), 0 1px 3px rgba(0,0,0,0.07); backdrop-filter: blur(4px); }
   .badge::before { content: ''; position: absolute; inset: -1px; border-radius: 999px; padding: 1px; background: linear-gradient(135deg, rgba(247,182,129,0.7), rgba(190,210,213,0.6), rgba(239,213,213,0.7)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
   :root { --bg: #fdf9f5; }
-  body { background: linear-gradient(160deg, #ffffff 0%, #f0e8dc 100%); }
+  body { background: linear-gradient(to bottom, #f0e8dc 0%, #fafafa 100%); }
   .hero-image-card { background: #e8c9a8; }
   .section-image-card { background: #f2dfc8 !important; }
 
@@ -213,7 +213,7 @@
   gtag('config', 'G-3WR6V9DTCJ');
 </script>
 </head>
-<body>
+<body data-nav-top="#f0e8dc" data-nav-bottom="#fafafa">
 
 <!-- PASSWORD OVERLAY -->
 <div id="pw-overlay">
@@ -614,5 +614,6 @@
   </ul>
   <span class="footer-copy">Aditi Singh · Ontario, Canada</span>
 </footer>
+<script src="nav-tint.js"></script>
 </body>
 </html>
