@@ -9,52 +9,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="case-study.css">
+<script>
+  if (localStorage.getItem('aditi_portfolio_auth') === 'true')
+    document.documentElement.classList.add('pw-authed');
+</script>
 <style>
+  :root { --bg: #eef2ee; }
+  body { background-image: radial-gradient(ellipse 80% 50% at 60% -10%, rgba(140, 185, 130, 0.18) 0%, transparent 70%); }
+  #pw-overlay { display: flex; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; }
+  .pw-authed #pw-overlay { display: none; }
+
+  /* HERO */
+  .hero-title { margin-bottom: 24px; }
   .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
-  .hero-image-card { background: #BED2D5; }
+  .hero-image-card { background: #c3cdc0; }
 
-  /* OPTIONS GRID */
-  .options-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 20px; }
-  .option-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 20px; }
-  .option-num { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 8px; }
-  .option-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
-  .option-body { font-size: 12px; color: var(--mid); line-height: 1.6; }
-  .option-card.chosen { background: rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.12); }
-  .option-chosen-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); font-weight: 500; margin-top: 10px; }
+  /* FULL-WIDTH SECTIONS */
+  .section-full { padding: 72px 0; border-top: 1px solid var(--rule); }
+  .section-full .section-body { max-width: none; }
 
-  /* PROPOSAL BLOCKS */
-  .proposal-section { padding: 80px 0; border-top: 1px solid var(--rule); }
-  .proposal-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 12px; }
-  .proposal-title { font-family: 'Lora', serif; font-size: clamp(22px, 2.8vw, 32px); font-weight: 400; line-height: 1.2; margin-bottom: 16px; }
-  .proposal-body { font-size: 14px; color: var(--mid); line-height: 1.75; max-width: 600px; }
-  .proposal-body p + p { margin-top: 12px; }
-
-  .proto-frame {
-    width: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--rule);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    background: #fff;
-    margin-top: 28px;
-  }
-  .proto-frame iframe {
-    width: 100%;
-    height: 520px;
-    border: none;
-    display: block;
-  }
-
-  .proposals-intro { padding: 80px 0 40px; border-top: 1px solid var(--rule); }
-
-  /* DECISION TABLE */
-  .decision-wrap { margin-top: 24px; overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  thead th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding: 8px 16px 8px 0; text-align: left; border-bottom: 1px solid var(--rule); font-weight: 400; }
-  tbody td { padding: 12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; font-size: 13px; }
-  tbody td:first-child { color: var(--mid); width: 140px; }
-  tbody td:nth-child(2), tbody td:nth-child(3) { color: #aaa; }
-  tbody td:last-child { color: var(--ink); font-weight: 500; }
+  /* TWO-COL REFRAME GRID */
+  .reframe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
 
   /* CHAIN */
   .chain { margin-top: 20px; }
@@ -62,39 +37,88 @@
   .chain-item:last-child { border-bottom: none; }
   .chain-num { font-size: 11px; color: var(--mid); font-weight: 400; flex-shrink: 0; padding-top: 2px; width: 20px; }
   .chain-text h4 { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
-  .chain-text p { font-size: 13px; color: var(--mid); line-height: 1.5; }
+  .chain-text p { font-size: 13px; color: var(--mid); line-height: 1.5; max-width: none; }
+
+  /* SIGNAL CARDS */
+  .signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+  .signal-card { background: rgba(0,0,0,0.03); border-radius: 8px; padding: 28px; }
+  .t-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 16px; }
+  .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
+  .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+  .signal-row { padding: 14px 0; border-bottom: 1px solid var(--rule); font-size: 14px; color: var(--mid); line-height: 1.75; }
+  .signal-row:last-child { border-bottom: none; }
+
+  /* OPTIONS GRID */
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 28px; }
+  .option-card { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 20px; }
+  .option-num { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mid); margin-bottom: 8px; }
+  .option-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+  .option-body { font-size: 12px; color: var(--mid); line-height: 1.6; }
+  .option-card.chosen { background: rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.12); }
+  .option-chosen-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); font-weight: 500; margin-top: 10px; }
+
+  /* PROTOTYPE FRAME */
+  .proto-frame { width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid var(--rule); box-shadow: 0 4px 24px rgba(0,0,0,0.08); background: #fff; margin-top: 32px; }
+  .proto-frame iframe { width: 100%; height: 700px; border: none; display: block; }
+
+  /* DECISION TABLE */
+  .compare-wrap { margin-top: 24px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); padding: 8px 16px 8px 0; text-align: left; border-bottom: 1px solid var(--rule); font-weight: 400; }
+  thead th:last-child { color: var(--ink); font-weight: 500; }
+  tbody td { padding: 12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  tbody td:first-child { color: var(--mid); width: 140px; font-size: 12px; }
+  tbody td:nth-child(2) { color: #aaa; }
+  tbody td:last-child { color: var(--ink); font-weight: 500; }
 
   /* TAKEAWAYS */
   .takeaway-section { padding: 80px 0; border-top: 1px solid var(--rule); }
   .takeaway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
   .takeaway-card { background: rgba(0,0,0,0.03); padding: 32px; border-radius: 6px; }
-  .t-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 16px; }
-  .t-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 10px; }
-  .t-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+
+  /* PIVOT CARDS */
+  .pivot-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
 
   @media (max-width: 768px) {
+    .reframe-grid { grid-template-columns: 1fr; gap: 40px; }
+    .signal-grid { grid-template-columns: 1fr; }
     .options-grid { grid-template-columns: 1fr; }
     .takeaway-grid { grid-template-columns: 1fr; }
+    .pivot-card-grid { grid-template-columns: 1fr; }
     .proto-frame iframe { height: 400px; }
   }
 </style>
 </head>
 <body>
 
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay">
+  <div style="max-width:380px;width:100%;padding:0 32px;">
+    <div style="font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:8px;">This work is protected</div>
+    <div style="font-size:14px;color:var(--mid);line-height:1.65;margin-bottom:32px;">Enter the password to view this case study. If you don't have it, reach out at aditisingh.design@gmail.com.</div>
+    <input id="pw-input" type="password" placeholder="Password" style="width:100%;font-size:14px;font-family:inherit;padding:12px 14px;border:1px solid var(--rule);border-radius:4px;background:transparent;color:var(--ink);outline:none;margin-bottom:8px;" />
+    <div id="pw-error" style="font-size:12px;color:#c0392b;min-height:18px;margin-bottom:12px;"></div>
+    <button id="pw-submit" style="width:100%;font-size:14px;font-family:inherit;font-weight:500;padding:12px;background:var(--ink);color:var(--bg);border:none;border-radius:4px;cursor:pointer;">Continue</button>
+    <button id="pw-cancel" style="width:100%;font-size:13px;font-family:inherit;color:var(--mid);background:none;border:none;cursor:pointer;margin-top:16px;">Cancel</button>
+  </div>
+</div>
+
 <nav>
   <a class="nav-back" href="index.html">← Back</a>
   <ul class="nav-links">
     <li><a href="index.html">Work</a></li>
     <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+    <li><span class="nav-sep" aria-hidden="true"></span></li>
+    <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href="https://github.com/A-ditiSingh" target="_blank" rel="noopener noreferrer">GitHub</a></li>
   </ul>
 </nav>
 
 <div class="hero fade-in">
-  <div class="hero-year">2026</div>
-  <h1 class="hero-title">Play evaluation</h1>
-  <p class="hero-desc">Sellers use a Deal Agent to get recommendations during active opportunities. The quality of those recommendations depends entirely on the quality of the sales plays behind them — so I designed a system to help play authors improve their content before it reaches the field.</p>
+  <h1 class="hero-title">Improving the content behind AI-generated sales guidance</h1>
+  <p class="hero-desc">When sellers ask the Agent for next steps, it pulls guidance from sales playbooks. When that content isn't actionable, the quality of recommendations suffers. I designed an evaluation system that helps authors improve their plays so actions are clear for both sellers and the agent.</p>
   <dl class="hero-meta">
-    <div class="meta-block"><dt>Role</dt><dd>Design Lead, Deal Agent</dd></div>
+    <div class="meta-block"><dt>Role</dt><dd>Design Lead, AI Agent</dd></div>
     <div class="meta-block"><dt>Stage</dt><dd>Zero to One</dd></div>
     <div class="meta-block"><dt>Domain</dt><dd>Agentic AI · Content Authoring</dd></div>
     <div class="meta-block"><dt>Timeline</dt><dd>2026</dd></div>
@@ -103,184 +127,105 @@
 
 <div class="hero-image-wrap fade-in">
   <div class="hero-image-card">
-    <div class="img-slot" style="aspect-ratio:15/7;">
-      <div class="upload-hint"><div class="plus">+</div><span>Add hero image</span></div>
-      <input type="file" accept="image/*">
+    <div class="img-slot">
+      <img src="Images/AIPlays_hero.png" alt="AI Plays hero" style="object-position: center;">
     </div>
   </div>
-  <p class="img-caption">Play evaluation panel — single-turn improvement cards in the Play viewer</p>
+  <p class="img-caption">Play evaluation panel — single-turn improvement cards in the content viewer</p>
 </div>
 
 <div class="content">
 
   <!-- CONTEXT -->
-  <div class="section-row reverse fade-in">
-    <div>
-      <div class="section-image-card lilac">
-        <div class="img-slot">
-          <div class="upload-hint"><div class="plus">+</div><span>Add image</span></div>
-          <input type="file" accept="image/*">
+  <div class="section-full fade-in">
+    <div class="reframe-grid">
+      <div>
+        <div class="section-label">Context</div>
+        <h2 class="section-title">Sellers ask the AI agent what to do next, and the answer depends on the content behind it</h2>
+        <div class="section-body">
+          <p>Highspot has an AI agent that lives inside active sales opportunities. Sellers ask it what to do next, and its answers draw on company-specific playbooks — competitive intelligence, talk tracks, and recommended actions. When the content is strong, the guidance is specific and contextual. When it isn't, the agent falls back on generic advice.</p>
+          <p>The design problem was not the agent itself — it was the content feeding it.</p>
         </div>
       </div>
-      <p class="img-caption">Deal Agent — seller asking for next steps within an active deal</p>
-    </div>
-    <div class="section-text">
-      <div class="section-label">Context</div>
-      <h2 class="section-title">Sellers ask the Deal Agent what to do next. The answer depends on the play.</h2>
-      <div class="section-body">
-        <p>Highspot's Deal Agent lives inside active sales opportunities. One of the most common queries sellers ask is what to do next to increase the chances of closing a deal.</p>
-        <p>The agent's responses draw on company-specific sales plays — playbooks authored by experts that contain competitive intelligence, talk tracks, and recommended actions. When the play is strong, the agent gives specific, contextual guidance. When it isn't, the agent falls back on generic sales advice that could have come from anywhere.</p>
-        <p>The design problem was not the agent itself — it was the content feeding it.</p>
+      <div>
+        <div class="section-image-card lilac">
+          <div class="img-slot">
+            <img src="Images/Deal Agent.png" alt="AI agent — seller asking for next steps within an active deal">
+          </div>
+        </div>
+        <p class="img-caption">AI agent — seller asking for next steps within an active deal</p>
       </div>
     </div>
   </div>
 
   <!-- PROBLEM -->
-  <div class="section-row fade-in">
-    <div>
-      <div class="section-image-card warm">
-        <div class="img-slot">
-          <div class="upload-hint"><div class="plus">+</div><span>Add image</span></div>
-          <input type="file" accept="image/*">
-        </div>
+  <div class="section-full fade-in">
+    <div class="section-label">Problem</div>
+    <h2 class="section-title">Playbooks that aren't upfront about their actions are hard to follow — for humans and AI alike</h2>
+    <div class="signal-grid">
+      <div class="signal-card">
+        <div class="t-num">The problem</div>
+        <div class="t-title">Actions buried in playbooks are hard to act on, whether you're a rep reading them or an agent extracting them</div>
+        <div class="signal-row">When recommended actions are buried in prose, reps have to work to find them. The agent has the same problem — if the actions aren't clear, it can't surface them reliably either.</div>
       </div>
-      <p class="img-caption">The gap — generalized agent output vs. company-specific recommendations</p>
-    </div>
-    <div class="section-text">
-      <div class="section-label">The Problem</div>
-      <h2 class="section-title">The AI can only be as specific as the play it draws from</h2>
-      <div class="section-body">
-        <p>When a play lacks clear action items, actionable talk tracks, or competitive context, the agent cannot extract anything useful from it. The result is a response indistinguishable from a general-purpose sales coach — which defeats the purpose of having company-specific plays at all.</p>
-        <p>I identified two root causes: plays were not structured to be machine-readable, and authors had no signal that their plays were underperforming in the agent context.</p>
-      </div>
-      <div class="chain">
-        <div class="chain-item">
-          <div class="chain-num">—</div>
-          <div class="chain-text">
-            <h4>Plays are written for human readers</h4>
-            <p>Authors optimize for readability, not for action extraction. Recommendations are often embedded in prose rather than structured as discrete steps.</p>
-          </div>
-        </div>
-        <div class="chain-item">
-          <div class="chain-num">—</div>
-          <div class="chain-text">
-            <h4>Authors have no feedback loop</h4>
-            <p>There is no signal connecting play quality to agent output quality. Authors publish and move on — they never see how the play performs when a seller asks the agent a question.</p>
-          </div>
-        </div>
+      <div class="signal-card">
+        <div class="t-num">The opportunity</div>
+        <div class="t-title">Evaluating plays based on what the AI can extract creates a feedback loop that improves content for everyone</div>
+        <div class="signal-row">If we evaluate a play based on the actions the AI can extract, and surface suggestions that would make those actions clearer, the play gets better for reps reading it directly and for the agent surfacing it in a deal.</div>
       </div>
     </div>
   </div>
 
-  <!-- TWO PATHS -->
-  <div class="section-row reverse fade-in">
-    <div>
-      <div class="section-image-card clay">
-        <div class="img-slot">
-          <div class="upload-hint"><div class="plus">+</div><span>Add image</span></div>
-          <input type="file" accept="image/*">
-        </div>
-      </div>
-      <p class="img-caption">Two intervention points — editing extracted actions vs. improving the source play</p>
+  <!-- DESIGN DIRECTION -->
+  <div class="section-full fade-in">
+    <div class="section-label">Approach 1 — Initial direction</div>
+    <h2 class="section-title">Let authors edit the actions the AI extracts from their playbook</h2>
+    <div class="section-body">
+      <p>The first approach was to let authors directly edit the action items the AI had already extracted — giving them control over exactly what sellers see in the agent. This kept the playbook untouched and gave authors a direct lever over the output.</p>
     </div>
-    <div class="section-text">
-      <div class="section-label">Two Paths</div>
-      <h2 class="section-title">Fix the output, or fix the source</h2>
-      <div class="section-body">
-        <p>There are two places to intervene. The first is downstream: let authors edit the action items the agent has already extracted from the play. The second is upstream: evaluate the play itself, surface what's missing or weak, and help authors improve the content before it reaches the agent.</p>
-        <p>The downstream approach gives authors direct control over what sellers see, but it creates a maintenance burden — every time the play changes, the extracted actions have to be re-reviewed. The upstream approach treats the play as the source of truth and lets improvements propagate automatically.</p>
+    <div style="margin-top:32px;padding:0 72px;box-sizing:border-box;position:relative;left:50%;right:50%;width:100vw;margin-left:-50vw;margin-right:-50vw;">
+      <div class="proto-frame" style="max-width:1400px;margin:0 auto;">
+        <iframe src="play-action-edit.html" title="Play action edit prototype" style="width:100%;height:700px;border:none;display:block;"></iframe>
       </div>
-      <div class="discovery">
-        <div class="d-label">Design direction</div>
-        <p>Evaluate the play against a quality framework, surface specific improvement suggestions to the author, and automatically promote the play to the deal agent when it crosses a quality threshold.</p>
-      </div>
+    </div>
+    <p class="img-caption" style="margin-top:12px;">Prototype — editing extracted action items from the playbook</p>
+    <div class="discovery" style="margin-top: 28px;">
+      <div class="d-label">Feedback from authors</div>
+      <p>Initial feedback revealed a motivation problem: doing work specifically to improve AI output — work that didn't make the playbook itself better — wasn't something authors had a clear incentive to do. The extra step felt disconnected from their actual job.</p>
+    </div>
+  </div>
+
+  <!-- PIVOT -->
+  <div class="section-full fade-in">
+    <div class="section-label">Approach 2 — Pivot</div>
+    <h2 class="section-title">Make the playbook better for everyone — humans and AI</h2>
+    <div class="section-body">
+      <p>Instead of asking authors to do work just for the agent, we shifted to improving the playbook itself. If the play is clear and actionable, it's better for reps reading it directly and better for the agent extracting from it. The same improvement serves both audiences.</p>
+      <p>This meant evaluating the play based on what the AI can extract, and surfacing focused suggestions that make those actions clearer — not as an AI optimization task, but as a content quality improvement.</p>
     </div>
   </div>
 
   <!-- PROPOSALS INTRO -->
-  <div class="proposals-intro fade-in">
-    <div class="section-label">Proposals</div>
-    <h2 class="section-title" style="font-family:'Lora',serif;font-size:clamp(22px,2.8vw,32px);font-weight:400;line-height:1.2;margin-bottom:16px;">Three ways to surface improvement suggestions in the Play viewer</h2>
-    <p style="font-size:14px;color:var(--mid);line-height:1.75;max-width:640px;">I explored three levels of suggestion interaction — from read-only text to structured cards to a free-form chat. The proposals below are all scoped to the Play viewer (where authors review published content), not the editor experience.</p>
-
-    <div class="options-grid" style="margin-top:28px;">
-      <div class="option-card">
-        <div class="option-num">Option 1</div>
-        <div class="option-title">Static suggestions</div>
-        <div class="option-body">The agent evaluates the play and returns plain-text improvement notes in a sidebar panel. No structured interaction — authors read and act on suggestions manually in the editor.</div>
-      </div>
-      <div class="option-card chosen">
-        <div class="option-num">Option 2</div>
-        <div class="option-title">Single-turn cards</div>
-        <div class="option-body">The agent returns structured improvement cards with accept and dismiss actions. Authors can accept a suggested rewrite or fill in missing information directly inside the panel.</div>
-        <div class="option-chosen-tag">→ Selected</div>
-      </div>
-      <div class="option-card">
-        <div class="option-num">Option 3</div>
-        <div class="option-title">Multi-turn chat</div>
-        <div class="option-body">A free-form chat interface where authors can ask the agent follow-up questions and explore improvements conversationally. Highest flexibility, highest engineering complexity.</div>
+  <div class="section-full fade-in">
+    <div class="section-label">Approach 2 — Three ways to surface suggestions</div>
+    <h2 class="section-title">Exploring three levels of interaction for surfacing improvement suggestions to authors</h2>
+    <div class="section-body" style="margin-bottom: 0;">
+      <p>I explored three levels of interaction — read-only text, structured cards, and free-form chat — all scoped to the content viewer where authors review published content.</p>
+    </div>
+    <div style="margin-top:32px;padding:0 72px;box-sizing:border-box;position:relative;left:50%;right:50%;width:100vw;margin-left:-50vw;margin-right:-50vw;">
+      <div class="proto-frame" style="max-width:1400px;margin:0 auto;">
+        <iframe src="play-evaluation-proposals.html" title="Play evaluation proposals prototype" style="width:100%;height:700px;border:none;display:block;"></iframe>
       </div>
     </div>
-  </div>
-
-  <!-- PROPOSAL 1: STATIC -->
-  <div class="proposal-section fade-in">
-    <div class="proposal-label">Proposal 1 · Viewer</div>
-    <h2 class="proposal-title">Static suggestions</h2>
-    <div class="proposal-body">
-      <p>The agent evaluates the play after it reaches a usage threshold and surfaces plain-text suggestions in a sidebar panel. Authors see what could be improved but take action entirely within the editor — there is no structured interaction inside the panel itself.</p>
-      <p>This is the lowest-effort implementation. The tradeoff is friction: the gap between reading a suggestion and acting on it is large enough that many authors won't follow through.</p>
-    </div>
-    <div class="proto-frame">
-      <iframe srcdoc="" id="frame-static" title="Static suggestions prototype"></iframe>
-    </div>
-    <p class="img-caption" style="margin-top:12px;">Prototype — play evaluation panel with plain-text suggestions</p>
-  </div>
-
-  <!-- PROPOSAL 2: SINGLE-TURN -->
-  <div class="proposal-section fade-in">
-    <div class="proposal-label">Proposal 2 · Viewer · Selected</div>
-    <h2 class="proposal-title">Single-turn improvement cards</h2>
-    <div class="proposal-body">
-      <p>The agent evaluates the play and returns structured cards — each card identifies a specific weakness, shows the current text, and offers either a suggested replacement the author can accept, or a question the author answers to fill in missing information. Accepting or submitting updates the play and moves the quality score toward the threshold needed to surface in the Deal Agent.</p>
-      <p>This was selected over the other options because it reduces the distance between reading a suggestion and acting on it, while remaining feasible to build. The multi-turn chat offered more flexibility but introduced significant engineering complexity and made it harder to guide authors toward the specific improvements the framework required.</p>
-    </div>
-    <div class="proto-frame">
-      <iframe srcdoc="" id="frame-cards" title="Single-turn cards prototype"></iframe>
-    </div>
-    <p class="img-caption" style="margin-top:12px;">Prototype — structured improvement cards with accept and dismiss actions</p>
+    <p class="img-caption" style="margin-top:12px;">Prototype — three proposal options for surfacing improvement suggestions</p>
   </div>
 
   <!-- DECISION -->
-  <div class="section-row fade-in" style="grid-template-columns:1fr 1fr;">
-    <div>
-      <div class="section-image-card sage">
-        <div class="img-slot">
-          <div class="upload-hint"><div class="plus">+</div><span>Add image</span></div>
-          <input type="file" accept="image/*">
-        </div>
-      </div>
-      <p class="img-caption">Evaluation framework — Know-Say-Show-Do scoring model</p>
-    </div>
-    <div class="section-text">
-      <div class="section-label">Decision</div>
-      <h2 class="section-title">Option 2 balanced author effort with engineering feasibility</h2>
-      <div class="section-body">
-        <p>The decision was made in partnership with engineering. Option 3 (multi-turn chat) was the strongest from a flexibility standpoint, but building a stateful conversation inside the Play viewer introduced scope that the team couldn't absorb in the current cycle.</p>
-        <p>Option 1 (static) was feasible but put too much burden on the author to translate a suggestion into an edit. Option 2 reduced that gap by making the suggested change explicit and accepting it with a single action.</p>
-      </div>
-      <div class="decision-wrap">
-        <table>
-          <thead>
-            <tr><th></th><th>Static</th><th>Multi-turn</th><th>Single-turn</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Author effort</td><td>High — manual action required</td><td>Low — conversational</td><td>Low — one click to accept</td></tr>
-            <tr><td>Eng complexity</td><td>Low</td><td>High</td><td>Medium</td></tr>
-            <tr><td>Specificity</td><td>Low — free text only</td><td>High</td><td>High — structured cards</td></tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="section-full fade-in">
+    <div class="section-label">Decision</div>
+    <h2 class="section-title">Start with static, evolve to single-turn cards</h2>
+    <div class="section-body">
+      <p>Multi-turn chat was ruled out — the engineering complexity wasn't justified, and building a conversational editor would have moved the product toward a page builder, which wasn't the right direction. The decision was to ship static suggestions first to validate that authors engage with the feedback, then evolve to single-turn cards once that's confirmed.</p>
     </div>
   </div>
 
@@ -291,12 +236,12 @@
       <div class="takeaway-card">
         <div class="t-num">01</div>
         <h3 class="t-title">Content quality is a product design problem</h3>
-        <p class="t-body">When AI surfaces content, the design surface extends beyond the UI into the content itself. In this case, improving seller-facing recommendations required designing a feedback loop for the authors who create that content — not just the interface sellers interact with.</p>
+        <p class="t-body">When AI surfaces content, the design surface extends beyond the UI into the content itself. Improving seller-facing recommendations meant designing a feedback loop for the authors who create that content — not just the interface sellers see.</p>
       </div>
       <div class="takeaway-card">
         <div class="t-num">02</div>
         <h3 class="t-title">The distance between suggestion and action determines follow-through</h3>
-        <p class="t-body">Static recommendations are easy to produce and easy to ignore. Structured cards that make the required action explicit — and executable within the same panel — meaningfully reduce that gap. The format of feedback shapes whether it gets acted on.</p>
+        <p class="t-body">Static recommendations are easy to produce and easy to ignore. Structured cards that make the action explicit and executable in the same panel meaningfully reduce that gap. The format of feedback shapes whether it gets acted on.</p>
       </div>
     </div>
   </div>
@@ -447,7 +392,7 @@ var SHARED_CSS = `
 
 var PANEL_DEFAULT = `
   <div id="evalDefault" style="padding:16px 14px;display:flex;flex-direction:column;gap:14px;">
-    <div style="font-size:12px;color:#3A3830;line-height:1.6;">Is your Play ready for execution? Let's run a quick check to ensure your sales reps get the best recommendations in the Deal Agent.</div>
+    <div style="font-size:12px;color:#3A3830;line-height:1.6;">Is your Play ready for execution? Let's run a quick check to ensure your sales reps get the best recommendations from the AI agent.</div>
     <button onclick="runEvaluate()" style="background:#006DC7;color:#fff;border:none;padding:9px 14px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;width:fit-content;align-self:flex-start;" onmouseover="this.style.background='#0056A8'" onmouseout="this.style.background='#006DC7'">Evaluate play</button>
   </div>`;
 
@@ -621,7 +566,7 @@ function buildViewer(panelResults, jsEvaluate, jsExtra) {
 </div>
 ${ICON_RAIL}
 <script>
-  window.__manualTrigger=true;
+  window.__manualTrigger=false;
   function runEvaluate(){
     document.getElementById('evalDefault').style.display='none';
     document.getElementById('evalLoading').style.display='flex';
@@ -634,21 +579,61 @@ ${ICON_RAIL}
   function closePanel(){}
   ${jsExtra || ''}
   (function(){
-    var d=document.getElementById('evalDefault');if(d)d.style.display='flex';
+    var d=document.getElementById('evalDefault');if(d)d.style.display='none';
     var l=document.getElementById('evalLoading');if(l)l.style.display='none';
-    var r=document.getElementById('evalResults');if(r)r.style.display='none';
+    var r=document.getElementById('evalResults');if(r){r.style.display='flex';r.style.flexDirection='column';}
+    ${scoreInit}
   })();
 <\/script></body></html>`;
 }
 
-document.getElementById('frame-static').srcdoc = buildViewer(PANEL_PLAIN, '', '');
-document.getElementById('frame-cards').srcdoc  = buildViewer(PANEL_CARDS, '', JS_CARDS);
 
 /* fade-in on scroll */
 var obs = new IntersectionObserver(function(entries){
   entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
+}, { threshold: 0.06 });
 document.querySelectorAll('.fade-in').forEach(function(el){ obs.observe(el); });
+
+// Password gate
+(function() {
+  var PASS = 'seeproject';
+  var STORAGE_KEY = 'aditi_portfolio_auth';
+  var overlay = document.getElementById('pw-overlay');
+  var pwInput = document.getElementById('pw-input');
+  var pwError = document.getElementById('pw-error');
+
+  if (localStorage.getItem(STORAGE_KEY) !== 'true') {
+    setTimeout(function(){ pwInput.focus(); }, 50);
+  }
+
+  function attempt() {
+    if (pwInput.value === PASS) {
+      localStorage.setItem(STORAGE_KEY, 'true');
+      overlay.style.display = 'none';
+    } else {
+      pwError.textContent = 'Incorrect password. Please try again.';
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  }
+
+  document.getElementById('pw-submit').addEventListener('click', attempt);
+  pwInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') attempt(); });
+  document.getElementById('pw-cancel').addEventListener('click', function(){
+    window.location.href = 'index.html';
+  });
+})();
 </script>
+
+<script src="lightbox.js"></script>
+<!-- FOOTER -->
+<footer>
+  <ul class="footer-links">
+    <li><a href="mailto:aditisingh.design@gmail.com">Email</a></li>
+    <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+  </ul>
+  <span class="footer-copy">Aditi Singh · Ontario, Canada</span>
+</footer>
 </body>
 </html>

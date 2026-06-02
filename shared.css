@@ -14,6 +14,7 @@ html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
+  background-image: radial-gradient(ellipse 80% 50% at 60% -10%, rgba(247, 182, 129, 0.18) 0%, transparent 70%);
   color: var(--ink);
   font-family: 'Inter', sans-serif;
   font-size: 15px;
@@ -43,10 +44,11 @@ nav {
   transition: color 0.15s;
 }
 .nav-back:hover { color: var(--ink); }
-.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
 .nav-links a { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
 .nav-links a:hover { color: var(--ink); }
 .nav-links a.active { color: var(--ink); font-weight: 500; }
+.nav-sep { width: 1px; height: 13px; background: var(--rule); display: inline-block; margin: 0 4px; flex-shrink: 0; }
 
 /* UPLOAD HINT */
 .upload-hint { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #aaa; font-size: 12px; pointer-events: none; text-align: center; }

@@ -6,7 +6,7 @@
 <link rel="icon" type="image/svg+xml" href="Images/favicon.svg">
 <title>Aditi — Product Designer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Prata&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
   /* HERO */
@@ -25,10 +25,9 @@
   }
 
   .hero-name {
-    font-family: 'Fraunces', serif;
+    font-family: 'Prata', serif;
     font-size: clamp(48px, 7vw, 80px);
-    font-weight: 300;
-    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+    font-weight: 400;
     line-height: 1.04;
     letter-spacing: -0.02em;
     margin-bottom: 24px;
@@ -119,6 +118,7 @@
   .project-card.orange { background: var(--orange); }
   .project-card.lilac  { background: var(--lilac); }
   .project-card.yellow { background: var(--yellow); }
+  .project-card.sage   { background: #c3cdc0; }
 
   .project-card .img-slot {
     background: transparent;
@@ -153,9 +153,49 @@
     margin-bottom: 8px;
   }
 
+  .badge-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    padding: 4px 11px;
+    border-radius: 999px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(247,182,129,0.32) 0%, rgba(190,210,213,0.36) 50%, rgba(239,213,213,0.32) 100%);
+    color: #6b6157;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55), 0 1px 3px rgba(0,0,0,0.07);
+    backdrop-filter: blur(4px);
+    transition: box-shadow 0.2s;
+  }
+
+  .badge::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 999px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(247,182,129,0.7), rgba(190,210,213,0.6), rgba(239,213,213,0.7));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
   .project-title {
     font-family: 'Lora', serif;
-    font-size: clamp(28px, 3.5vw, 44px);
+    font-size: clamp(22px, 2.8vw, 36px);
     font-weight: 400;
     line-height: 1.15;
     letter-spacing: -0.01em;
@@ -264,12 +304,15 @@
   <ul class="nav-links">
     <li><a href="#" class="active">Work</a></li>
     <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+    <li><span class="nav-sep" aria-hidden="true"></span></li>
+    <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href="https://github.com/A-ditiSingh" target="_blank" rel="noopener noreferrer">GitHub</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <div class="hero hero-fade">
- <h1 class="hero-name"><strong>aditi singh</strong></h1>
+ <h1 class="hero-name">aditi singh</h1>
   <p class="hero-summary">Senior product designer with 6+ years of experience shipping end-to-end B2B SaaS products. At Highspot, I lead design for an AI agent that surfaces actionable insights for sales enablement and marketing teams. I work closely with product and engineering, run customer research throughout the project lifecycle, and use AI prototyping to ship at speed.</p>
 </div>
 
@@ -291,8 +334,13 @@
       </div>
     </div>
     <div class="project-text">
-      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">Highspot</span>
       <h2 class="project-title">Transforming fragmented data into insights</h2>
+      <div class="badge-row">
+        <span class="badge">Highspot</span>
+        <span class="badge">0 to 1</span>
+        <span class="badge">Analytics</span>
+        <span class="badge">Dashboard</span>
+      </div>
       <p class="project-desc">GTM teams invest in plays, training, and content to drive revenue, but have no reliable way to know if any of it is working. I designed the end-to-end product to close that gap.</p>
       <div class="project-links">
         <button class="link-primary lock-btn" data-dest="gtm-oversight-portfolio_1.html" style="background:none;border:none;border-bottom:1px solid var(--ink);padding-bottom:1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:var(--ink);font-family:inherit;">
@@ -304,6 +352,29 @@
   </div>
 
 
+  <!-- PROJECT 2: Play Evaluation -->
+  <div class="project-row">
+    <div class="project-card sage">
+      <div class="img-slot">
+        <img src="Images/Cover_AIPlays.png" alt="AI Plays cover">
+      </div>
+    </div>
+    <div class="project-text">
+      <h2 class="project-title">Improving the content behind AI-generated sales guidance</h2>
+      <div class="badge-row">
+        <span class="badge">Highspot</span>
+        <span class="badge">AI-assisted workflow</span>
+      </div>
+      <p class="project-desc">When sellers ask the Agent for next steps, it pulls guidance from sales playbooks. When that content isn't actionable, the quality of recommendations suffers. I designed an evaluation system that helps authors improve their plays so actions are clear for both sellers and the agent.</p>
+      <div class="project-links">
+        <button class="link-primary lock-btn" data-dest="play-evaluation-portfolio.html" style="background:none;border:none;border-bottom:1px solid var(--ink);padding-bottom:1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:var(--ink);font-family:inherit;">
+          <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="5.5" width="8" height="6" rx="1" fill="currentColor" opacity="0.8"/><path d="M3.5 5.5V3.75a2 2 0 0 1 4 0V5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+          Case Study
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- PROJECT 3: Scoped Search -->
   <div class="project-row">
     <div class="project-card" style="background:#a8c4d8;">
@@ -313,8 +384,11 @@
       </div>
     </div>
     <div class="project-text">
-      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">Highspot</span>
       <h2 class="project-title">Making content findable for sellers in large orgs</h2>
+      <div class="badge-row">
+        <span class="badge">Highspot</span>
+        <span class="badge">Enterprise search</span>
+      </div>
       <p class="project-desc">Poor search relevance was the top reason enterprise customers rated Highspot negatively. I redesigned search to let reps scope results to content that's actually relevant to their role.</p>
       <div class="project-links">
         <button class="link-primary lock-btn" data-dest="scoped-search-portfolio.html" style="background:none;border:none;border-bottom:1px solid var(--ink);padding-bottom:1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:var(--ink);font-family:inherit;">
@@ -334,31 +408,16 @@
       </div>
     </div>
     <div class="project-text">
-      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">personal project</span>
       <h2 class="project-title">Building an app for our home library</h2>
+      <div class="badge-row">
+        <span class="badge">Personal project</span>
+        <span class="badge">Vibe-coded</span>
+      </div>
       <p class="project-desc">After trying to catalogue 1,000+ books in two failed tracking attempts, I designed and built a fully deployed app from scratch, with auth, a real database, AI enrichment, and a live URL.</p>
       <div class="project-links">
         <a href="library-app-case-study.html" class="link-primary">Case Study</a>
         <a href="https://our-library-nu.vercel.app/" class="link-secondary" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">See it live<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 9L9 2M9 2H4.5M9 2V6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
-    </div>
-  </div>
-
-   <!-- PROJECT 2: Agentic Data Design -->
-   <div class="project-row">
-    <div class="project-card lilac">
-      <div class="img-slot">
-        <img src="Images/Cover_ADD.png" alt="Agentic Data Design">
-      </div>
-    </div>
-    <div class="project-text">
-      <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); background: rgba(0,0,0,0.06); border-radius: 4px; padding: 4px 8px; margin: 8px 0 12px; font-weight: 500;">
-        <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;"><rect x="1" y="5" width="8" height="6" rx="1" fill="currentColor" opacity="0.7"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
-        Confidential
-      </span>
-      <h2 class="project-title">Agent response for data queries</h2>
-      <p class="project-desc">When an AI agent answers a question with data, the design challenge is to build trust, and help users understand exactly where the answer came from.</p>
-      <p class="project-desc">Email <a href="mailto:aditisingh.design@gmail.com">aditisingh.design@gmail.com</a><button class="copy-btn" aria-label="Copy email" title="Copy email" onclick="copyEmail(this)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="4.5" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.1"/><path d="M3 8.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button> for details.</p>
     </div>
   </div>
 

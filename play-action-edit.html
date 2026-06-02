@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Play Action Edit — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F5F3EE 0%,#F7DDD0 60%,#E8E2F0 100%);height:100vh;display:flex;overflow:hidden;color:#1A1A2E;}
+
+  .nav{width:320px;flex-shrink:0;padding:40px 28px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;}
+  .nav-eyebrow{font-size:10px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:#9A9690;margin-bottom:6px;font-family:'DM Mono',monospace;}
+  .nav-heading{font-size:20px;font-weight:600;color:#1A1A2E;line-height:1.25;margin-bottom:4px;}
+  .nav-sub{font-size:12px;color:#6B6760;line-height:1.6;margin-bottom:16px;}
+  .nav-divider{border-top:1px solid #E2E0DB;margin:8px 0 16px;}
+  .nav-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#C0BCB5;margin-bottom:10px;}
+  .nav-group{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+  .nav-item{background:rgba(255,255,255,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,0.7);border-radius:10px;padding:14px 16px;cursor:pointer;transition:border-color 0.15s,box-shadow 0.15s;display:flex;gap:12px;align-items:flex-start;}
+  .nav-item:hover{border-color:#AEAAA4;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+  .nav-item.active{border-color:#1A1A2E;background:rgba(255,255,255,0.75);box-shadow:0 2px 12px rgba(0,0,0,0.10);}
+  .nav-num{width:22px;height:22px;border-radius:50%;background:#F0EEE9;color:#6B6760;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:background 0.15s,color 0.15s;}
+  .nav-item.active .nav-num{background:#1A1A2E;color:#fff;}
+  .nav-title{font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:3px;}
+  .nav-desc{font-size:11px;color:#9A9690;line-height:1.5;}
+  .step-dots{display:flex;gap:5px;margin-bottom:16px;}
+  .sdot{width:7px;height:7px;border-radius:50%;background:#D8D4CE;transition:background 0.15s;}
+  .sdot.active{background:#1A1A2E;}
+
+  .frame-wrap{flex:1;min-width:0;display:flex;flex-direction:column;padding:40px 56px 56px 0;}
+  .frame-shell{flex:1;height:92%;width:94%;align-self:flex-end;margin-top:auto;border-radius:12px;overflow:hidden;border:1px solid #D8D4CE;box-shadow:0 4px 24px rgba(0,0,0,0.10);background:#fff;}
+  .frame-shell iframe{width:100%;height:100%;border:none;display:block;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-eyebrow">Deal Agent · Play Viewer</div>
+  <div class="nav-heading">Edit Actions</div>
+  <div class="nav-sub">Sidebar shows suggested actions as a numbered list. The pencil icon opens a dialog to edit, reorder, or add actions.</div>
+
+  <div class="step-dots" id="stepDots">
+    <div class="sdot active"></div>
+    <div class="sdot"></div>
+    <div class="sdot"></div>
+  </div>
+
+  <div class="nav-divider"></div>
+  <div class="nav-label">Steps</div>
+
+  <div class="nav-group">
+    <div class="nav-item active" data-step="0" onclick="goStep(0)">
+      <div class="nav-num">1</div>
+      <div>
+        <div class="nav-title">Suggested Actions sidebar</div>
+        <div class="nav-desc">Panel shows numbered actions with bold titles and descriptions. Pencil icon in header opens the edit dialog.</div>
+      </div>
+    </div>
+    <div class="nav-item" data-step="1" onclick="goStep(1)">
+      <div class="nav-num">2</div>
+      <div>
+        <div class="nav-title">Edit dialog</div>
+        <div class="nav-desc">Full list of actions with per-row edit (✏) and more (···) controls. "Add Action" at the bottom.</div>
+      </div>
+    </div>
+    <div class="nav-item" data-step="2" onclick="goStep(2)">
+      <div class="nav-num">3</div>
+      <div>
+        <div class="nav-title">Add Action inline form</div>
+        <div class="nav-desc">Clicking "+ Add Action" appends an inline form with title + description fields and confirm/dismiss buttons.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="frame-wrap">
+  <div class="frame-shell">
+    <iframe id="preview-frame"></iframe>
+  </div>
+</div>
+
+<script>
+/* ─── SHARED VIEWER PIECES ─── */
+var LOFI_HEADER = `
+  <div style="padding:10px 20px;border-bottom:1px solid #E2E0DB;display:flex;align-items:center;gap:5px;background:#fff;position:sticky;top:0;z-index:10;">
+    <div style="display:flex;align-items:center;gap:5px;">
+      <div class="lofi" style="width:18px;height:18px;border-radius:3px;"></div>
+      <div class="lofi" style="width:18px;height:18px;border-radius:3px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:72px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:36px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:110px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:60px;height:10px;border-radius:10px;"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;margin-left:auto;">
+      <div class="lofi" style="width:80px;height:22px;border-radius:4px;"></div>
+      <div class="lofi" style="width:22px;height:22px;border-radius:4px;"></div>
+      <div class="lofi" style="width:22px;height:22px;border-radius:4px;"></div>
+    </div>
+  </div>`;
+
+var LOFI_DOC = `
+  <div style="display:flex;gap:20px;padding:24px 28px 20px;align-items:flex-start;">
+    <div class="lofi" style="width:180px;height:110px;border-radius:6px;flex-shrink:0;"></div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:10px;padding-top:8px;">
+      <div class="lofi" style="width:70%;height:13px;border-radius:3px;"></div>
+      <div class="lofi" style="width:90%;height:10px;border-radius:3px;"></div>
+      <div class="lofi" style="width:80%;height:10px;border-radius:3px;"></div>
+      <div class="lofi" style="width:55%;height:10px;border-radius:3px;"></div>
+    </div>
+  </div>
+  <div style="background:#EBF2FF;padding:14px 28px;">
+    <div class="lofi" style="width:120px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto 14px;"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:400px;margin:0 auto;">
+      <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+      <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+      <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+      <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+    </div>
+  </div>
+  <div style="border-top:2px solid #D0DFF5;">
+    <div style="background:#EBF2FF;padding:10px 28px;"><div class="lofi" style="width:100px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto;"></div></div>
+    <div style="display:flex;gap:24px;padding:18px 28px;">
+      <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+        <div class="lofi" style="width:100px;height:10px;border-radius:3px;background:#C8D8EE;"></div>
+        <div class="lofi" style="width:95%;height:9px;border-radius:3px;"></div>
+        <div class="lofi" style="width:88%;height:9px;border-radius:3px;"></div>
+        <div class="lofi" style="width:75%;height:9px;border-radius:3px;"></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+        <div class="lofi" style="width:110px;height:10px;border-radius:3px;background:#C8D8EE;"></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div class="lofi" style="width:52px;height:52px;border-radius:4px;flex-shrink:0;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:7px;padding-top:2px;">
+            <div class="lofi" style="width:90%;height:9px;border-radius:3px;background:#C8D8EE;"></div>
+            <div class="lofi" style="width:40px;height:14px;border-radius:10px;background:#3A9E5F;"></div>
+            <div class="lofi" style="width:85%;height:9px;border-radius:3px;"></div>
+            <div class="lofi" style="width:70%;height:9px;border-radius:3px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+var ICON_RAIL = `
+  <div class="icon-rail">
+    <div class="rail-active-wrap">
+      <div class="rail-star">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L13.4 10.1L21 12L13.4 13.9L12 21.5L10.6 13.9L3 12L10.6 10.1L12 2.5Z"/></svg>
+      </div>
+    </div>
+    <div class="rail-skel"></div>
+    <div class="rail-skel"></div>
+    <div class="rail-skel"></div>
+    <div class="rail-divider"></div>
+    <div class="rail-skel"></div>
+  </div>`;
+
+/* ─── ACTIONS DATA ─── */
+var ACTIONS = [
+  { title: 'Leverage Seismic Switch Play',        desc: 'If your prospect is a Seismic customer, leverage the Seismic Switch Play to clearly highlight Highspot\'s competitive advantages and differentiation.' },
+  { title: 'Practice Role Play',                  desc: 'Practice articulating Highspot\'s differentiated value against Seismic through role play scenarios, particularly with a VP of Sales persona.' },
+  { title: 'Acknowledge and Reframe Objections',  desc: 'When handling objections, acknowledge the prospect\'s concern, reframe it to provide a new perspective, and redirect the conversation toward Highspot\'s strengths.' },
+  { title: 'Share Customer Validation',           desc: 'Share success stories from customers who switched from Seismic to Highspot, highlighting measurable improvements such as increased win rates and larger deal sizes.' },
+  { title: 'Conduct Competitive Analysis',        desc: 'Share success stories from customers who switched from Seismic to Highspot, highlighting measurable improvements such as increased win rates and larger deal sizes.' },
+  { title: 'Utilize Analytics for Insights',      desc: 'Leverage Highspot\'s analytics capabilities to deliver insights on content effectiveness and inform more strategic sales motions.' },
+];
+
+/* ─── BASE CSS ─── */
+var BASE_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:#F0EEE9;height:100vh;display:flex;overflow:hidden;font-size:14px;color:#1A1A2E;}
+  .lofi{background:#EDEAE4;border-radius:3px;display:inline-block;}
+  .main{flex:1;overflow-y:auto;background:#fff;border-right:1px solid #E2E0DB;min-width:0;}
+
+  /* PANEL */
+  .panel{width:320px;flex-shrink:0;background:#fff;border-left:1px solid #E2E0DB;display:flex;flex-direction:column;overflow:hidden;}
+  .panel-header{padding:14px 16px;border-bottom:1px solid #E8E8E8;background:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .panel-header h2{font-size:15px;font-weight:600;color:#1A1A2E;}
+  .panel-header-icons{display:flex;align-items:center;gap:6px;}
+  .ph-icon{width:34px;height:34px;border:1px solid #E2E0DB;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#3A3830;}
+  .ph-icon:hover{background:#F5F4F1;}
+  .panel-body{flex:1;overflow-y:auto;padding:18px 18px 12px;}
+  .panel-intro{font-size:13.5px;color:#3A3830;line-height:1.65;margin-bottom:20px;}
+
+  /* SIDEBAR ACTIONS LIST */
+  .s-action{margin-bottom:18px;}
+  .s-action-title{font-size:14px;font-weight:700;color:#1A1A2E;margin-bottom:5px;}
+  .s-action-desc{font-size:13.5px;color:#3A3830;line-height:1.6;}
+  .s-divider{height:1px;background:#E8E8E8;margin-bottom:18px;}
+
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;padding-top:40px;z-index:200;}
+  .modal{background:#fff;border-radius:8px;width:680px;max-height:calc(100vh - 80px);display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.25);overflow:hidden;}
+  .modal-header{padding:18px 20px;border-bottom:1px solid #E8E8E8;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .modal-header h3{font-size:17px;font-weight:600;color:#1A1A2E;}
+  .modal-close-btn{width:36px;height:36px;border:1px solid #E2E0DB;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#3A3830;}
+  .modal-close-btn:hover{background:#F5F4F1;}
+  .modal-body{flex:1;overflow-y:auto;padding:20px 24px 12px;}
+  .modal-intro{font-size:13.5px;color:#3A3830;line-height:1.65;margin-bottom:24px;}
+
+  /* DIALOG ACTION ROWS */
+  .d-action-row{display:flex;align-items:stretch;border-bottom:1px solid #E8E8E8;padding:14px 0;}
+  .d-action-content{flex:1;padding-right:12px;}
+  .d-action-title{font-size:14px;font-weight:700;color:#1A1A2E;margin-bottom:5px;}
+  .d-action-desc{font-size:13px;color:#3A3830;line-height:1.6;}
+  .d-action-controls{display:flex;align-items:center;gap:10px;padding-left:14px;border-left:1px solid #E8E8E8;flex-shrink:0;}
+  .d-icon-btn{background:none;border:none;cursor:pointer;color:#3A3830;padding:4px;display:flex;align-items:center;justify-content:center;border-radius:4px;}
+  .d-icon-btn:hover{background:#F5F4F1;}
+
+  /* INLINE ADD FORM */
+  .d-add-form{border:2px solid #006DC7;border-radius:6px;padding:0;overflow:hidden;margin-top:12px;}
+  .d-add-form-title-row{display:flex;align-items:center;}
+  .d-add-form-title{flex:1;border:none;outline:none;padding:10px 12px;font-family:inherit;font-size:14px;font-weight:500;color:#1A1A2E;background:#fff;}
+  .d-add-form-title::placeholder{color:#9A9690;font-weight:400;}
+  .d-add-form-actions{display:flex;align-items:center;gap:0;border-left:1px solid #E8E8E8;padding:0 10px;gap:8px;}
+  .d-add-confirm{background:none;border:none;cursor:pointer;color:#3A3830;display:flex;align-items:center;justify-content:center;padding:4px;}
+  .d-add-confirm:hover{color:#1A1A2E;}
+  .d-add-cancel{background:none;border:none;cursor:pointer;color:#9A9690;display:flex;align-items:center;justify-content:center;padding:4px;}
+  .d-add-cancel:hover{color:#3A3830;}
+  .d-add-form-desc{border:none;border-top:1px solid #E8E8E8;outline:none;width:100%;padding:8px 12px 10px;font-family:inherit;font-size:13.5px;color:#3A3830;background:#fff;resize:none;line-height:1.5;}
+  .d-add-form-desc::placeholder{color:#9A9690;}
+
+  /* ADD ACTION BUTTON */
+  .d-add-action-btn{display:flex;align-items:center;gap:8px;margin-top:16px;padding:8px 14px;background:#F5F4F1;border:1px solid #E2E0DB;border-radius:6px;font-family:inherit;font-size:13.5px;font-weight:500;color:#3A3830;cursor:pointer;}
+  .d-add-action-btn:hover{background:#EDEAE4;}
+
+  /* MODAL FOOTER */
+  .modal-footer{padding:14px 24px;border-top:1px solid #E8E8E8;display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;background:#fff;}
+  .btn-cancel{background:#fff;color:#3A3830;border:1px solid #D8D4CE;padding:8px 20px;border-radius:6px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;}
+  .btn-cancel:hover{background:#F5F4F1;}
+  .btn-save{background:#006DC7;color:#fff;border:none;padding:8px 22px;border-radius:6px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;}
+  .btn-save:hover{background:#0056A8;}
+
+  /* ICON RAIL */
+  .icon-rail{width:44px;background:#FAFAF8;border-left:1px solid #E2E0DB;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:10px;flex-shrink:0;}
+  .rail-active-wrap{position:relative;width:100%;display:flex;justify-content:center;align-items:center;padding:2px 0;}
+  .rail-active-wrap::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:24px;background:#00A99D;border-radius:0 2px 2px 0;}
+  .rail-star{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#00A99D;}
+  .rail-skel{width:24px;height:24px;border-radius:6px;background:#EDEAE4;}
+  .rail-divider{width:28px;height:1px;background:#E2E0DB;margin:2px 0;}`;
+
+/* ─── SVG ICONS ─── */
+var PENCIL_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+var DOTS_SVG  = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>`;
+var X_SVG     = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>`;
+var CHECK_SVG = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,9 6,13 14,4"/></svg>`;
+
+/* ─── BUILD SIDEBAR ACTIONS ─── */
+function sidebarActions() {
+  return ACTIONS.map(function(a, i) {
+    return `<div class="s-action">
+      <div class="s-action-title">${i+1}. ${a.title}</div>
+      <div class="s-action-desc">${a.desc}</div>
+    </div>${i < ACTIONS.length - 1 ? '<div class="s-divider"></div>' : ''}`;
+  }).join('');
+}
+
+/* ─── BUILD DIALOG ACTION ROWS ─── */
+function dialogActions() {
+  return ACTIONS.map(function(a) {
+    return `<div class="d-action-row">
+      <div class="d-action-content">
+        <div class="d-action-title">${a.title}</div>
+        <div class="d-action-desc">${a.desc}</div>
+      </div>
+      <div class="d-action-controls">
+        <button class="d-icon-btn">${PENCIL_SVG}</button>
+        <button class="d-icon-btn">${DOTS_SVG}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ─── FRAME 0: Sidebar only ─── */
+function frame0() {
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${BASE_CSS}</style></head><body>
+<div class="main">
+  ${LOFI_HEADER}
+  <div>${LOFI_DOC}</div>
+</div>
+<div class="panel">
+  <div class="panel-header">
+    <h2>Suggested Actions</h2>
+    <div class="panel-header-icons">
+      <div class="ph-icon" title="Edit actions">${PENCIL_SVG}</div>
+      <div class="ph-icon" title="Close">${X_SVG}</div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <p class="panel-intro">These actions are extracted from play content and used to match deal activity to track completion.</p>
+    ${sidebarActions()}
+  </div>
+</div>
+${ICON_RAIL}
+</body></html>`;
+}
+
+/* ─── FRAME 1: Dialog open, list only ─── */
+function frame1() {
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${BASE_CSS}</style></head><body>
+<div class="main" style="filter:blur(1px);pointer-events:none;user-select:none;">
+  ${LOFI_HEADER}
+  <div>${LOFI_DOC}</div>
+</div>
+<div class="panel" style="filter:blur(1px);pointer-events:none;user-select:none;">
+  <div class="panel-header">
+    <h2>Suggested Actions</h2>
+    <div class="panel-header-icons">
+      <div class="ph-icon">${PENCIL_SVG}</div>
+      <div class="ph-icon">${X_SVG}</div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <p class="panel-intro">These actions are extracted from play content and used to match deal activity to track completion.</p>
+    ${sidebarActions()}
+  </div>
+</div>
+${ICON_RAIL}
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Suggested actions</h3>
+      <button class="modal-close-btn">${X_SVG}</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-intro">You can edit and reorganize suggested actions below. The order of actions will be used for display in the Deal Agent when evaluating progress against a Deal.</p>
+      ${dialogActions()}
+      <button class="d-add-action-btn">+ Add Action</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel">Cancel</button>
+      <button class="btn-save">Save</button>
+    </div>
+  </div>
+</div>
+</body></html>`;
+}
+
+/* ─── FRAME 2: Dialog with inline add form ─── */
+function frame2() {
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${BASE_CSS}</style></head><body>
+<div class="main" style="filter:blur(1px);pointer-events:none;user-select:none;">
+  ${LOFI_HEADER}
+  <div>${LOFI_DOC}</div>
+</div>
+<div class="panel" style="filter:blur(1px);pointer-events:none;user-select:none;">
+  <div class="panel-header">
+    <h2>Suggested Actions</h2>
+    <div class="panel-header-icons">
+      <div class="ph-icon">${PENCIL_SVG}</div>
+      <div class="ph-icon">${X_SVG}</div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <p class="panel-intro">These actions are extracted from play content and used to match deal activity to track completion.</p>
+    ${sidebarActions()}
+  </div>
+</div>
+${ICON_RAIL}
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Suggested actions</h3>
+      <button class="modal-close-btn">${X_SVG}</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-intro">You can edit and reorganize suggested actions below. The order of actions will be used for display in the Deal Agent when evaluating progress against a Deal.</p>
+      ${dialogActions()}
+      <div class="d-add-form">
+        <div class="d-add-form-title-row">
+          <input class="d-add-form-title" type="text" value="Action" placeholder="Action title"/>
+          <div class="d-add-form-actions">
+            <button class="d-add-confirm">${CHECK_SVG}</button>
+            <button class="d-add-cancel">${X_SVG}</button>
+          </div>
+        </div>
+        <textarea class="d-add-form-desc" rows="2" placeholder="Enter action description"></textarea>
+      </div>
+      <button class="d-add-action-btn">+ Add Action</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel">Cancel</button>
+      <button class="btn-save">Save</button>
+    </div>
+  </div>
+</div>
+</body></html>`;
+}
+
+var frames = [frame0(), frame1(), frame2()];
+var currentStep = 0;
+
+function goStep(i) {
+  currentStep = i;
+  document.querySelectorAll('.nav-item[data-step]').forEach(function(el){
+    el.classList.toggle('active', parseInt(el.getAttribute('data-step')) === i);
+  });
+  document.querySelectorAll('.sdot').forEach(function(d, idx){
+    d.classList.toggle('active', idx === i);
+  });
+  document.getElementById('preview-frame').srcdoc = frames[i];
+}
+
+goStep(0);
+</script>
+</body>
+</html>

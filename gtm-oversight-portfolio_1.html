@@ -85,7 +85,7 @@
   }
   .gtm-col {
     display: grid;
-    grid-template-columns: minmax(220px, 1fr) 1.8fr;
+    grid-template-columns: minmax(180px, 0.6fr) 2.8fr;
     grid-template-rows: auto 1fr;
     column-gap: 48px;
     align-items: start;
@@ -218,11 +218,13 @@
   <ul class="nav-links">
     <li><a href="index.html">Work</a></li>
     <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+    <li><span class="nav-sep" aria-hidden="true"></span></li>
+    <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href="https://github.com/A-ditiSingh" target="_blank" rel="noopener noreferrer">GitHub</a></li>
   </ul>
 </nav>
 
 <div class="hero fade-in">
-  <div class="hero-year">2025</div>
   <h1 class="hero-title">Transforming fragmented data into insights</h1>
   <p class="hero-desc">Enablement and marketing teams invest effort to run business initiatives, but have no reliable way to know what is working. I designed the end-to-end product to close that gap.</p>
   <dl class="hero-meta">
@@ -253,12 +255,12 @@
       <div class="signal-card">
         <div class="t-num">User problem</div>
         <div class="t-title">Initiative owners cannot tell whether reps are executing or whether it is working</div>
-        <div class="signal-row">Teams invest in training programs, plays, and conversation frameworks to execute strategic initiatives, but have no reliable way to track whether reps are following through or whether those activities are producing revenue outcomes. The decisions that separate effective initiatives from ineffective ones — what to fix, what to scale, what to cut — cannot be made without that information.</div>
+        <div class="signal-row">Teams invest in plays, training, and content to run strategic initiatives — but have no way to track whether reps are following through or whether any of it is driving revenue.</div>
       </div>
       <div class="signal-card">
         <div class="t-num">Business opportunity</div>
         <div class="t-title">Closing this gap makes Highspot indispensable when companies are cutting costs</div>
-        <div class="signal-row">In an environment where companies are scrutinizing every software purchase, customers need to demonstrate that their enablement investment is producing results. A platform that surfaces the connection between rep activity and revenue outcomes gives customers a concrete reason to keep it. Closing this gap moves Highspot from a content management tool to an optimization layer that drives revenue — a harder category to cut.</div>
+        <div class="signal-row">When every software purchase needs to justify itself, a platform that connects rep activity to revenue outcomes is harder to cut. This moves Highspot from content management to a revenue optimization layer.</div>
       </div>
     </div>
   </div>
@@ -273,10 +275,7 @@
           <div class="section-label">Zero to One — The Initiative Scorecard</div>
           <h3 style="font-family: 'Lora', serif; font-size: 32px; font-weight: 400; line-height: 1.25; color: var(--ink); margin: 12px 0 20px;">Aligning GTM and leadership on what the scorecard should measure</h3>
           <div class="section-body">
-            <p>The Initiative Scorecard was the most contested artefact in the product, so I started here. I used low-fidelity designs and options as a tool for alignment across GTM and leadership, and drove agreement on three things.</p>
-            <p><strong>Which metrics to include.</strong> The scorecard needed to capture percentage of reps who completed each activity, revenue outcomes, and a metric linking activity completion to revenue, showing whether the activities driving the initiative were also driving the deal.</p>
-            <p><strong>How to track performance against a goal.</strong> Each activity needed a goal set by the initiative owner, so the scorecard could show whether execution was on course rather than just reporting raw numbers.</p>
-            <p><strong>How to organize multiple metrics.</strong> The metrics were organized as a causal chain, Enablement, Engagement, Business Outcomes, so customers could read from the leading indicators of rep behavior through to revenue impact.</p>
+            <p>The scorecard was the most contested artefact in the product. I used low-fi designs as an alignment tool across GTM and leadership, driving agreement on three things: which metrics to include, how to track progress against a goal, and how to organize the metrics as a causal chain — Enablement → Engagement → Business Outcomes — so customers could trace rep behavior through to revenue impact.</p>
           </div>
         </div>
 
@@ -296,8 +295,7 @@
       <div class="section-label">Zero to One — End to End Flow</div>
       <h3 style="font-family: 'Lora', serif; font-size: 32px; font-weight: 400; line-height: 1.25; color: var(--ink); margin: 12px 0 20px; max-width: 760px;">Creating a three-phase model for running a go-to-market initiative</h3>
       <div class="section-body">
-        <p>The end-to-end flow consolidated into three phases that customers move through for any initiative. Each phase has its own surface, but all three connect through the Initiative object — context set in Define carries into Configure, and the metrics surfaced in Track tie back to the goals set in Configure.</p>
-        <p>This was an expansive project that evolved significantly from inception to general availability. The case study below presents two design pivots that were informed by customer feedback after the pilot release.</p>
+        <p>Three phases — Define, Configure, Track — connected through a single Initiative object. The case study below covers two pivots made after a 10-customer pilot.</p>
       </div>
 
       <div class="section-image-card clay gtm-three-col-card" style="margin-top: 32px;">
@@ -343,7 +341,7 @@
   <div class="section-label">Design Pivots between pilot and launch</div>
   <h2 class="section-title">Streamlining the creation experience & reframing the correlation metric</h2>
   <div class="section-body">
-    <p>The product was first released to a pilot cohort of 10 customers ahead of general availability. Feedback from that cohort surfaced two areas where the design needed substantial change, so the experience at launch reflects the following pivots.</p>
+    <p>Pilot feedback from 10 customers surfaced two areas that needed substantial redesign before launch.</p>
   </div>
   <div class="pivot-card-grid">
     <div class="takeaway-card">
@@ -383,8 +381,7 @@
     <div class="section-label">Pivot 01 — Revisiting the creation experience</div>
     <h2 class="section-title">Reducing the barrier to entry for defining an initiative</h2>
     <div class="section-body">
-      <p>The initial version of the Initiative creation experience was built on an existing WYSIWYG editor in the product. Users could drag and drop components to tell the story of the initiative and add relevant content.</p>
-      <p>Feedback from 10 customers in the pilot indicated that the open-ended format was not working — users focused on formatting decisions rather than the strategic content of the initiative.</p>
+      <p>The creation experience was built on an existing WYSIWYG editor. Pilot feedback showed users were making formatting decisions instead of focusing on the strategic content of the initiative.</p>
     </div>
     <div class="chain" style="margin-top: 16px;">
       <div class="chain-item">
@@ -401,7 +398,7 @@
       </div>
     </div>
     <div class="section-body" style="margin-top: 20px;">
-      <p>I used that feedback to make the case for replacing the WYSIWYG with a structured drag-and-drop model. In the new structured object, users dragged and dropped relevant content to build the Initiative. The option to add a written overview was still available, but was no longer the default path.</p>
+      <p>I replaced the WYSIWYG with a structured drag-and-drop scaffold. The option to add a written overview remained, but was no longer the default.</p>
     </div>
     <div class="pivot-inline" style="margin-top: 20px;">
       <div class="pivot-row before-row"><span class="pivot-tag before">Before</span><span class="pivot-content">Open WYSIWYG — leaders design their own layout</span></div>
@@ -424,7 +421,7 @@
     <div class="section-label">Pivot 02 — Reframing the correlation metric</div>
     <h2 class="section-title">Reframing the key metric for visibility and clarity</h2>
     <div class="section-body">
-      <p>A key differentiator in the scorecard was a metric that correlated activity completion with revenue outcomes. Because revenue was the primary measure of practice success, I placed this metric in the existing Business Outcomes section of the scorecard.</p>
+      <p>The scorecard had a metric correlating activity completion with revenue outcomes. I placed it in the Business Outcomes section — but pilot customers couldn't understand it without explanation.</p>
     </div>
     <div class="chain" style="margin-top: 16px;">
       <div class="chain-item">
@@ -437,7 +434,7 @@
       </div>
     </div>
     <div class="section-body" style="margin-top: 16px;">
-      <p>Customer research highlighted that the data was useful but the product wasn't doing a great job of communicating this to the user. I had placed the metric in a "Business Outcomes" section, where the revenue figure was the headline and the activity driving that revenue appeared as secondary text below it.</p>
+      <p>Revenue was the headline; the activity driving it was buried as secondary text. The framing obscured the insight.</p>
 
     </div>
   </div>
@@ -450,8 +447,7 @@
       <div class="section-label">Reframe</div>
       <h2 class="section-title">Renaming and reorganizing the sections to host the metric</h2>
       <div class="section-body">
-        <p>After feedback from the pilot, together with the leadership and our go-to-market teams, we decided to create a new "Business Drivers" section in the scorecard to host the hero metric.</p>
-        <p>The new name and a dedicated section in the scorecard gave the metric the emphasis and the space it needed to deliver a clear message: these are the activities that are driving revenue.</p>
+        <p>We created a dedicated "Business Drivers" section to host the metric — giving it the emphasis and framing it needed. The message became clear: these are the activities driving revenue.</p>
       </div>
       
     </div>
@@ -472,7 +468,7 @@
   <div class="section-label">Downstream impact of reframe</div>
   <h2 class="section-title">Revisiting business drivers charts and configuration with an activity-first lens</h2>
   <div class="section-body">
-  <p>Once activity became the primary lens for reading business drivers, I proposed a change to the chart title and the chart configuration flow to keep the message consistent throughout the experience.</p>
+  <p>Shifting to an activity-first lens required updating the chart framing and configuration flow for consistency.</p>
 </div>
   <div class="compare-wrap">
     <table>
