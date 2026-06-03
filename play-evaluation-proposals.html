@@ -47,6 +47,9 @@
     margin-top:1px;transition:background 0.15s,color 0.15s;
   }
   .nav-item.active .nav-num{background:#1A1A2E;color:#fff;}
+  .nav-badge{display:inline-flex;align-items:center;justify-content:center;background:#F0EEE9;color:#6B6760;font-size:10px;font-weight:700;border-radius:6px;padding:2px 8px;margin-bottom:7px;transition:background 0.15s,color 0.15s;}
+  .nav-item.active .nav-badge{background:#1A1A2E;color:#fff;}
+  .nav-item.badge-top{flex-direction:column;gap:0;align-items:flex-start;}
   .nav-text{}
   .nav-title{font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:3px;}
   .nav-desc{font-size:11px;color:#9A9690;line-height:1.5;}
@@ -166,86 +169,32 @@
 <div class="nav">
   <div class="nav-eyebrow">Deal Agent · Play Evaluation</div>
   <div class="nav-heading-row">
-    <div class="nav-heading">Proposals</div>
+    <div class="nav-heading">Suggested Improvements <span style="font-weight:400;">/ Options</span></div>
   </div>
   <div style="border-top:1px solid #E2E0DB;margin-bottom:16px;"></div>
 
-  <div class="nav-context">
-    <div class="nav-context-label">Context</div>
-    <div class="nav-context-row">
-      <div class="context-dropdown" id="contextDropdown">
-      <button class="context-trigger" type="button" onclick="toggleContextFlyout(event)" aria-haspopup="true">
-        <span id="contextTriggerLabel">Play viewer</span>
-        <svg class="context-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
-      </button>
-      <div class="context-flyout" id="contextFlyout" onclick="event.stopPropagation()">
-        <button class="context-option selected" type="button" data-value="viewer" onclick="onContextChange('viewer')">
-          <span>Play viewer</span>
-          <svg class="context-check" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,7 5.5,10.5 11,3.5"/></svg>
-        </button>
-        <button class="context-option" type="button" data-value="editor" onclick="onContextChange('editor')">
-          <span>Smartpage editor</span>
-          <svg class="context-check" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,7 5.5,10.5 11,3.5"/></svg>
-        </button>
-      </div>
-      </div>
-      <div class="nav-settings">
-        <button class="settings-btn" type="button" onclick="toggleSettingsFlyout(event)" aria-label="Settings">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
-          </svg>
-        </button>
-        <div class="settings-flyout" id="settingsFlyout" onclick="event.stopPropagation()">
-          <div class="settings-row">
-            <div class="settings-row-text">
-              <div class="settings-label">Automated evaluation</div>
-              <div class="settings-desc" id="automatedEvalDesc">Play is automatically evaluated after a defined threshold</div>
-            </div>
-            <label class="toggle">
-              <input type="checkbox" id="automatedEvalToggle" checked onchange="onAutomatedEvalChange(this.checked)"/>
-              <span class="toggle-track"></span>
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="nav-context-label" style="margin-bottom:10px;">Options</div>
 
   <div class="nav-group" id="navProposals">
-    <div class="nav-item active visible" data-index="1" data-context="viewer" data-type="static" onclick="select(1)">
-      <div class="nav-num">1</div>
+    <div class="nav-item badge-top active visible" data-index="1" data-context="viewer" data-type="static" onclick="select(1)">
+      <div class="nav-badge">Option 1</div>
       <div class="nav-text">
         <div class="nav-title">Static</div>
         <div class="nav-desc">Agent returns plain-text suggestions in the sidebar. No structured interaction required.</div>
       </div>
     </div>
-    <div class="nav-item visible" data-index="0" data-context="viewer" data-type="single" onclick="select(0)">
-      <div class="nav-num">2</div>
+    <div class="nav-item badge-top visible" data-index="0" data-context="viewer" data-type="single" onclick="select(0)">
+      <div class="nav-badge">Option 2</div>
       <div class="nav-text">
         <div class="nav-title">Single-turn</div>
         <div class="nav-desc">Agent evaluates the Play and returns structured improvement cards with accept/dismiss actions.</div>
       </div>
     </div>
-    <div class="nav-item visible" data-index="4" data-context="viewer" data-type="multi" onclick="select(4)">
-      <div class="nav-num">3</div>
+    <div class="nav-item badge-top visible" data-index="4" data-context="viewer" data-type="multi" onclick="select(4)">
+      <div class="nav-badge">Option 3</div>
       <div class="nav-text">
         <div class="nav-title">Multi-turn</div>
         <div class="nav-desc">Agent opens a conversational sidebar where users can iterate on improvements back and forth.</div>
-      </div>
-    </div>
-    <div class="nav-item" data-index="3" data-context="editor" data-type="static" onclick="select(3)">
-      <div class="nav-num">1</div>
-      <div class="nav-text">
-        <div class="nav-title">Static</div>
-        <div class="nav-desc">In the editor, the agent surfaces plain-text suggestions alongside the content being edited.</div>
-      </div>
-    </div>
-    <div class="nav-item" data-index="2" data-context="editor" data-type="single" onclick="select(2)">
-      <div class="nav-num">2</div>
-      <div class="nav-text">
-        <div class="nav-title">Single-turn</div>
-        <div class="nav-desc">In the editor, the agent returns improvement cards the author can act on before publishing.</div>
       </div>
     </div>
   </div>
@@ -1210,8 +1159,11 @@ document.addEventListener('click', function() {
   document.getElementById('contextDropdown').classList.remove('open');
 });
 
-// start on viewer static
-setContext('viewer', 'static');
+// show all viewer items and start on static
+items.forEach(function(el) {
+  if (el.getAttribute('data-context') === 'viewer') el.classList.add('visible');
+});
+select(1);
 </script>
 </body>
 </html>

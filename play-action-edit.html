@@ -23,6 +23,9 @@
   .nav-item.active{border-color:#1A1A2E;background:rgba(255,255,255,0.75);box-shadow:0 2px 12px rgba(0,0,0,0.10);}
   .nav-num{width:22px;height:22px;border-radius:50%;background:#F0EEE9;color:#6B6760;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:background 0.15s,color 0.15s;}
   .nav-item.active .nav-num{background:#1A1A2E;color:#fff;}
+  .nav-badge{display:inline-flex;align-items:center;justify-content:center;background:#F0EEE9;color:#6B6760;font-size:10px;font-weight:700;border-radius:6px;padding:2px 8px;margin-bottom:7px;transition:background 0.15s,color 0.15s;}
+  .nav-item.active .nav-badge{background:#1A1A2E;color:#fff;}
+  .nav-item.badge-top{flex-direction:column;gap:0;align-items:flex-start;}
   .nav-title{font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:3px;}
   .nav-desc{font-size:11px;color:#9A9690;line-height:1.5;}
   .step-dots{display:flex;gap:5px;margin-bottom:16px;}
@@ -38,38 +41,32 @@
 
 <div class="nav">
   <div class="nav-eyebrow">Deal Agent · Play Viewer</div>
-  <div class="nav-heading">Edit Actions</div>
+  <div class="nav-heading">Edit Action <span style="font-weight:400;">/ User Flow</span></div>
   <div class="nav-sub">Sidebar shows suggested actions as a numbered list. The pencil icon opens a dialog to edit, reorder, or add actions.</div>
-
-  <div class="step-dots" id="stepDots">
-    <div class="sdot active"></div>
-    <div class="sdot"></div>
-    <div class="sdot"></div>
-  </div>
 
   <div class="nav-divider"></div>
   <div class="nav-label">Steps</div>
 
   <div class="nav-group">
-    <div class="nav-item active" data-step="0" onclick="goStep(0)">
-      <div class="nav-num">1</div>
+    <div class="nav-item badge-top active" data-step="0" onclick="goStep(0)">
+      <div class="nav-badge">Step 1</div>
       <div>
         <div class="nav-title">Suggested Actions sidebar</div>
         <div class="nav-desc">Panel shows numbered actions with bold titles and descriptions. Pencil icon in header opens the edit dialog.</div>
       </div>
     </div>
-    <div class="nav-item" data-step="1" onclick="goStep(1)">
-      <div class="nav-num">2</div>
+    <div class="nav-item badge-top" data-step="1" onclick="goStep(1)">
+      <div class="nav-badge">Step 2</div>
       <div>
         <div class="nav-title">Edit dialog</div>
-        <div class="nav-desc">Full list of actions with per-row edit (✏) and more (···) controls. "Add Action" at the bottom.</div>
+        <div class="nav-desc">Full list of actions with per-row edit (✏) and more (···) controls. Click edit on a row to open the inline form.</div>
       </div>
     </div>
-    <div class="nav-item" data-step="2" onclick="goStep(2)">
-      <div class="nav-num">3</div>
+    <div class="nav-item badge-top" data-step="2" onclick="goStep(2)">
+      <div class="nav-badge">Step 3</div>
       <div>
-        <div class="nav-title">Add Action inline form</div>
-        <div class="nav-desc">Clicking "+ Add Action" appends an inline form with title + description fields and confirm/dismiss buttons.</div>
+        <div class="nav-title">Edit Action inline form</div>
+        <div class="nav-desc">Clicking the pencil on any row replaces it with an inline form (title + description) and confirm/dismiss buttons.</div>
       </div>
     </div>
   </div>
@@ -205,27 +202,95 @@ var BASE_CSS = `
   .modal-body{flex:1;overflow-y:auto;padding:20px 24px 12px;}
   .modal-intro{font-size:13.5px;color:#3A3830;line-height:1.65;margin-bottom:24px;}
 
-  /* DIALOG ACTION ROWS */
-  .d-action-row{display:flex;align-items:stretch;border-bottom:1px solid #E8E8E8;padding:14px 0;}
-  .d-action-content{flex:1;padding-right:12px;}
+  /* DIALOG ACTION ROWS — shared grid keeps edit form same width as read row */
+  .d-action-row{
+    --d-action-controls-width:76px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) var(--d-action-controls-width);
+    align-items:stretch;
+    border-bottom:1px solid #E8E8E8;
+    padding:14px 0;
+    width:100%;
+  }
+  .d-action-content{grid-column:1;min-width:0;padding-right:12px;}
   .d-action-title{font-size:14px;font-weight:700;color:#1A1A2E;margin-bottom:5px;}
   .d-action-desc{font-size:13px;color:#3A3830;line-height:1.6;}
-  .d-action-controls{display:flex;align-items:center;gap:10px;padding-left:14px;border-left:1px solid #E8E8E8;flex-shrink:0;}
+  .d-action-controls{
+    grid-column:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding-left:14px;
+    border-left:1px solid #E8E8E8;
+    min-width:var(--d-action-controls-width);
+    box-sizing:border-box;
+  }
   .d-icon-btn{background:none;border:none;cursor:pointer;color:#3A3830;padding:4px;display:flex;align-items:center;justify-content:center;border-radius:4px;}
   .d-icon-btn:hover{background:#F5F4F1;}
 
-  /* INLINE ADD FORM */
-  .d-add-form{border:2px solid #006DC7;border-radius:6px;padding:0;overflow:hidden;margin-top:12px;}
-  .d-add-form-title-row{display:flex;align-items:center;}
-  .d-add-form-title{flex:1;border:none;outline:none;padding:10px 12px;font-family:inherit;font-size:14px;font-weight:500;color:#1A1A2E;background:#fff;}
-  .d-add-form-title::placeholder{color:#9A9690;font-weight:400;}
-  .d-add-form-actions{display:flex;align-items:center;gap:0;border-left:1px solid #E8E8E8;padding:0 10px;gap:8px;}
-  .d-add-confirm{background:none;border:none;cursor:pointer;color:#3A3830;display:flex;align-items:center;justify-content:center;padding:4px;}
-  .d-add-confirm:hover{color:#1A1A2E;}
-  .d-add-cancel{background:none;border:none;cursor:pointer;color:#9A9690;display:flex;align-items:center;justify-content:center;padding:4px;}
-  .d-add-cancel:hover{color:#3A3830;}
-  .d-add-form-desc{border:none;border-top:1px solid #E8E8E8;outline:none;width:100%;padding:8px 12px 10px;font-family:inherit;font-size:13.5px;color:#3A3830;background:#fff;resize:none;line-height:1.5;}
-  .d-add-form-desc::placeholder{color:#9A9690;}
+  /* INLINE EDIT FORM — spans content + controls columns (same width as read row) */
+  .d-action-row.is-editing{grid-template-columns:1fr;}
+  .d-inline-form{
+    grid-column:1 / -1;
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    border:2px solid #006DC7;
+    border-radius:6px;
+    padding:0;
+    overflow:hidden;
+    margin:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .d-inline-form-title-row{display:flex;align-items:stretch;min-height:44px;}
+  .d-inline-form-title{
+    flex:1;
+    min-width:0;
+    border:none;
+    outline:none;
+    padding:10px 12px;
+    font-family:inherit;
+    font-size:14px;
+    font-weight:700;
+    color:#1A1A2E;
+    background:#fff;
+  }
+  .d-inline-form-title::placeholder{color:#9A9690;font-weight:400;}
+  .d-inline-form-actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    flex-shrink:0;
+    width:var(--d-action-controls-width);
+    min-width:var(--d-action-controls-width);
+    border-left:1px solid #E8E8E8;
+    padding:0 10px;
+    box-sizing:border-box;
+  }
+  .d-inline-confirm{background:none;border:none;cursor:pointer;color:#3A3830;display:flex;align-items:center;justify-content:center;padding:4px;}
+  .d-inline-confirm:hover{color:#1A1A2E;}
+  .d-inline-cancel{background:none;border:none;cursor:pointer;color:#9A9690;display:flex;align-items:center;justify-content:center;padding:4px;}
+  .d-inline-cancel:hover{color:#3A3830;}
+  .d-inline-form-desc{
+    display:block;
+    border:none;
+    border-top:1px solid #E8E8E8;
+    outline:none;
+    width:100%;
+    box-sizing:border-box;
+    padding:10px 12px 12px;
+    font-family:inherit;
+    font-size:13px;
+    color:#3A3830;
+    background:#fff;
+    resize:vertical;
+    line-height:1.6;
+    min-height:72px;
+  }
+  .d-inline-form-desc::placeholder{color:#9A9690;}
 
   /* ADD ACTION BUTTON */
   .d-add-action-btn{display:flex;align-items:center;gap:8px;margin-top:16px;padding:8px 14px;background:#F5F4F1;border:1px solid #E2E0DB;border-radius:6px;font-family:inherit;font-size:13.5px;font-weight:500;color:#3A3830;cursor:pointer;}
@@ -256,23 +321,47 @@ var CHECK_SVG = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" str
 function sidebarActions() {
   return ACTIONS.map(function(a, i) {
     return `<div class="s-action">
-      <div class="s-action-title">${i+1}. ${a.title}</div>
-      <div class="s-action-desc">${a.desc}</div>
+      <div class="s-action-title">${i+1}. ${escapeHtml(a.title)}</div>
+      <div class="s-action-desc">${escapeHtml(a.desc)}</div>
     </div>${i < ACTIONS.length - 1 ? '<div class="s-divider"></div>' : ''}`;
   }).join('');
 }
 
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function inlineEditForm(a, index) {
+  return `<div class="d-inline-form" data-edit-index="${index}">
+    <div class="d-inline-form-title-row">
+      <input class="d-inline-form-title" type="text" value="${escapeHtml(a.title)}" placeholder="Action title" aria-label="Action title"/>
+      <div class="d-inline-form-actions">
+        <button class="d-inline-confirm" type="button" aria-label="Confirm">${CHECK_SVG}</button>
+        <button class="d-inline-cancel" type="button" aria-label="Dismiss">${X_SVG}</button>
+      </div>
+    </div>
+    <textarea class="d-inline-form-desc" rows="3" placeholder="Enter action description" aria-label="Action description">${escapeHtml(a.desc)}</textarea>
+  </div>`;
+}
+
 /* ─── BUILD DIALOG ACTION ROWS ─── */
-function dialogActions() {
-  return ACTIONS.map(function(a) {
+function dialogActions(editingIndex) {
+  return ACTIONS.map(function(a, i) {
+    if (editingIndex === i) {
+      return `<div class="d-action-row is-editing">${inlineEditForm(a, i)}</div>`;
+    }
     return `<div class="d-action-row">
       <div class="d-action-content">
-        <div class="d-action-title">${a.title}</div>
-        <div class="d-action-desc">${a.desc}</div>
+        <div class="d-action-title">${escapeHtml(a.title)}</div>
+        <div class="d-action-desc">${escapeHtml(a.desc)}</div>
       </div>
       <div class="d-action-controls">
-        <button class="d-icon-btn">${PENCIL_SVG}</button>
-        <button class="d-icon-btn">${DOTS_SVG}</button>
+        <button class="d-icon-btn" type="button" aria-label="Edit action" data-edit-index="${i}">${PENCIL_SVG}</button>
+        <button class="d-icon-btn" type="button" aria-label="More options">${DOTS_SVG}</button>
       </div>
     </div>`;
   }).join('');
@@ -289,7 +378,7 @@ function frame0() {
   <div class="panel-header">
     <h2>Suggested Actions</h2>
     <div class="panel-header-icons">
-      <div class="ph-icon" title="Edit actions">${PENCIL_SVG}</div>
+      <div class="ph-icon ph-icon-open-dialog" title="Edit actions" role="button" tabindex="0">${PENCIL_SVG}</div>
       <div class="ph-icon" title="Close">${X_SVG}</div>
     </div>
   </div>
@@ -299,8 +388,64 @@ function frame0() {
   </div>
 </div>
 ${ICON_RAIL}
+${FRAME_BRIDGE}
 </body></html>`;
 }
+
+var FRAME_BRIDGE = `
+  <script>
+    document.addEventListener('click', function(e) {
+      if (window.parent === window) return;
+
+      var confirmBtn = e.target.closest('.d-inline-confirm');
+      if (confirmBtn) {
+        var form = confirmBtn.closest('.d-inline-form');
+        if (!form) return;
+        var idx = parseInt(form.getAttribute('data-edit-index'), 10);
+        var titleEl = form.querySelector('.d-inline-form-title');
+        var descEl = form.querySelector('.d-inline-form-desc');
+        window.parent.postMessage({
+          type: 'play-action-confirm',
+          index: idx,
+          title: titleEl ? titleEl.value : '',
+          desc: descEl ? descEl.value : ''
+        }, '*');
+        return;
+      }
+
+      var cancelBtn = e.target.closest('.d-inline-cancel');
+      if (cancelBtn) {
+        window.parent.postMessage({ type: 'play-action-cancel-edit' }, '*');
+        return;
+      }
+
+      var saveBtn = e.target.closest('.btn-save');
+      if (saveBtn) {
+        window.parent.postMessage({ type: 'play-action-modal-save' }, '*');
+        return;
+      }
+
+      var closeBtn = e.target.closest('.modal-close-btn');
+      if (closeBtn) {
+        window.parent.postMessage({ type: 'play-action-modal-close' }, '*');
+        return;
+      }
+
+      var openDialog = e.target.closest('.ph-icon-open-dialog');
+      if (openDialog) {
+        window.parent.postMessage({ type: 'play-action-open-dialog' }, '*');
+        return;
+      }
+
+      var editBtn = e.target.closest('[data-edit-index]');
+      if (editBtn && editBtn.classList.contains('d-icon-btn')) {
+        window.parent.postMessage({
+          type: 'play-action-edit',
+          index: parseInt(editBtn.getAttribute('data-edit-index'), 10)
+        }, '*');
+      }
+    });
+  <\/script>`;
 
 /* ─── FRAME 1: Dialog open, list only ─── */
 function frame1() {
@@ -340,10 +485,11 @@ ${ICON_RAIL}
     </div>
   </div>
 </div>
+${FRAME_BRIDGE}
 </body></html>`;
 }
 
-/* ─── FRAME 2: Dialog with inline add form ─── */
+/* ─── FRAME 2: Dialog with one action in inline edit form ─── */
 function frame2() {
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${BASE_CSS}</style></head><body>
 <div class="main" style="filter:blur(1px);pointer-events:none;user-select:none;">
@@ -372,17 +518,7 @@ ${ICON_RAIL}
     </div>
     <div class="modal-body">
       <p class="modal-intro">You can edit and reorganize suggested actions below. The order of actions will be used for display in the Deal Agent when evaluating progress against a Deal.</p>
-      ${dialogActions()}
-      <div class="d-add-form">
-        <div class="d-add-form-title-row">
-          <input class="d-add-form-title" type="text" value="Action" placeholder="Action title"/>
-          <div class="d-add-form-actions">
-            <button class="d-add-confirm">${CHECK_SVG}</button>
-            <button class="d-add-cancel">${X_SVG}</button>
-          </div>
-        </div>
-        <textarea class="d-add-form-desc" rows="2" placeholder="Enter action description"></textarea>
-      </div>
+      ${dialogActions(editingIndex)}
       <button class="d-add-action-btn">+ Add Action</button>
     </div>
     <div class="modal-footer">
@@ -391,13 +527,23 @@ ${ICON_RAIL}
     </div>
   </div>
 </div>
+${FRAME_BRIDGE}
 </body></html>`;
 }
 
-var frames = [frame0(), frame1(), frame2()];
+var frames = [];
+var editingIndex = 0;
+
+function rebuildFrames() {
+  frames = [frame0(), frame1(), frame2()];
+}
+
 var currentStep = 0;
 
 function goStep(i) {
+  if (i === 2 && (editingIndex < 0 || editingIndex >= ACTIONS.length)) {
+    editingIndex = 0;
+  }
   currentStep = i;
   document.querySelectorAll('.nav-item[data-step]').forEach(function(el){
     el.classList.toggle('active', parseInt(el.getAttribute('data-step')) === i);
@@ -405,8 +551,37 @@ function goStep(i) {
   document.querySelectorAll('.sdot').forEach(function(d, idx){
     d.classList.toggle('active', idx === i);
   });
+  rebuildFrames();
   document.getElementById('preview-frame').srcdoc = frames[i];
 }
+
+window.addEventListener('message', function(e) {
+  if (!e.data || !e.data.type) return;
+  var d = e.data;
+
+  if (d.type === 'play-action-open-dialog') {
+    goStep(1);
+    return;
+  }
+  if (d.type === 'play-action-edit' && typeof d.index === 'number' && ACTIONS[d.index]) {
+    editingIndex = d.index;
+    goStep(2);
+    return;
+  }
+  if (d.type === 'play-action-confirm' && typeof d.index === 'number' && ACTIONS[d.index]) {
+    if (d.title !== undefined) ACTIONS[d.index].title = d.title;
+    if (d.desc !== undefined) ACTIONS[d.index].desc = d.desc;
+    goStep(1);
+    return;
+  }
+  if (d.type === 'play-action-cancel-edit') {
+    goStep(1);
+    return;
+  }
+  if (d.type === 'play-action-modal-save' || d.type === 'play-action-modal-close') {
+    goStep(0);
+  }
+});
 
 goStep(0);
 </script>
