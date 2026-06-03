@@ -402,10 +402,9 @@ var SHARED_CSS = `
   .rail-divider{width:28px;height:1px;background:#E2E0DB;flex-shrink:0;margin:2px 0;}
   @keyframes spin{to{transform:rotate(360deg);}}
   .spinner{width:16px;height:16px;border:2px solid #E2E0DB;border-top-color:#1A1A2E;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
-  .suggestion-card{background:#fff;border:1px solid #E2E0DB;border-radius:7px;padding:12px 13px;font-size:11.5px;color:#3A3830;line-height:1.65;}
-  .suggestion-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;}
-  .type-replace{color:#C44A2C;}
-  .type-add{color:#2E5EAA;}`;
+  .suggestion-card{background:#fff;border:1px solid #E0E0E0;border-radius:6px;padding:16px 18px;}
+  .suggestion-type{font-size:13px;font-weight:700;color:#333;line-height:1.35;margin-bottom:8px;}
+  .suggestion-body{font-size:12px;font-weight:400;color:#555;line-height:1.6;}`;
 
 var AGENT_CSS = `
   .agent-panel{width:320px;background:#fff;}
@@ -590,10 +589,10 @@ var PANEL_CARDS = `
 var PANEL_PLAIN = `
   <div id="evalResults" style="display:none;flex:1;overflow-y:auto;flex-direction:column;padding:12px;gap:8px;">
     <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9A9690;margin-bottom:4px;">Suggestions</div>
-    <div class="suggestion-card"><div class="suggestion-type type-replace">⚠ Sharpen your differentiation</div>Replace "aggressive sales culture" with a specific, evidence-backed win story that shows how Highspot's analytics depth beat Seismic in a live deal.</div>
-    <div class="suggestion-card"><div class="suggestion-type type-add">+ Add pricing context</div>Include Seismic's recent move to seat-based pricing so reps can counter "they're cheaper now" directly instead of deflecting to TCO.</div>
-    <div class="suggestion-card"><div class="suggestion-type type-add">+ Add champion talk track</div>Give champions specific language to justify Highspot internally — a "say this to your CFO" script would directly improve deal progression.</div>
-    <div class="suggestion-card"><div class="suggestion-type type-replace">⚠ Make the intro actionable</div>Start with a concrete first step — e.g. "Open with the Land Early Differentiation talk track" — so reps know exactly what to do in the first 30 seconds.</div>
+    <div class="suggestion-card"><div class="suggestion-type">Sharpen your differentiation</div><div class="suggestion-body">Replace "aggressive sales culture" with a specific, evidence-backed win story that shows how Highspot's analytics depth beat Seismic in a live deal.</div></div>
+    <div class="suggestion-card"><div class="suggestion-type">Add pricing context</div><div class="suggestion-body">Include Seismic's recent move to seat-based pricing so reps can counter "they're cheaper now" directly instead of deflecting to TCO.</div></div>
+    <div class="suggestion-card"><div class="suggestion-type">Add champion talk track</div><div class="suggestion-body">Give champions specific language to justify Highspot internally — a "say this to your CFO" script would directly improve deal progression.</div></div>
+    <div class="suggestion-card"><div class="suggestion-type">Make the intro actionable</div><div class="suggestion-body">Start with a concrete first step — e.g. "Open with the Land Early Differentiation talk track" — so reps know exactly what to do in the first 30 seconds.</div></div>
   </div>`;
 
 var ICON_RAIL = `
