@@ -8,6 +8,7 @@
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#e8ede8 0%,#dce8e4 55%,#d4e4e0 100%);height:100vh;display:flex;overflow:hidden;color:#1A1A2E;}
+  .cards-strip{display:none;}
 
   /* ── LEFT NAV ── */
   .nav{
@@ -161,6 +162,18 @@
   .toggle-track::after{content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
   .toggle input:checked + .toggle-track{background:#006DC7;}
   .toggle input:checked + .toggle-track::after{transform:translateX(16px);}
+
+  @media (max-width:1100px){
+    body{flex-direction:column;height:auto;min-height:100vh;overflow-y:auto;overflow-x:hidden;}
+    .nav{width:100%;padding:24px 20px 0;flex-shrink:0;flex-grow:0;overflow:visible;height:auto;}
+    .nav-cards-wide{display:none !important;}
+    .nav-options-label{display:none !important;}
+    .cards-strip{display:block;width:100%;padding:0 16px 20px;flex-shrink:0;flex-grow:0;}
+    .cards-strip-row{display:flex;flex-direction:row;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+    .cards-strip-row .nav-item.badge-top{flex:1 1 0;min-width:160px;}
+    .frame-wrap{flex:none;width:100%;padding:0 16px 24px;}
+    .frame-shell{width:100%;height:100vh;align-self:auto;margin-top:0;}
+  }
 </style>
 </head>
 <body>
@@ -173,9 +186,10 @@
   </div>
   <div style="border-top:1px solid #E2E0DB;margin-bottom:16px;"></div>
 
-  <div class="nav-context-label" style="margin-bottom:10px;">Options</div>
+  <div class="nav-context-label nav-options-label" style="margin-bottom:10px;">Options</div>
 
-  <div class="nav-group" id="navProposals">
+  <!-- Cards inside nav: visible on wide viewports -->
+  <div class="nav-group nav-cards-wide" id="navProposals">
     <div class="nav-item badge-top active visible" data-index="1" data-context="viewer" data-type="static" onclick="select(1)">
       <div class="nav-badge">Option 1</div>
       <div class="nav-text">
@@ -191,6 +205,34 @@
       </div>
     </div>
     <div class="nav-item badge-top visible" data-index="4" data-context="viewer" data-type="multi" onclick="select(4)">
+      <div class="nav-badge">Option 3</div>
+      <div class="nav-text">
+        <div class="nav-title">Multi-turn</div>
+        <div class="nav-desc">Agent opens a conversational sidebar where users can iterate on improvements back and forth.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARDS STRIP: only shown on narrow viewports, lives outside nav so overflow works freely -->
+<div class="cards-strip" id="cardsStrip">
+  <div class="nav-context-label" style="margin-bottom:10px;">Options</div>
+  <div class="cards-strip-row">
+    <div class="nav-item badge-top active visible" data-index="1" data-context="viewer" data-type="static" data-mirror onclick="select(1)">
+      <div class="nav-badge">Option 1</div>
+      <div class="nav-text">
+        <div class="nav-title">Static</div>
+        <div class="nav-desc">Agent returns plain-text suggestions in the sidebar. No structured interaction required.</div>
+      </div>
+    </div>
+    <div class="nav-item badge-top visible" data-index="0" data-context="viewer" data-type="single" data-mirror onclick="select(0)">
+      <div class="nav-badge">Option 2</div>
+      <div class="nav-text">
+        <div class="nav-title">Single-turn</div>
+        <div class="nav-desc">Agent evaluates the Play and returns structured improvement cards with accept/dismiss actions.</div>
+      </div>
+    </div>
+    <div class="nav-item badge-top visible" data-index="4" data-context="viewer" data-type="multi" data-mirror onclick="select(4)">
       <div class="nav-badge">Option 3</div>
       <div class="nav-text">
         <div class="nav-title">Multi-turn</div>
@@ -753,7 +795,8 @@ var JS_AGENT = `
   }
   document.getElementById('agentInput').addEventListener('keydown',function(e){
     if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
-  });`;
+  });
+  startPrompt('Improve this Play');`;
 
 /* ── EDITOR shell pieces ── */
 var EDITOR_CSS = `
@@ -1110,6 +1153,10 @@ function showPanel(i) {
 
 function select(i) {
   currentIndex = i;
+  // sync active state on mirror cards in the strip
+  document.querySelectorAll('.nav-item[data-mirror]').forEach(function(el){
+    el.classList.toggle('active', parseInt(el.getAttribute('data-index'),10) === i);
+  });
   showPanel(i);
 }
 

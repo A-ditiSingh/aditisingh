@@ -7,16 +7,15 @@ Website: aditisingh.ca
 Location: Ontario, Canada
 
 ## Summary
-Product designer with 6+ years of experience in B2B SaaS. At Highspot, I design for our enablement and marketing personas to make sense of large volumes of data, helping them identify the actions most likely to accelerate revenue outcomes. Currently, I am designing the experience for a specialized AI agent that surfaces data-driven insights.
+Senior product designer with 6 years of B2B SaaS experience, specializing in AI assistant and analytics products. At Highspot, I lead design for an AI agent that analyzes sales activity and surfaces recommendations. I partner with product and engineering to translate technical capability into trustworthy product experiences.
 
 ## Experience
 
 ### Senior UX Designer | Highspot | 2022 – Present | Canada (Remote)
-- Currently leading design for the Go-to-Market Agent, a specialized AI agent that surfaces data-driven insights across seller activity and revenue outcomes.
-- Designed Initiatives from 0 to 1, a key competitive differentiator enabling sales leaders to track, measure, and act on seller activity data.
-- Led end-to-end design for Highspot's analytics platform, owning information architecture, interaction patterns, and visual systems for dashboards and reports. Worked with 8+ feature crews across the company to deliver a consistent analytics experience to customers.
-- Redesigned the core search experience to modernize the experience and provide capabilities that reduce time-to-content for sellers.
-- Partnered with other designers to raise the quality bar and drive consistency across the product.
+- Lead end-to-end design for a specialized agent that analyzes sales activity and surfaces recommendations to GTM teams. Design work focuses on translating AI outputs into clear interactions, including communicating reasoning, handling output variability, and building user trust.
+- Led end-to-end design for the analytics platform, owning information architecture, interaction models, and visual systems across 8+ cross-functional feature crews. Established shared patterns and a data visualization library to raise consistency across the product.
+- Shipped Initiatives from 0 to 1, a tool for sales leaders to track seller activity against strategic goals. Demoed at Highspot's largest annual customer event; attributed to 30% of company pipeline.
+- Redesigned the core search experience to reduce time-to-content for sellers, validated through customer interviews and usability testing.
 
 ### UX Designer | Guidewire Software | Jan 2022 – Aug 2022 | Canada (Remote)
 - Led the design for single sign-on to unify and streamline the sign-in experience across all Guidewire products.
