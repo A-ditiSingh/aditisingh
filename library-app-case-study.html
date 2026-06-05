@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="Images/favicon.svg">
-<title>Building an app for our home library — Aditi</title>
+<title>Creating an online catalogue of books from photographs — Aditi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -72,7 +72,7 @@ nav {
 }
 .hero-title {
   font-family: 'Lora', serif;
-  font-size: clamp(40px, 6vw, 68px);
+  font-size: clamp(32px, 4.5vw, 54px);
   line-height: 1.08;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -193,7 +193,7 @@ nav {
 
 /* ─── NEEDS GRID ────────────────────────────────────────────────── */
 .needs-section {
-  padding: 80px 0;
+  padding: 48px 0;
   border-top: 1px solid var(--rule);
 }
 .needs-header {
@@ -210,6 +210,8 @@ nav {
   margin-bottom: 12px;
 }
 .needs-intro { font-size: 14px; color: var(--mid); line-height: 1.75; max-width: 480px; }
+.needs-list { margin: 12px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.needs-list li { font-size: 14px; color: var(--mid); line-height: 1.65; }
 .needs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -335,8 +337,8 @@ footer {
 <!-- HERO -->
 <div class="hero fade-in">
   <div class="hero-tag">Personal Project · Vibe-coded</div>
-  <h1 class="hero-title">Building an app for our home library</h1>
-  <p class="hero-desc">A book catalogue app I designed and built for our home — because after 1,000+ books and two failed attempts at tracking them, the only solution that fit our lives was one designed for an audience of exactly two. I owned everything: the requirements, the design, and shipping a live product with auth, a real database, and AI enrichment.</p>
+  <h1 class="hero-title">Creating an online catalogue of books from photographs</h1>
+  <p class="hero-desc">After two failed attempts to manually catalogue our home library of 1,000+ books, I built an app that converts photos of my bookshelves into a searchable catalogue of books. I owned everything: the requirements, the design, and shipping a live product with auth, a real database, and AI enrichment.</p>
   <dl class="hero-meta">
     <div class="meta-block"><dt>My Role</dt><dd>Product Designer + Builder</dd></div>
     <div class="meta-block"><dt>Tools</dt><dd>Claude, Cursor, Supabase, Vercel</dd></div>
@@ -361,9 +363,9 @@ footer {
   <div class="section-row fade-in">
     <div class="section-text">
       <div class="section-label">01 · The Problem</div>
-      <h2 class="section-title">We didn't know if we already owned a book we wanted to buy</h2>
+      <h2 class="section-title">We needed a searchable catalogue of the books in our home library</h2>
       <div class="section-body">
-        <p>My husband and I are serious book people. Over the years, we built a library of 1,000+ books — and with it, a surprisingly frustrating problem. We'd be at a used bookstore, spot something on our radar, and completely blank on whether we already owned it. Did we buy this last year? Is it on the shelf at home? We had no idea.</p>
+        <p>We have a home collection of 1,000+ books and wanted a way to search through it — mainly to check what we already own when we're out at used bookstores. Doing this manually was tedious, and we tried and failed twice before building an app.</p>
       </div>
     </div>
     <div class="section-image-card clay">
@@ -389,13 +391,12 @@ footer {
     </div>
     <div class="section-text">
       <div class="section-label">03 · Attempt Two · 2023</div>
-      <h2 class="section-title">AI + a spreadsheet: fast to create, hard to use</h2>
+      <h2 class="section-title">Translating pictures into an excel sheet</h2>
       <div class="section-body">
-        <p>We leveled up. Using ChatGPT's image processing, we photographed our shelves and pulled book titles and authors straight into a spreadsheet. Getting the data in was actually easy — 1,000 rows, done.</p>
-        <p>But a spreadsheet with 1,000 rows is not something either of us wanted to open on a Saturday afternoon at a used bookstore. The data existed. We never looked at it.</p>
+        <p>We leveled up. Using ChatGPT's image processing, we photographed our shelves and pulled book titles and authors straight into a spreadsheet. Getting the data in was quick but we couldn't easily access it on the go.</p>
         <div class="insight">
           <div class="i-label">Why it failed</div>
-          <p>Fast to build but not accessible in the moment. The solution didn't fit how we actually behave.</p>
+          <p>Fast to build but not accessible in the moment.</p>
         </div>
       </div>
     </div>
@@ -410,56 +411,16 @@ footer {
       <div>
         <div class="needs-label">04 · The Requirements</div>
         <h2 class="needs-title">What we needed</h2>
-      </div>
-      <p class="needs-intro">Two failed attempts. Same root cause: the solution didn't fit our actual lives. Instead of finding an app that was good enough, I decided to build exactly what we needed. No compromises, no workarounds — just our catalogue, designed around how we actually think and behave.</p>
-    </div>
-    <div class="needs-grid">
-      <div class="need-card">
-        <div class="need-tier">Must have</div>
-        <h4>Low-effort bulk entry</h4>
-        <p>Getting 1,000 books in without losing our minds — using image processing to import the existing collection fast.</p>
-      </div>
-      <div class="need-card">
-        <div class="need-tier">Must have</div>
-        <h4>Search and filter from anywhere</h4>
-        <p>A clean, fast interface we'd actually open mid-bookstore. Not a spreadsheet, not a slow app — something that fits in your hand.</p>
-      </div>
-      <div class="need-card">
-        <div class="need-tier">Must have</div>
-        <h4>Easy way to add new books</h4>
-        <p>After the initial import, adding a single book should take seconds — no barcode scanner required.</p>
-      </div>
-      <div class="need-card">
-        <div class="need-tier">Nice to have</div>
-        <h4>Per-person read/unread status</h4>
-        <p>We read very differently — one of us tears through books, the other re-reads slowly. Tracking status per person is something no off-the-shelf app bothered with. We could build it in.</p>
-      </div>
-      <div class="need-card highlight" style="grid-column: 1 / -1;">
-        <div class="need-tier">Nice to have</div>
-        <h4>Find a Book</h4>
-        <p>We have a ritual when one of us finishes a book — we walk the shelves together and talk about what to read next. Do you want fiction or non-fiction? Something easy or a real commitment? It's one of our favorite things. I wasn't trying to replace it with an algorithm. But I thought — what if the app could play along? Find a Book is an AI-powered recommendation mode that mirrors that conversation. It asks the same questions and suggests something from your own library. I didn't build it to be useful — I built it to be delightful.</p>
+        <p class="needs-intro">With coding agents becoming so good earlier this year, in attempt three, I translated the photos from the second attempt into an online searchable catalogue. Since I was making a custom application, we decided to add a few nice-to-have features.</p>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- ── TIME TO SURVEY ────────────────────────────────────────────── -->
-<div class="content">
-  <div class="section-row fade-in">
-    <div class="section-image-card sage">
-      <div class="img-slot" style="aspect-ratio: 7/6;">
-        <img src="Images/osl-find a book.png" alt="Our Shared Library">
-      </div>
-    </div>
-    <div class="section-text">
-      <div class="section-label">04b · Feature Highlight</div>
-      <h2 class="section-title">Find a Book</h2>
-      <div class="section-body">
-        <p>We have a ritual when one of us finishes a book — we walk the shelves together and talk about what to read next. Do you want fiction or non-fiction? Something easy or a real commitment? It's one of our favorite things.</p>
-        <p>I wasn't trying to replace it with an algorithm. But I thought — what if the app could play along?</p>
-        <p>Find a Book is a simple filter-based recommendation mode that mirrors that conversation. It asks the same questions and surfaces something from your own library. The AI enrichment I added to each book provides more meaningful facets that we can filter by.</p>
-      </div>
-    </div>
+    <ul class="needs-list">
+      <li><strong>Bulk import from photos</strong> — use image processing to get 1,000 books in fast</li>
+      <li><strong>Search and filter on mobile</strong> — fast enough to use mid-bookstore</li>
+      <li><strong>Quick single-book entry</strong> — adding a new book should take seconds</li>
+      <li><strong>Per-person read/unread tracking</strong> — each household member tracks their own status</li>
+      <li><strong>Find a Book</strong> — filter-based mode to surface something to read next from our own shelves</li>
+    </ul>
   </div>
 </div>
 
@@ -513,6 +474,24 @@ footer {
   </div>
 </div>
 
+<!-- ── FIND A BOOK ────────────────────────────────────────────── -->
+<div class="content">
+  <div class="section-row fade-in">
+    <div class="section-image-card sage">
+      <div class="img-slot" style="aspect-ratio: 7/6;">
+        <img src="Images/osl-find a book.png" alt="Our Shared Library">
+      </div>
+    </div>
+    <div class="section-text">
+      <div class="section-label">04b · Feature Highlight</div>
+      <h2 class="section-title">Find a Book</h2>
+      <div class="section-body">
+        <p>When one of us finishes a book, we browse the shelves together to decide what to read next — filtering by mood, genre, and how much of a commitment we're up for. Find a Book is a filter-based mode that replicates that process in the app. Each book is enriched with additional metadata that makes the filters more meaningful than title and author alone.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── TAKEAWAYS ──────────────────────────────────────────────────── -->
 <div class="content">
   <div class="takeaway-section fade-in">
@@ -521,13 +500,13 @@ footer {
     <div class="takeaway-grid">
       <div class="takeaway-card">
         <div class="t-num">Design for a known user</div>
-        <div class="t-title">The clearest brief I've ever had</div>
-        <div class="t-body">Designing for yourself is a specific skill — you have to resist over-building and stay honest about what actually matters. Two failed attempts gave me unusually precise requirements before I wrote a line of code.</div>
+        <div class="t-title">Precise requirements from lived experience</div>
+        <div class="t-body">Two failed attempts produced a specific, well-tested set of requirements before I wrote a line of code. Designing for a problem you've experienced directly removes a lot of ambiguity from the brief.</div>
       </div>
       <div class="takeaway-card">
         <div class="t-num">End-to-end ownership</div>
-        <div class="t-title">From requirements to a live URL</div>
-        <div class="t-body">I defined the problem, designed the solution, and shipped a deployed product with real infrastructure. Understanding what it takes to build what you design makes you a better collaborator with the engineers you work with.</div>
+        <div class="t-title">From requirements to a deployed product</div>
+        <div class="t-body">I defined the problem, designed the solution, and shipped a product with real infrastructure — auth, a database, and a live URL. Building what you design gives you a more accurate understanding of the constraints engineers work within.</div>
       </div>
     </div>
   </div>
