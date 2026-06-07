@@ -67,12 +67,12 @@
     padding: 0 60px;
   }
   .page > * {
-    max-width: 780px;
+    max-width: 900px;
   }
 
   /* HERO */
   .hero {
-    padding: 96px 0 72px;
+    padding: 56px 0 40px;
     animation: fadeUp 0.7s ease both;
   }
   .no-anim .hero,
@@ -92,7 +92,7 @@
     font-weight: 400;
     line-height: 1.04;
     letter-spacing: -0.02em;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   .hero-name em {
@@ -110,7 +110,7 @@
 
   /* DOWNLOAD BUTTON */
   .btn-download {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
     font-family: 'Inter', sans-serif;
@@ -125,7 +125,7 @@
     letter-spacing: 0.02em;
     text-decoration: none;
     transition: background 0.15s, color 0.15s;
-    margin-bottom: 40px;
+    margin-bottom: 0;
   }
   .btn-download:hover { background: var(--ink); color: var(--bg); }
   .btn-download svg { flex-shrink: 0; transition: transform 0.15s; }
@@ -133,9 +133,9 @@
 
   .hero-meta {
     display: flex;
-    gap: 48px;
+    gap: 24px;
     flex-wrap: wrap;
-    padding-top: 16px;
+    padding-top: 8px;
   }
 
   .meta-block { display: flex; flex-direction: row; align-items: center; gap: 8px; }
@@ -163,9 +163,9 @@
   .section-row {
     display: grid;
     grid-template-columns: 200px 1fr;
-    gap: 64px;
+    gap: 48px;
     align-items: start;
-    padding: 64px 0;
+    padding: 40px 0;
     border-top: 1px solid var(--rule);
     animation: fadeUp 0.6s ease both;
   }
@@ -189,19 +189,25 @@
 
   /* ROLE */
   .role {
-    padding-bottom: 40px;
-    margin-bottom: 40px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
     border-bottom: 1px solid var(--rule);
   }
   .role:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .role--continued { border-bottom: none; padding-bottom: 0; margin-bottom: 24px; }
+  .role--continued { border-bottom: none; padding-bottom: 0; margin-bottom: 12px; }
 
   .role-header {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
-    margin-bottom: 16px;
+  }
+
+  .role-oneliner {
+    font-size: 13px;
+    color: var(--mid);
+    margin-top: 6px;
+    line-height: 1.5;
   }
 
   .role-title {
@@ -275,8 +281,8 @@
 
   /* EDUCATION */
   .edu-item {
-    padding-bottom: 28px;
-    margin-bottom: 28px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
     border-bottom: 1px solid var(--rule);
   }
   .edu-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
@@ -294,8 +300,8 @@
   .edu-year   { font-size: 12px; color: var(--mid); letter-spacing: 0.04em; }
 
   /* SKILLS */
-  .skills-block { display: flex; flex-direction: column; gap: 24px; }
-  .skill-group  { display: flex; flex-direction: column; gap: 6px; }
+  .skills-block { display: flex; flex-direction: column; gap: 16px; }
+  .skill-group  { display: flex; flex-direction: column; gap: 4px; }
 
   .skill-cat {
     font-size: 11px;
@@ -307,6 +313,23 @@
 
   .skill-items { font-size: 14px; color: var(--ink); line-height: 1.7; }
 
+  /* ABOUT BIO */
+  .about-bio p {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.8;
+    max-width: 600px;
+  }
+  .about-bio p + p { margin-top: 10px; }
+  .about-bio p a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: border-color 0.15s;
+  }
+  .about-bio p a:hover { border-color: var(--ink); }
+
   /* NOTABLES */
   .notables { display: flex; flex-direction: column; }
 
@@ -314,13 +337,13 @@
     font-size: 14px;
     color: var(--mid);
     line-height: 1.7;
-    padding: 14px 0;
+    padding: 10px 0;
     border-bottom: 1px solid var(--rule);
     display: flex;
     gap: 20px;
     align-items: baseline;
   }
-  .notable-item:first-child { border-top: 1px solid var(--rule); }
+  .notable-item:first-child { border-top: none; }
 
   .notable-num { font-size: 11px; color: var(--mid); flex-shrink: 0; width: 20px; font-weight: 400; }
 
@@ -365,14 +388,7 @@
 <div class="page">
 
   <div class="hero">
-    <h1 class="hero-name">aditi singh</h1>
-    <p class="hero-summary">Senior product designer with 6 years of B2B SaaS experience, specializing in AI assistant and analytics products. At Highspot, I lead design for an AI agent that analyzes sales activity and surfaces recommendations. I partner with product and engineering to translate technical capability into trustworthy product experiences.</p>
-    <a class="btn-download" href="Images/Aditi_Singh_Resume.pdf" download="Aditi_Singh_Resume.pdf" onclick="downloadResume(event)">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Download Resume
-    </a>
+    <h1 class="hero-name">Hi! I'm Aditi.</h1>
     <dl class="hero-meta">
       <div class="meta-block">
         <dt aria-label="Email"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 3.5l6 4.5 6-4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></dt>
@@ -382,17 +398,32 @@
       </div>
       <div class="meta-block">
         <dt aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6v5M4 4v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M7.5 11V8.5c0-1.5 1-2.5 2-2.5s2 .5 2 2.5V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 6v5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></dt>
-        <dd><a href="https://linkedin.com/in/aditising" target="_blank">linkedin.com/in/aditising</a></dd>
+        <dd><a href="https://linkedin.com/in/aditising" target="_blank">LinkedIn</a></dd>
       </div>
       <div class="meta-block">
         <dt aria-label="GitHub"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1C3.91 1 1 3.91 1 7.5c0 2.87 1.86 5.3 4.44 6.16.32.06.44-.14.44-.31v-1.08c-1.8.39-2.18-.87-2.18-.87-.3-.75-.72-.95-.72-.95-.59-.4.04-.39.04-.39.65.05 1 .67 1 .67.58 1 1.53.71 1.9.54.06-.42.23-.71.41-.87-1.44-.16-2.95-.72-2.95-3.2 0-.71.25-1.28.67-1.74-.07-.16-.29-.82.06-1.71 0 0 .55-.18 1.8.67a6.27 6.27 0 0 1 1.64-.22c.56 0 1.12.07 1.64.22 1.25-.85 1.8-.67 1.8-.67.35.89.13 1.55.06 1.71.42.46.67 1.03.67 1.74 0 2.49-1.52 3.04-2.96 3.2.23.2.44.59.44 1.19v1.77c0 .17.11.37.44.31A6.504 6.504 0 0 0 14 7.5C14 3.91 11.09 1 7.5 1z" fill="currentColor"/></svg></dt>
-        <dd><a href="https://github.com/A-ditiSingh" target="_blank">github.com/A-ditiSingh</a></dd>
+        <dd><a href="https://github.com/A-ditiSingh" target="_blank">GitHub</a></dd>
       </div>
       <div class="meta-block">
-        <dt aria-label="Location"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1C5.01 1 3 3.01 3 5.5c0 3.5 4.5 8.5 4.5 8.5S12 9 12 5.5C12 3.01 9.99 1 7.5 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.5" cy="5.5" r="1.5" stroke="currentColor" stroke-width="1.2"/></svg></dt>
-        <dd>Ontario, Canada</dd>
+        <dt aria-label="Google Scholar"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1L1 5l6.5 4L14 5 7.5 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M3 6.5v4c0 1.1 2 2.5 4.5 2.5S12 11.6 12 10.5v-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 5v3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></dt>
+        <dd><a href="https://scholar.google.ca/citations?user=lB6rtdAAAAAJ&hl=en" target="_blank">Google Scholar</a></dd>
       </div>
     </dl>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section-row" style="padding-bottom: 48px;">
+    <div class="section-label">About</div>
+    <div class="section-body about-bio">
+      <p>I'm currently at Highspot designing how sellers find content, how teams understand performance, and how AI surfaces answers people can act on.</p>
+      <p>I'm a builder at heart and bring that maker mindset to both my work and hobbies. My approach to design is shaped by a background in HCI research, where I built interactive prototypes, ran usability tests, and conducted statistical analysis. Before that, I practiced as an architect, working with tradespeople on site to bring designs to life.</p>
+      <a class="btn-download" href="Images/Aditi_Singh_Resume.pdf" download="Aditi_Singh_Resume.pdf" onclick="downloadResume(event)" style="margin-top: 16px; width: fit-content;">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Download Resume
+      </a>
+    </div>
   </div>
 
   <!-- EXPERIENCE -->
@@ -406,13 +437,8 @@
           <div class="role-meta">
             <span class="role-period">Sept 2022 – Present · Canada (Remote)</span>
           </div>
+          <p class="role-oneliner">Led design and shaped the vision for data-based agentic responses, analytics, and search.</p>
         </div>
-        <ul>
-          <li>Lead end-to-end design for a specialized agent that analyzes sales activity and surfaces recommendations to GTM teams. Design work focuses on translating AI outputs into clear interactions, including communicating reasoning, handling output variability, and building user trust.</li>
-          <li>Led end-to-end design for the analytics platform, owning information architecture, interaction models, and visual systems across 8+ cross-functional feature crews. Established shared patterns and a data visualization library to raise consistency across the product.</li>
-          <li>Shipped Initiatives from 0 to 1, a tool for sales leaders to track seller activity against strategic goals. Demoed at Highspot's largest annual customer event; attributed to 30% of company pipeline.</li>
-          <li>Redesigned the core search experience to reduce time-to-content for sellers, validated through customer interviews and usability testing.</li>
-        </ul>
       </div>
  
       <div class="role">
@@ -421,10 +447,8 @@
           <div class="role-meta">
             <span class="role-period">Jan 2022 – Aug 2022 · Canada (Remote)</span>
           </div>
+          <p class="role-oneliner">Unified sign-on across Guidewire's full product suite.</p>
         </div>
-        <ul>
-          <li>Led end-to-end design for single sign-on across Guidewire's product suite, partnering with product and engineering to unify the sign-in experience across all customer-facing applications.</li>
-        </ul>
       </div>
  
       <div class="role">
@@ -433,10 +457,8 @@
           <div class="role-meta">
             <span class="role-period">Sept 2019 – Dec 2021 · Ottawa, Canada</span>
           </div>
+          <p class="role-oneliner">Led video conferencing design across web, mobile, and meeting room surfaces.</p>
         </div>
-        <ul>
-          <li>Led end-to-end design for video conferencing across web, mobile, and meeting room surfaces, from discovery through delivery, and engaged directly with customers to validate concepts through research sessions.</li>
-        </ul>
       </div>
 
  
@@ -446,10 +468,8 @@
           <div class="role-meta">
             <span class="role-period">Sept 2015 – Apr 2017 · India</span>
           </div>
+          <p class="role-oneliner">Interaction research on flexible display devices; 4 peer-reviewed publications.</p>
         </div>
-        <ul>
-          <li>Designed and conducted usability testing for zooming interactions on flexible display devices, contributing to 4 peer-reviewed HCI publications.</li>
-        </ul>
       </div>
  
       <div class="role">
@@ -458,10 +478,8 @@
           <div class="role-meta">
             <span class="role-period">May 2012 – Jun 2015 · New Delhi, India</span>
           </div>
+          <p class="role-oneliner">10+ projects; work featured in Architizer, Archdaily, and Designboom.</p>
         </div>
-        <ul>
-          <li>Led concept design, technical drawing, and on-site coordination for 10+ projects, with work recognized in Architizer, Archdaily, and Designboom.</li>
-        </ul>
       </div>
  
     </div>

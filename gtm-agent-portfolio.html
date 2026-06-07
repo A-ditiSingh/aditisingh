@@ -102,7 +102,7 @@
 
 <div class="hero fade-in">
   <h1 class="hero-title">Agentic design for data</h1>
-  <p class="hero-desc">When an AI agent answers a question with data, the design challenge isn't just what to show — it's how to present it, how to build trust, and how to help users understand exactly where the answer came from.</p>
+  <p class="hero-desc">When an AI agent answers a question with data, the design challenge is how to present that data in the right format and give users enough context to evaluate whether the answer is correct.</p>
   <dl class="hero-meta">
     <div class="meta-block"><dt>Role</dt><dd>Design Lead, GTM Agent</dd></div>
     <div class="meta-block"><dt>Stage</dt><dd>Zero to One</dd></div>
@@ -134,10 +134,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">Context</div>
-      <h2 class="section-title">I led design for GTM Agent because most GTM questions need data</h2>
+      <h2 class="section-title">I led design for GTM Agent as part of my role as design lead for analytics</h2>
       <div class="section-body">
-        <p>As design lead for analytics, I took on GTM Agent because the questions GTM teams ask — about content performance, rep activity, pipeline — almost always warrant a data-based response, not just a text summary.</p>
-        <p>This made it a different design problem than a typical conversational agent.</p>
+        <p>As design lead for analytics, I took on GTM Agent because the questions GTM teams ask — about content performance, rep activity, pipeline — almost always require a data-based response, not just a text summary. That made it a different design problem than a typical conversational agent.</p>
       </div>
       <div class="chain">
         <div class="chain-item"><div class="chain-num">—</div><div class="chain-text"><h4>Solo designer</h4><p>Embedded with Agent Platform crew: 1 PM, 2 engineers</p></div></div>
@@ -170,10 +169,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">The Shift</div>
-      <h2 class="section-title">Before: wayfinding. After: a different design problem entirely.</h2>
+      <h2 class="section-title">Before AI, the design problem was wayfinding. After AI, it shifted to trust and clarity.</h2>
       <div class="section-body">
-        <p>Before AI, users had to navigate to the right place themselves — scorecard for overviews, report builder for datasets. My job was to make that wayfinding as frictionless as possible.</p>
-        <p>After AI, the user asks a question. The agent looks through the platform and composes the answer. My job changed completely.</p>
+        <p>Before AI, users had to navigate to the right surface themselves — scorecard for overviews, report builder for datasets. The design focus was reducing that wayfinding friction. After AI, the user asks a question and the agent composes the answer. The design focus shifted to making the response trustworthy and understandable.</p>
       </div>
       <div class="compare-wrap">
         <table>
@@ -202,10 +200,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">The Design Problem</div>
-      <h2 class="section-title">Data responses require more than a good summary</h2>
+      <h2 class="section-title">Data responses require format selection and derivation context, not just a summary</h2>
       <div class="section-body">
-        <p>A text-based agent response needs to summarize sources well. A data-based response has to do more: it needs to present data in the right format, and it needs to give users the context to understand how the agent derived that data.</p>
-        <p>Without both, users can't tell if the answer is right. They either overtrust it or ignore it.</p>
+        <p>A text-based agent response needs to summarize sources well. A data-based response has additional requirements: the data needs to be presented in the right format, and users need enough context to understand how the agent derived it. Without both, users cannot evaluate whether the answer is correct and are likely to either overtrust or dismiss it.</p>
       </div>
       <div class="req-list">
         <div class="req-item"><div class="req-dot"></div><div class="req-text"><strong>Present data in an appropriate format</strong> — not all data reads the same way; the wrong format creates confusion even when the data is correct</div></div>
@@ -239,7 +236,7 @@
     </div>
     <div class="section-text">
       <div class="section-label">Response Format</div>
-      <h2 class="section-title">Four response types. Each with a distinct job.</h2>
+      <h2 class="section-title">Four response types, each suited to a different kind of question</h2>
       <div class="section-body">
         <p>The starting point for a data response is choosing the right format. We defined four types based on the shape of the question — not just the shape of the data.</p>
       </div>
@@ -280,14 +277,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">Design Insight</div>
-      <h2 class="section-title">The prompt is the design spec</h2>
+      <h2 class="section-title">Getting the agent to choose the right format required writing explicit decision rules in the prompt</h2>
       <div class="section-body">
-        <p>Defining the four types was the easy part. To get the agent to choose correctly, I had to specify decision logic precisely enough that the model could apply it consistently.</p>
-        <p>I wrote detailed decision rules — when to use a table over a list, how to distinguish a trend question from a ranking question — and encoded them directly into the prompt. The prompt became the design deliverable.</p>
-      </div>
-      <div class="discovery">
-        <div class="d-label">Key insight</div>
-        <p>In agentic design, the prompt is the design spec. If you can't articulate a decision rule clearly enough to write it down, the agent can't apply it. The act of writing the prompt forces design rigor.</p>
+        <p>Defining the four types was straightforward. Getting the agent to apply them consistently required writing decision rules precise enough for the model to follow — when to use a table over a list, how to distinguish a trend question from a ranking question. I encoded these rules directly into the prompt, which became the primary design deliverable for this part of the work.</p>
       </div>
       <div class="pivot-inline" style="margin-top: 20px;">
         <div class="pivot-row before-row"><span class="pivot-tag before">Before</span><span class="pivot-content">Agent defaulted to a text summary regardless of the question type</span></div>
@@ -320,9 +312,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">The Table Component</div>
-      <h2 class="section-title">Data alone isn't enough. Context makes it trustworthy.</h2>
+      <h2 class="section-title">The table component surfaces derivation context alongside the data</h2>
       <div class="section-body">
-        <p>The table response isn't just a data dump. It's a structured artifact that gives users everything they need to evaluate and act on the answer.</p>
+        <p>The table response is a structured component that gives users what they need to evaluate the answer — not just the data itself, but the filters and scope the agent applied to derive it.</p>
       </div>
       <div class="chain">
         <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Query + Additional Context tabs</h4><p>Users can see how the agent interpreted the question and what context it applied</p></div></div>
@@ -359,9 +351,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">Phase 01 — Query</div>
-      <h2 class="section-title">The agent interprets the question. Humans refine the filters.</h2>
+      <h2 class="section-title">The agent parses the question into a structured query, with two human-in-the-loop checkpoints before execution</h2>
       <div class="section-body">
-        <p>The agent parses the user's question into a structured query, but it doesn't execute blindly. Two human-in-the-loop components give users control before the data runs.</p>
+        <p>The agent proposes a structured query from the user's question, but does not execute it automatically. Two checkpoints give users the opportunity to review and adjust before the data runs.</p>
       </div>
       <div class="chain">
         <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Filter proposal</h4><p>The agent proposes filters based on the question (time range, scope, exclusions). Users accept, adjust, or reject before query execution.</p></div></div>
@@ -383,10 +375,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">Phase 03 — Action</div>
-      <h2 class="section-title">Selecting a row surfaces the next logical step</h2>
+      <h2 class="section-title">Selecting a row surfaces a contextual next step tied to that item</h2>
       <div class="section-body">
-        <p>The response table isn't a dead artifact. When a user clicks a row, that item becomes the context for what happens next. The UI surfaces one clear, contextual action tied to the selected item—not a generic menu, but a specific outcome shaped by the data.</p>
-        <p>If a rep shows low activity completion, the action might be to view their coaching history. If a content piece has high engagement, the action might be to check replication patterns. The action flows from the insight.</p>
+        <p>When a user clicks a row in the response table, the UI surfaces one action specific to the selected item — not a generic menu. The action is determined by the data. If a rep shows low activity completion, the action might be to view their coaching history. If a content piece has high engagement, the action might be to check replication patterns.</p>
       </div>
     </div>
   </div>
@@ -404,9 +395,9 @@
     </div>
     <div class="section-text">
       <div class="section-label">Putting It Together</div>
-      <h2 class="section-title">From insight to action in three phases</h2>
+      <h2 class="section-title">The three phases connect questioning, response, and action in a single flow</h2>
       <div class="section-body">
-        <p>The three phases form a coherent loop. The user doesn't just ask a question and receive a passive answer. They refine the query, evaluate the response in context, select what matters to them, and move directly into action—all without leaving the conversational interface.</p>
+        <p>The three phases form a connected loop. The user refines the query, evaluates the response in context, selects a specific item, and moves into action — all within the conversational interface.</p>
       </div>
       <div class="chain">
         <div class="chain-item"><div class="chain-num">01</div><div class="chain-text"><h4>Query</h4><p>User asks a question; agent proposes filters and disambiguates ambiguity</p></div></div>
@@ -423,13 +414,13 @@
     <div class="takeaway-grid">
       <div class="takeaway-card">
         <div class="t-num">Learning 01</div>
-        <div class="t-title">The prompt is the design spec</div>
-        <div class="t-body">In agentic product design, you can't just design the UI — you have to design the agent's decision logic too. Writing precise decision rules for format selection forced a clarity that visual mockups alone never require.</div>
+        <div class="t-title">In agentic product design, the prompt is the design deliverable</div>
+        <div class="t-body">Designing the agent's decision logic required the same precision as designing the UI. Writing explicit decision rules for format selection forced a level of clarity that visual mockups alone don't require.</div>
       </div>
       <div class="takeaway-card">
         <div class="t-num">Learning 02</div>
-        <div class="t-title">Trust is a design deliverable</div>
-        <div class="t-body">For data-based AI responses, the answer alone isn't enough. Users need to see how the agent derived the dataset to decide whether to act on it. Surfacing derivation context — filters, scope, assumptions — is as important as the data itself.</div>
+        <div class="t-title">For data-based AI responses, derivation context is as important as the data</div>
+        <div class="t-body">Users need to see the filters, scope, and assumptions the agent applied to decide whether the answer is correct. Surfacing that context is a core part of the design, not secondary to it.</div>
       </div>
     </div>
   </div>
