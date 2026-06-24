@@ -6,7 +6,7 @@
 <link rel="icon" type="image/svg+xml" href="Images/favicon.svg">
 <title>Aditi — Product Designer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Prata&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Prata&family=Gloock&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
   /* HERO */
@@ -17,20 +17,27 @@
   }
 
   .hero-eyebrow {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
+    font-size: 13px;
     color: var(--mid);
     margin-bottom: 20px;
   }
 
   .hero-name {
-    font-family: 'Prata', serif;
+    font-family: 'Gloock', serif;
     font-size: clamp(48px, 7vw, 80px);
     font-weight: 400;
-    line-height: 1.04;
+    line-height: 1.2;
     letter-spacing: -0.02em;
     margin-bottom: 24px;
+    padding-bottom: 0.1em;
+    background: linear-gradient(135deg, #3a2436 0%, #8a4a4f 50%, #d9883f 100%);
+    background-size: 400% 400%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    transition: background-position 0.1s linear;
   }
 
   .hero-name em {
@@ -78,9 +85,7 @@
   }
 
   .projects-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
+    font-size: 13px;
     color: var(--mid);
     padding-bottom: 20px;
     border-bottom: 1px solid var(--rule);
@@ -93,25 +98,41 @@
     padding: 0 60px;
   }
 
-  /* PROJECT ROW */
+  /* PROJECT ROW — the whole row is now a clickable card */
   .project-row {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 56px;
     align-items: center;
-    padding: 72px 0;
-    border-bottom: 1px solid var(--rule);
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    margin-bottom: 12px;
+    cursor: pointer;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.65s ease, transform 0.65s ease;
+    transition: opacity 0.65s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1), backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
-
   .project-row.visible { opacity: 1; transform: translateY(0); }
+  .project-row:hover {
+    background: rgba(255,255,255,0.18);
+    -webkit-backdrop-filter: blur(8px) saturate(1.2);
+    backdrop-filter: blur(8px) saturate(1.2);
+    box-shadow: 0 12px 40px rgba(58,36,54,0.10);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
+  }
+  .project-row:hover .project-card .img-slot img { transform: scale(1.04); }
+
+  .project-row.image-right {
+    grid-template-columns: 0.8fr 1.2fr;
+  }
+  .project-row.image-right .project-text { order: 1; }
+  .project-row.image-right .project-card { order: 2; }
 
   /* IMAGE CARD */
   .project-card {
-    border-radius: 8px;
-    /*padding: 32px 32px 0;*/
+    border-radius: 12px;
     overflow: hidden;
     position: relative;
   }
@@ -119,10 +140,11 @@
   .project-card.lilac  { background: var(--lilac); }
   .project-card.yellow { background: var(--yellow); }
   .project-card.sage   { background: #c3cdc0; }
+  .project-card.slate  { background: #a8c4d8; }
 
   .project-card .img-slot {
     background: transparent;
-    border-radius: 8px 8px 0 0;
+    border-radius: 12px;
     aspect-ratio: 5/4;
     overflow: hidden;
     position: relative;
@@ -132,27 +154,63 @@
     justify-content: center;
     gap: 8px;
   }
-  .project-card .img-slot input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .project-card .img-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transform: scale(1); transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-  .project-row.in-focus .project-card .img-slot img { transform: scale(1.05); }
+  .project-card .img-slot img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transform: scale(1);
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* TL;DR */
+  .tldr {
+    padding: 16px 20px 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .tldr-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tldr-label {
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: rgba(0,0,0,0.38);
+  }
+
+  .tldr-value {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    color: rgba(0,0,0,0.62);
+    line-height: 1.5;
+  }
+
+  .tldr-inline {
+    padding: 0;
+    margin-bottom: 24px;
+  }
+
+  .tldr-inline .tldr-label {
+    color: var(--mid);
+    opacity: 0.7;
+  }
+
+  .tldr-inline .tldr-value {
+    font-size: 16px;
+    color: var(--mid);
+  }
 
   /* PROJECT TEXT */
   .project-text { padding: 8px 0; }
-
-  .project-year {
-    font-size: 12px;
-    color: var(--mid);
-    letter-spacing: 0.05em;
-    margin-bottom: 12px;
-  }
-
-  .project-tag {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--mid);
-    margin-bottom: 8px;
-  }
 
   .badge-row {
     display: flex;
@@ -210,33 +268,8 @@
     max-width: 380px;
     margin-bottom: 24px;
   }
-  .project-desc a {
-    color: var(--ink);
-    text-decoration: none;
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 1px;
-    font-weight: 500;
-    transition: border-color 0.15s;
-  }
-  .project-desc a:hover { border-color: var(--ink); }
 
-  .project-links {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-  }
-
-  .link-primary {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--ink);
-    text-decoration: none;
-    border-bottom: 1px solid var(--ink);
-    padding-bottom: 1px;
-    transition: opacity 0.15s;
-  }
-  .link-primary:hover { opacity: 0.5; }
-
+  /* Live link — sits above row click target */
   .link-secondary {
     font-size: 14px;
     color: var(--mid);
@@ -244,6 +277,8 @@
     border-bottom: 1px solid var(--rule);
     padding-bottom: 1px;
     transition: color 0.15s, border-color 0.15s;
+    position: relative;
+    z-index: 10;
   }
   .link-secondary:hover { color: var(--ink); border-color: var(--ink); }
 
@@ -284,6 +319,129 @@
   /* Let gradient show through nav */
   nav { background: transparent !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
+  /* ── CARD EXPAND OVERLAY ── */
+  :root {
+    --expand-easing: cubic-bezier(0.32, 0, 0.06, 1);
+    --expand-duration: 0.38s;
+  }
+
+  #card-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0);
+    pointer-events: none;
+    transition: background var(--expand-duration) var(--expand-easing);
+  }
+  #card-scrim.active {
+    background: rgba(0,0,0,0.35);
+    pointer-events: all;
+  }
+
+  #card-expand {
+    position: fixed;
+    z-index: 201;
+    border-radius: 12px;
+    overflow: hidden;
+    display: none;
+    will-change: top, left, width, height, border-radius;
+    transition:
+      top var(--expand-duration) var(--expand-easing),
+      left var(--expand-duration) var(--expand-easing),
+      width var(--expand-duration) var(--expand-easing),
+      height var(--expand-duration) var(--expand-easing),
+      border-radius var(--expand-duration) var(--expand-easing);
+    background: var(--bg);
+    box-shadow: 0 32px 80px rgba(0,0,0,0.18);
+  }
+  #card-expand.animating,
+  #card-expand.open { display: block; }
+
+  #card-expand iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  #card-expand.open iframe { opacity: 1; transition: opacity 0.2s ease 0.15s; }
+
+  /* Floating control cluster — Prev / Next / Close, top-right over the iframe */
+  #card-controls {
+    position: fixed;
+    z-index: 202;
+    top: 20px;
+    right: 20px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 999px;
+    /* Light glassy fill — frosted white panel carrying dark text/icons */
+    background: rgba(255, 255, 255, 0.42);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.14);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  #card-controls.visible {
+    display: flex;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.22s ease 0.3s, transform 0.22s ease 0.3s;
+  }
+
+  .card-ctrl {
+    height: 40px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 16px;
+    transition: background 0.15s ease, opacity 0.15s ease;
+  }
+  /* Close is icon-only — keep it circular */
+  #card-close.card-ctrl {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+  .card-ctrl svg { display: block; }
+  .card-ctrl:hover { background: rgba(0,0,0,0.07); }
+  .card-ctrl:focus-visible {
+    outline: 2px solid #1a1a1a;
+    outline-offset: 2px;
+  }
+  .card-ctrl:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .card-ctrl:disabled:hover { background: transparent; }
+
+  /* Divider before the close button */
+  #card-controls .ctrl-sep {
+    width: 1px;
+    height: 20px;
+    background: rgba(0,0,0,0.18);
+    margin: 0 2px;
+    flex-shrink: 0;
+  }
+
+  /* Disable hover on rows while overlay is open */
+  body.card-open .project-row { pointer-events: none; }
+
   /* DYNAMIC GRADIENT */
   #gradient-canvas {
     position: fixed;
@@ -312,7 +470,7 @@
   <a class="nav-name" href="#" style="font-family:'Fraunces',serif; font-weight:300; font-variation-settings:'opsz' 144,'SOFT' 100; font-size:22px; line-height:1;"><strong>as</strong></a>
   <ul class="nav-links">
     <li><a href="#" class="active">Work</a></li>
-    <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+    <li><a href="Aditi_Singh_Resume.html">About</a></li>
     <li><span class="nav-sep" aria-hidden="true"></span></li>
     <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
     <li><a href="https://github.com/A-ditiSingh" target="_blank" rel="noopener noreferrer">GitHub</a></li>
@@ -326,19 +484,17 @@
 </div>
 
 <!-- PROJECTS LABEL -->
-<div class="section-label-row hero-fade" style="transition-delay: 0.1s;">
-  <div class="projects-label">Projects</div>
+<div class="section-label-row hero-fade" style="transition-delay: 0.1s; margin-bottom: 20px;">
+  <div class="projects-label">Selected Work</div>
 </div>
 
 <!-- PROJECTS -->
 <div class="projects">
 
   <!-- PROJECT 1: GTM Initiatives -->
-  <div class="project-row">
+  <div class="project-row btn-expand" data-src="gtm-oversight-portfolio_1.html">
     <div class="project-card orange" style="background:#e8c9a8;">
-      <div class="img-slot" style="border: none;">
-        <input type="file" accept="image/*" onchange="loadImage(this)">
-
+      <div class="img-slot">
         <img src="Images/Cover_Initiative.png" alt="Go to market with Initiatives">
       </div>
     </div>
@@ -350,19 +506,12 @@
         <span class="badge">Analytics</span>
         <span class="badge">Dashboard</span>
       </div>
-      <p class="project-desc">GTM teams invest in plays, training, and content to drive revenue, but have no reliable way to know if any of it is working. I designed the end-to-end product to close that gap.</p>
-      <div class="project-links">
-        <button class="link-primary lock-btn" data-dest="gtm-oversight-portfolio_1.html" style="background:none;border:none;border-bottom:1px solid var(--ink);padding-bottom:1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:var(--ink);font-family:inherit;">
-          <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="5.5" width="8" height="6" rx="1" fill="currentColor" opacity="0.8"/><path d="M3.5 5.5V3.75a2 2 0 0 1 4 0V5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
-          Case Study
-        </button>
-      </div>
+      <p class="project-desc">Enablement and marketing teams invest in plays, training, and content to run business initiatives, but have no way to track whether reps are following through or whether any of it is driving revenue. I designed the end-to-end product to address this.</p>
     </div>
   </div>
 
-
   <!-- PROJECT 2: Play Evaluation -->
-  <div class="project-row">
+  <div class="project-row image-right btn-expand" data-src="play-evaluation-portfolio.html">
     <div class="project-card sage">
       <div class="img-slot">
         <img src="Images/Cover_AIPlays.png" alt="AI Plays cover">
@@ -375,21 +524,14 @@
         <span class="badge">AI-assisted workflow</span>
       </div>
       <p class="project-desc">When sellers ask the Agent for next steps, it pulls guidance from sales playbooks. When that content isn't actionable, the quality of recommendations suffers. I designed an evaluation system that helps authors improve their plays so actions are clear for both sellers and the agent.</p>
-      <div class="project-links">
-        <button class="link-primary lock-btn" data-dest="play-evaluation-portfolio.html" style="background:none;border:none;border-bottom:1px solid var(--ink);padding-bottom:1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:var(--ink);font-family:inherit;">
-          <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="5.5" width="8" height="6" rx="1" fill="currentColor" opacity="0.8"/><path d="M3.5 5.5V3.75a2 2 0 0 1 4 0V5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
-          Case Study
-        </button>
-      </div>
     </div>
   </div>
 
   <!-- PROJECT 3: Scoped Search -->
-  <div class="project-row">
+  <div class="project-row btn-expand" data-src="scoped-search-portfolio.html">
     <div class="project-card" style="background:#a8c4d8;">
-      <div class="img-slot" style="padding: 24px 24px 0;">
+      <div class="img-slot">
         <img src="Images/Cover_SS.png" alt="Scoped Search">
-
       </div>
     </div>
     <div class="project-text">
@@ -399,21 +541,14 @@
         <span class="badge">Enterprise search</span>
       </div>
       <p class="project-desc">Poor search relevance was the top reason enterprise customers rated Highspot negatively. I redesigned search to let reps scope results to content that's actually relevant to their role.</p>
-      <div class="project-links">
-        <button class="link-primary lock-btn" data-dest="scoped-search-portfolio.html" style="background:none;border:none;border-bottom:1px solid var(--ink);padding-bottom:1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:var(--ink);font-family:inherit;">
-          <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="5.5" width="8" height="6" rx="1" fill="currentColor" opacity="0.8"/><path d="M3.5 5.5V3.75a2 2 0 0 1 4 0V5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
-          Case Study
-        </button>
-      </div>
     </div>
   </div>
 
-  <!-- PROJECT 3: Our Shared Library -->
-  <div class="project-row">
+  <!-- PROJECT 4: Our Shared Library -->
+  <div class="project-row image-right btn-expand" data-src="library-app-case-study.html">
     <div class="project-card yellow">
       <div class="img-slot">
         <img src="Images/Cover_OSL.png" alt="Our Shared Library">
-
       </div>
     </div>
     <div class="project-text">
@@ -422,15 +557,34 @@
         <span class="badge">Personal project</span>
         <span class="badge">Vibe-coded</span>
       </div>
-      <p class="project-desc">After two failed attempts to manually catalogue our home library of 1,000+ books, I built an app that converts photos of my bookshelves into a searchable catalogue of books.</p>
-      <div class="project-links">
-        <a href="library-app-case-study.html" class="link-primary">Case Study</a>
-        <a href="https://our-library-nu.vercel.app/" class="link-secondary" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">See it live<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 9L9 2M9 2H4.5M9 2V6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
+      <p class="project-desc">After two failed attempts to manually catalogue our home library of 1,000+ books, I built an app that converts photos of my bookshelves into a searchable catalogue of books. I owned everything: the requirements, the design, and shipping a live product with auth, a real database, and AI enrichment.</p>
+      <a href="https://our-library-nu.vercel.app/" class="link-secondary" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">
+        See it live
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 9L9 2M9 2H4.5M9 2V6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </div>
 
+</div>
 
+<!-- CARD EXPAND OVERLAY -->
+<div id="card-scrim"></div>
+<div id="card-controls">
+  <button id="card-prev" class="card-ctrl" aria-label="Previous project">
+    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Previous project
+  </button>
+  <button id="card-next" class="card-ctrl" aria-label="Next project">
+    Next project
+    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <span class="ctrl-sep" aria-hidden="true"></span>
+  <button id="card-close" class="card-ctrl" aria-label="Close project">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+</div>
+<div id="card-expand">
+  <iframe id="card-iframe" title="Project detail" src="about:blank"></iframe>
 </div>
 
 <!-- FOOTER -->
@@ -438,7 +592,7 @@
   <ul class="footer-links">
     <li><a href="mailto:aditisingh.design@gmail.com">Email</a></li>
     <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-    <li><a href="Aditi_Singh_Resume.html">Resume</a></li>
+    <li><a href="Aditi_Singh_Resume.html">About</a></li>
   </ul>
   <span class="footer-copy">Aditi Singh · Ontario, Canada</span>
 </footer>
@@ -454,6 +608,15 @@
 
   document.querySelector('a[href="Aditi_Singh_Resume.html"]')
     ?.addEventListener('click', () => sessionStorage.setItem('portfolio_nav', '1'));
+
+  // Shift hero name gradient on scroll
+  const heroName = document.querySelector('.hero-name');
+  if (heroName) {
+    window.addEventListener('scroll', () => {
+      const pos = Math.min(100, window.scrollY * 0.8);
+      heroName.style.backgroundPosition = `${pos}% ${pos}%`;
+    }, { passive: true });
+  }
 
   const fadeEls = document.querySelectorAll('.hero-fade, .project-row');
   const io = new IntersectionObserver((entries) => {
@@ -494,11 +657,6 @@
     reader.readAsDataURL(file);
   }
 
-  document.querySelectorAll('.lock-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      window.location.href = btn.getAttribute('data-dest');
-    });
-  });
 </script>
 
 <script>
@@ -574,9 +732,7 @@
       if (newKey !== activeKey) {
         activeKey = newKey;
         setTarget(activeKey);
-        projectRows.forEach(({ el, key }) => {
-          if (el) el.classList.toggle('in-focus', hasScrolled && key === newKey);
-        });
+        // in-focus no longer used (no separate img-slot from card)
       }
     }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
 
@@ -642,6 +798,139 @@
     }
 
     requestAnimationFrame(draw);
+  })();
+</script>
+<script>
+  /* ── Card expand animation ── */
+  (function () {
+    const expand   = document.getElementById('card-expand');
+    const iframe   = document.getElementById('card-iframe');
+    const scrim    = document.getElementById('card-scrim');
+    const controls = document.getElementById('card-controls');
+    const closeBtn = document.getElementById('card-close');
+    const prevBtn  = document.getElementById('card-prev');
+    const nextBtn  = document.getElementById('card-next');
+    const DURATION = 380; // ms — must match --expand-duration
+    let isAnimating = false;
+    let activeRow   = null; // remember which row opened so we can re-read its rect on close
+
+    // Ordered list of expandable project rows for prev/next navigation
+    const rows = Array.from(document.querySelectorAll('.project-row.btn-expand'));
+
+    function updateNavState() {
+      const i = rows.indexOf(activeRow);
+      prevBtn.disabled = i <= 0;
+      nextBtn.disabled = i < 0 || i >= rows.length - 1;
+    }
+
+    // Swap the iframe to an adjacent project without re-running the expand animation
+    function goTo(delta) {
+      if (isAnimating || !activeRow) return;
+      const i = rows.indexOf(activeRow);
+      const next = rows[i + delta];
+      if (!next) return;
+      activeRow = next;
+      iframe.style.transition = 'opacity 0.12s ease';
+      iframe.style.opacity = '0';
+      setTimeout(() => {
+        iframe.src = next.dataset.src;
+        iframe.style.opacity = '1';
+      }, 120);
+      updateNavState();
+    }
+
+    function afterTransition(fn) {
+      // Use a timeout equal to the CSS duration as a reliable fallback
+      // instead of relying on transitionend (which can silently not fire).
+      setTimeout(fn, DURATION);
+    }
+
+    function openCard(row) {
+      if (isAnimating) return;
+      isAnimating = true;
+      activeRow = row;
+
+      const rect = row.getBoundingClientRect();
+
+      // Snap to row position, no transition
+      expand.style.transition = 'none';
+      expand.style.top    = rect.top    + 'px';
+      expand.style.left   = rect.left   + 'px';
+      expand.style.width  = rect.width  + 'px';
+      expand.style.height = rect.height + 'px';
+      expand.style.borderRadius = '16px';
+      expand.classList.add('animating');
+
+      expand.offsetHeight; // force reflow
+
+      // Animate to near-fullscreen
+      expand.style.transition = '';
+      const gap = 12;
+      expand.style.top    = gap + 'px';
+      expand.style.left   = gap + 'px';
+      expand.style.width  = `calc(100vw - ${gap * 2}px)`;
+      expand.style.height = `calc(100vh - ${gap * 2}px)`;
+
+      scrim.classList.add('active');
+      document.body.classList.add('card-open');
+
+      afterTransition(() => {
+        iframe.src = row.dataset.src;
+        expand.classList.remove('animating');
+        expand.classList.add('open');
+        controls.classList.add('visible');
+        updateNavState();
+        isAnimating = false;
+      });
+    }
+
+    function closeCard() {
+      if (isAnimating || !activeRow) return;
+      isAnimating = true;
+
+      controls.classList.remove('visible');
+      expand.classList.remove('open');
+      scrim.classList.remove('active');
+
+      // Re-read the row's current position (scroll may have changed)
+      const rect = activeRow.getBoundingClientRect();
+      expand.style.top    = rect.top    + 'px';
+      expand.style.left   = rect.left   + 'px';
+      expand.style.width  = rect.width  + 'px';
+      expand.style.height = rect.height + 'px';
+      expand.style.borderRadius = '16px';
+
+      afterTransition(() => {
+        expand.classList.remove('animating');
+        expand.style.transition = 'none';
+        iframe.src = 'about:blank';
+        iframe.style.transition = '';
+        iframe.style.opacity = '';
+        document.body.classList.remove('card-open');
+        activeRow   = null;
+        isAnimating = false;
+      });
+    }
+
+    // The whole row is the click target; let the "See it live" link through
+    document.querySelectorAll('.project-row.btn-expand').forEach(row => {
+      row.addEventListener('click', e => {
+        if (e.target.closest('.link-secondary')) return;
+        e.preventDefault();
+        openCard(row);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeCard);
+    prevBtn.addEventListener('click', () => goTo(-1));
+    nextBtn.addEventListener('click', () => goTo(1));
+    scrim.addEventListener('click', closeCard);
+    document.addEventListener('keydown', e => {
+      if (!document.body.classList.contains('card-open')) return;
+      if (e.key === 'Escape') closeCard();
+      else if (e.key === 'ArrowLeft')  goTo(-1);
+      else if (e.key === 'ArrowRight') goTo(1);
+    });
   })();
 </script>
 </body>

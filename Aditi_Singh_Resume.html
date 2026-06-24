@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Aditi Singh — Resume</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Prata&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Prata&family=Gloock&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -74,6 +74,31 @@
   .hero {
     padding: 56px 0 40px;
     animation: fadeUp 0.7s ease both;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .hero-photo {
+    flex-shrink: 0;
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--rule);
+  }
+
+  @media (max-width: 600px) {
+    .hero { flex-direction: column; align-items: flex-start; gap: 20px; }
+  }
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    filter: grayscale(100%);
   }
   .no-anim .hero,
   .no-anim .section-row { animation: none; opacity: 1; transform: none; }
@@ -87,12 +112,21 @@
   }
 
   .hero-name {
-    font-family: 'Prata', serif;
+    font-family: 'Gloock', serif;
     font-size: clamp(48px, 7vw, 80px);
     font-weight: 400;
-    line-height: 1.04;
+    line-height: 1.2;
     letter-spacing: -0.02em;
     margin-bottom: 16px;
+    padding-bottom: 0.1em;
+    background: linear-gradient(135deg, #3a2436 0%, #8a4a4f 50%, #d9883f 100%);
+    background-size: 400% 400%;
+    background-position: 0% 0%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    transition: background-position 0.1s linear;
   }
 
   .hero-name em {
@@ -378,7 +412,7 @@
   <a class="nav-back" href="index.html">← Back</a>
   <ul class="nav-links">
     <li><a href="index.html">Work</a></li>
-    <li><a href="Aditi_Singh_Resume.html" class="active">Resume</a></li>
+    <li><a href="Aditi_Singh_Resume.html" class="active">About</a></li>
     <li><span class="nav-sep" aria-hidden="true"></span></li>
     <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
     <li><a href="https://github.com/A-ditiSingh" target="_blank" rel="noopener noreferrer">GitHub</a></li>
@@ -388,27 +422,10 @@
 <div class="page">
 
   <div class="hero">
+    <div class="hero-photo">
+      <img src="Images/Headshot_circle.png" alt="Portrait of Aditi Singh">
+    </div>
     <h1 class="hero-name">Hi! I'm Aditi.</h1>
-    <dl class="hero-meta">
-      <div class="meta-block">
-        <dt aria-label="Email"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 3.5l6 4.5 6-4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></dt>
-        <dd>
-          <a href="mailto:aditisingh.design@gmail.com">aditisingh.design@gmail.com</a><button class="copy-btn" aria-label="Copy email" title="Copy email" onclick="copyEmail(this)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="4.5" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.1"/><path d="M3 8.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button>
-        </dd>
-      </div>
-      <div class="meta-block">
-        <dt aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6v5M4 4v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M7.5 11V8.5c0-1.5 1-2.5 2-2.5s2 .5 2 2.5V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 6v5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></dt>
-        <dd><a href="https://linkedin.com/in/aditising" target="_blank">LinkedIn</a></dd>
-      </div>
-      <div class="meta-block">
-        <dt aria-label="GitHub"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1C3.91 1 1 3.91 1 7.5c0 2.87 1.86 5.3 4.44 6.16.32.06.44-.14.44-.31v-1.08c-1.8.39-2.18-.87-2.18-.87-.3-.75-.72-.95-.72-.95-.59-.4.04-.39.04-.39.65.05 1 .67 1 .67.58 1 1.53.71 1.9.54.06-.42.23-.71.41-.87-1.44-.16-2.95-.72-2.95-3.2 0-.71.25-1.28.67-1.74-.07-.16-.29-.82.06-1.71 0 0 .55-.18 1.8.67a6.27 6.27 0 0 1 1.64-.22c.56 0 1.12.07 1.64.22 1.25-.85 1.8-.67 1.8-.67.35.89.13 1.55.06 1.71.42.46.67 1.03.67 1.74 0 2.49-1.52 3.04-2.96 3.2.23.2.44.59.44 1.19v1.77c0 .17.11.37.44.31A6.504 6.504 0 0 0 14 7.5C14 3.91 11.09 1 7.5 1z" fill="currentColor"/></svg></dt>
-        <dd><a href="https://github.com/A-ditiSingh" target="_blank">GitHub</a></dd>
-      </div>
-      <div class="meta-block">
-        <dt aria-label="Google Scholar"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1L1 5l6.5 4L14 5 7.5 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M3 6.5v4c0 1.1 2 2.5 4.5 2.5S12 11.6 12 10.5v-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 5v3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></dt>
-        <dd><a href="https://scholar.google.ca/citations?user=lB6rtdAAAAAJ&hl=en" target="_blank">Google Scholar</a></dd>
-      </div>
-    </dl>
   </div>
 
   <!-- ABOUT -->
@@ -417,6 +434,26 @@
     <div class="section-body about-bio">
       <p>I'm currently at Highspot designing how sellers find content, how teams understand performance, and how AI surfaces answers people can act on.</p>
       <p>I'm a builder at heart and bring that maker mindset to both my work and hobbies. My approach to design is shaped by a background in HCI research, where I built interactive prototypes, ran usability tests, and conducted statistical analysis. Before that, I practiced as an architect, working with tradespeople on site to bring designs to life.</p>
+      <dl class="hero-meta" style="margin-top: 20px; margin-bottom: 4px;">
+        <div class="meta-block">
+          <dt aria-label="Email"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 3.5l6 4.5 6-4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></dt>
+          <dd>
+            <a href="mailto:aditisingh.design@gmail.com">aditisingh.design@gmail.com</a><button class="copy-btn" aria-label="Copy email" title="Copy email" onclick="copyEmail(this)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="4.5" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.1"/><path d="M3 8.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button>
+          </dd>
+        </div>
+        <div class="meta-block">
+          <dt aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6v5M4 4v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M7.5 11V8.5c0-1.5 1-2.5 2-2.5s2 .5 2 2.5V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 6v5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></dt>
+          <dd><a href="https://linkedin.com/in/aditising" target="_blank">LinkedIn</a></dd>
+        </div>
+        <div class="meta-block">
+          <dt aria-label="GitHub"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1C3.91 1 1 3.91 1 7.5c0 2.87 1.86 5.3 4.44 6.16.32.06.44-.14.44-.31v-1.08c-1.8.39-2.18-.87-2.18-.87-.3-.75-.72-.95-.72-.95-.59-.4.04-.39.04-.39.65.05 1 .67 1 .67.58 1 1.53.71 1.9.54.06-.42.23-.71.41-.87-1.44-.16-2.95-.72-2.95-3.2 0-.71.25-1.28.67-1.74-.07-.16-.29-.82.06-1.71 0 0 .55-.18 1.8.67a6.27 6.27 0 0 1 1.64-.22c.56 0 1.12.07 1.64.22 1.25-.85 1.8-.67 1.8-.67.35.89.13 1.55.06 1.71.42.46.67 1.03.67 1.74 0 2.49-1.52 3.04-2.96 3.2.23.2.44.59.44 1.19v1.77c0 .17.11.37.44.31A6.504 6.504 0 0 0 14 7.5C14 3.91 11.09 1 7.5 1z" fill="currentColor"/></svg></dt>
+          <dd><a href="https://github.com/A-ditiSingh" target="_blank">GitHub</a></dd>
+        </div>
+        <div class="meta-block">
+          <dt aria-label="Google Scholar"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1L1 5l6.5 4L14 5 7.5 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M3 6.5v4c0 1.1 2 2.5 4.5 2.5S12 11.6 12 10.5v-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 5v3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></dt>
+          <dd><a href="https://scholar.google.ca/citations?user=lB6rtdAAAAAJ&hl=en" target="_blank">Google Scholar</a></dd>
+        </div>
+      </dl>
       <a class="btn-download" href="Images/Aditi_Singh_Resume.pdf" download="Aditi_Singh_Resume.pdf" onclick="downloadResume(event)" style="margin-top: 16px; width: fit-content;">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
@@ -552,6 +589,15 @@
 
   document.querySelectorAll('a[href="index.html"]')
     .forEach(a => a.addEventListener('click', () => sessionStorage.setItem('portfolio_nav', '1')));
+
+  // Shift hero name gradient on scroll
+  const heroName = document.querySelector('.hero-name');
+  if (heroName) {
+    window.addEventListener('scroll', () => {
+      const pos = Math.min(100, window.scrollY * 0.8);
+      heroName.style.backgroundPosition = `${pos}% ${pos}%`;
+    }, { passive: true });
+  }
 
   async function downloadResume(e) {
     // Force a real download even when the browser would otherwise open the PDF inline (Safari, in-app browsers, etc.)
