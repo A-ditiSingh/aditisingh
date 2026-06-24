@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Expand Animation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e0e;
+    --card-radius: 16px;
+    --easing: cubic-bezier(0.76, 0, 0.24, 1);
+    --duration: 0.55s;
+  }
+
+  body {
+    background: var(--bg);
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  /* ── Grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .card {
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    /* store bounding box for origin calculation */
+  }
+
+  .card--wide { grid-column: 1 / -1; }
+
+  /* Card inner — this is what we animate */
+  .card__inner {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Thumbnail appearances ── */
+  .card--kitchen {
+    background: #1a1a1a;
+    height: 240px;
+  }
+  .card--kitchen .card__inner {
+    background: linear-gradient(160deg, #111 0%, #2a2a2a 100%);
+    display: flex;
+    align-items: flex-end;
+  }
+  .card--kitchen .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    /* placeholder gradient */
+    background: linear-gradient(135deg, #1e3a2a 0%, #0d1f15 100%);
+  }
+
+  .card--amazon {
+    background: #1c0e0a;
+    height: 300px;
+  }
+  .card--amazon .card__inner {
+    background: radial-gradient(ellipse at 30% 70%, #3a1205 0%, #0d0503 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card--whatif {
+    background: #c8f000;
+    height: 300px;
+  }
+  .card--whatif .card__inner {
+    background: #c8f000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Card labels */
+  .card__labels {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    z-index: 1;
+  }
+  .card--whatif .card__labels { color: rgba(0,0,0,0.5); }
+
+  .card__title {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .card__meta {
+    font-size: 12px;
+    opacity: 0.6;
+  }
+
+  /* Amazon logo placeholder */
+  .amazon-logo {
+    font-size: 36px;
+    font-weight: 700;
+    color: #ff9900;
+    letter-spacing: -1px;
+  }
+  .amazon-logo span {
+    display: block;
+    font-size: 11px;
+    color: #ff9900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* What-if placeholder */
+  .whatif-symbol {
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(0,0,0,0.15);
+    user-select: none;
+  }
+
+  /* Kitchen placeholder */
+  .kitchen-bg {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #0d2018 0%, #1a3525 50%, #0a1510 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    opacity: 0.6;
+  }
+
+  /* ── Expanded overlay ── */
+  #overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    /* background scrim */
+    background: rgba(0,0,0,0);
+    transition: background var(--duration) var(--easing);
+  }
+  #overlay.active {
+    pointer-events: all;
+    background: rgba(0,0,0,0.6);
+  }
+
+  /* The flying card clone */
+  #expanded-card {
+    position: fixed;
+    z-index: 101;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    will-change: transform, border-radius;
+    transition:
+      top var(--duration) var(--easing),
+      left var(--duration) var(--easing),
+      width var(--duration) var(--easing),
+      height var(--duration) var(--easing),
+      border-radius var(--duration) var(--easing);
+    display: none;
+  }
+
+  #expanded-card.animating,
+  #expanded-card.open {
+    display: block;
+  }
+
+  /* Expanded card content */
+  .expanded-content {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    scrollbar-width: none;
+  }
+  .expanded-content::-webkit-scrollbar { display: none; }
+
+  #expanded-card.open .expanded-content {
+    opacity: 1;
+    transition: opacity 0.25s ease 0.3s;
+  }
+
+  /* Expanded card header (thumbnail area) */
+  .exp-hero {
+    height: 360px;
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 32px;
+  }
+
+  .exp-body {
+    padding: 40px 48px;
+    background: #111;
+    min-height: 400px;
+  }
+
+  .exp-body h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .exp-body .exp-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 24px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .exp-body p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.7);
+    max-width: 640px;
+  }
+
+  /* ── Top bar (close + next) ── */
+  #top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 102;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  #top-bar.visible {
+    pointer-events: all;
+    opacity: 1;
+    transition: opacity 0.25s ease 0.3s;
+  }
+
+  .btn-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    transition: background 0.15s;
+  }
+  .btn-close:hover { background: rgba(255,255,255,0.2); }
+
+  .btn-next {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 14px 8px 10px;
+    border-radius: 100px;
+    backdrop-filter: blur(8px);
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-next:hover { background: rgba(255,255,255,0.2); }
+
+  .next-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2ecc71;
+    flex-shrink: 0;
+  }
+
+  /* Card hover state */
+  .card {
+    transition: transform 0.2s ease;
+  }
+  .card:hover { transform: scale(0.985); }
+  .card:active { transform: scale(0.975); }
+
+  /* Page intro text */
+  .page-header {
+    max-width: 1100px;
+    margin: 0 auto 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .page-header h1 {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 400;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Card expand experiment — click any card</h1>
+</div>
+
+<!-- ── Card Grid ── -->
+<div class="grid">
+
+  <!-- Kitchen Experiment (wide) -->
+  <div class="card card--wide card--kitchen"
+       data-id="kitchen"
+       data-next="amazon">
+    <div class="card__inner">
+      <div class="kitchen-bg">🍳</div>
+    </div>
+    <div class="card__labels">
+      <span class="card__title">Kitchen Experiment</span>
+      <span class="card__meta">Human Computer Interaction · Research Through Design</span>
+    </div>
+  </div>
+
+  <!-- Amazon -->
+  <div class="card card--amazon"
+       data-id="amazon"
+       data-next="whatif">
+    <div class="card__inner">
+      <div class="amazon-logo">amazon<span>↗</span></div>
+    </div>
+    <div class="card__labels">
+      <span class="card__title">Amazon AI Interaction Lab</span>
+      <span class="card__meta">LLM as design material</span>
+    </div>
+  </div>
+
+  <!-- What if? -->
+  <div class="card card--whatif"
+       data-id="whatif"
+       data-next="kitchen">
+    <div class="card__inner">
+      <div class="whatif-symbol">?</div>
+    </div>
+    <div class="card__labels" style="color:rgba(0,0,0,0.5)">
+      <span class="card__title" style="color:#000">What if?</span>
+      <span class="card__meta" style="color:rgba(0,0,0,0.5)">Interaction Design · Art Direction</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Overlay scrim ── -->
+<div id="overlay"></div>
+
+<!-- ── Top bar ── -->
+<div id="top-bar">
+  <button class="btn-close" id="btn-close" aria-label="Close">✕</button>
+  <button class="btn-next" id="btn-next">
+    <span class="next-dot"></span>
+    <span id="next-label">Next</span>
+  </button>
+</div>
+
+<!-- ── Expanded card (positioned dynamically) ── -->
+<div id="expanded-card">
+  <div class="expanded-content" id="expanded-content">
+    <!-- injected per card -->
+  </div>
+</div>
+
+<script>
+  const cards = {
+    kitchen: {
+      color: '#0d2018',
+      heroColor: 'linear-gradient(160deg, #0d2018 0%, #1a3525 100%)',
+      heroEmoji: '🍳',
+      title: 'When touch is out of reach',
+      meta: ['8 weeks project (early 2023)', 'Human Computer Interaction', 'Research Through Design'],
+      body: `<p>Amidst the sizzle and sweat, grime-coated hands render the use of touch devices not only inconvenient but distinctly uncomfortable. This prototype-driven project proposes a multimodal interface for recipe navigation in the kitchen.</p>
+      <br><p>Leveraging iOS TrueDepth Camera, we can detect gesture distances and prevent unwanted triggers. By holding their hands in front of their device, users can toggle the play state. Users can scrub through the video by tilting their hand to one side after activating control mode.</p>
+      <br><p>Voice queries enable users to handle cooking tasks and look up recipes hands-free when their hands are occupied.</p>`
+    },
+    amazon: {
+      color: '#0d0503',
+      heroColor: 'radial-gradient(ellipse at 30% 70%, #3a1205 0%, #0d0503 100%)',
+      heroContent: '<div style="font-size:52px;font-weight:700;color:#ff9900;letter-spacing:-2px">amazon</div>',
+      title: 'LLM as design material',
+      meta: ['Full time · since fall 2025', 'Design Engineering'],
+      body: `<p>In late 2025, I joined a small team of mighty engineers and designers at Amazon AI Interaction Lab. Pushing code alongside my engineering peers, I've built a variety of prototypes that expand thinking around hardware and software initiatives.</p>
+      <br><p>The product is under active development.</p>`
+    },
+    whatif: {
+      color: '#c8f000',
+      heroColor: '#c8f000',
+      heroContent: '<div style="font-size:120px;font-weight:900;color:rgba(0,0,0,0.1)">?</div>',
+      textColor: '#000',
+      title: 'What if?',
+      meta: ['Interaction Design', 'Art Direction'],
+      body: `<p style="color:rgba(0,0,0,0.6)">An exploration into speculative design and interaction futures. A collection of provocations that ask: what if our interfaces worked differently?</p>
+      <br><p style="color:rgba(0,0,0,0.6)">These experiments push the boundaries of conventional UI patterns to imagine alternative futures.</p>`
+    }
+  };
+
+  const expandedCard = document.getElementById('expanded-card');
+  const expandedContent = document.getElementById('expanded-content');
+  const overlay = document.getElementById('overlay');
+  const topBar = document.getElementById('top-bar');
+  const btnClose = document.getElementById('btn-close');
+  const btnNext = document.getElementById('btn-next');
+  const nextLabel = document.getElementById('next-label');
+
+  let currentId = null;
+  let isAnimating = false;
+
+  function getCardEl(id) {
+    return document.querySelector(`[data-id="${id}"]`);
+  }
+
+  function openCard(id, fromRect) {
+    if (isAnimating) return;
+    isAnimating = true;
+    currentId = id;
+
+    const data = cards[id];
+    const cardEl = getCardEl(id);
+    const nextId = cardEl.dataset.next;
+    const nextData = cards[nextId];
+
+    // Update next label
+    nextLabel.textContent = nextData ? nextData.title.split(' ').slice(0,3).join(' ') + '…' : 'Next';
+
+    // Build content
+    const tc = data.textColor || '#fff';
+    const metaHtml = data.meta.map(m => `<span>${m}</span>`).join('');
+    expandedContent.innerHTML = `
+      <div class="exp-hero" style="background:${data.heroColor};align-items:center;justify-content:center;">
+        ${data.heroContent || `<div style="font-size:80px">${data.heroEmoji}</div>`}
+      </div>
+      <div class="exp-body" style="background:${data.color === '#c8f000' ? '#c8f000' : '#111'}">
+        <h2 style="color:${tc}">${data.title}</h2>
+        <div class="exp-meta" style="color:${tc === '#000' ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)'}">${metaHtml}</div>
+        ${data.body}
+      </div>
+    `;
+
+    // Start from card's bounding rect
+    const rect = fromRect || cardEl.getBoundingClientRect();
+
+    // Position at card's exact position
+    expandedCard.style.top = rect.top + 'px';
+    expandedCard.style.left = rect.left + 'px';
+    expandedCard.style.width = rect.width + 'px';
+    expandedCard.style.height = rect.height + 'px';
+    expandedCard.style.borderRadius = '16px';
+    expandedCard.style.background = data.heroColor;
+    expandedCard.style.transition = 'none';
+    expandedCard.classList.add('animating');
+
+    // Force reflow
+    expandedCard.offsetHeight;
+
+    // Animate to full screen
+    expandedCard.style.transition = `top var(--duration) var(--easing), left var(--duration) var(--easing), width var(--duration) var(--easing), height var(--duration) var(--easing), border-radius var(--duration) var(--easing)`;
+
+    const margin = 12;
+    expandedCard.style.top = margin + 'px';
+    expandedCard.style.left = margin + 'px';
+    expandedCard.style.width = `calc(100vw - ${margin * 2}px)`;
+    expandedCard.style.height = `calc(100vh - ${margin * 2}px)`;
+    expandedCard.style.borderRadius = '20px';
+
+    overlay.classList.add('active');
+
+    expandedCard.addEventListener('transitionend', () => {
+      expandedCard.classList.add('open');
+      topBar.classList.add('visible');
+      isAnimating = false;
+    }, { once: true });
+  }
+
+  function closeCard(targetRect) {
+    if (isAnimating || !currentId) return;
+    isAnimating = true;
+
+    topBar.classList.remove('visible');
+    expandedCard.classList.remove('open');
+    overlay.classList.remove('active');
+
+    const cardEl = getCardEl(currentId);
+    const rect = targetRect || cardEl.getBoundingClientRect();
+
+    // Animate back to card position
+    expandedCard.style.top = rect.top + 'px';
+    expandedCard.style.left = rect.left + 'px';
+    expandedCard.style.width = rect.width + 'px';
+    expandedCard.style.height = rect.height + 'px';
+    expandedCard.style.borderRadius = '16px';
+
+    expandedCard.addEventListener('transitionend', () => {
+      expandedCard.classList.remove('animating');
+      currentId = null;
+      isAnimating = false;
+    }, { once: true });
+  }
+
+  // Card click → open
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const rect = card.getBoundingClientRect();
+      openCard(card.dataset.id, rect);
+    });
+  });
+
+  // Close button
+  btnClose.addEventListener('click', closeCard);
+
+  // Overlay click → close
+  overlay.addEventListener('click', closeCard);
+
+  // Next button → cross-fade to next card
+  btnNext.addEventListener('click', () => {
+    if (!currentId || isAnimating) return;
+    const cardEl = getCardEl(currentId);
+    const nextId = cardEl.dataset.next;
+    if (!nextId) return;
+
+    // Fade out content, switch, fade in
+    expandedContent.style.opacity = '0';
+    expandedContent.style.transition = 'opacity 0.18s ease';
+
+    setTimeout(() => {
+      currentId = nextId;
+      const data = cards[nextId];
+      const nextCardEl = getCardEl(nextId);
+      const nextNextId = nextCardEl.dataset.next;
+      const nextNextData = cards[nextNextId];
+
+      // Update next label
+      nextLabel.textContent = nextNextData ? nextNextData.title.split(' ').slice(0,3).join(' ') + '…' : 'Next';
+
+      // Update background
+      expandedCard.style.background = data.heroColor;
+
+      // Rebuild content
+      const tc = data.textColor || '#fff';
+      const metaHtml = data.meta.map(m => `<span>${m}</span>`).join('');
+      expandedContent.innerHTML = `
+        <div class="exp-hero" style="background:${data.heroColor};align-items:center;justify-content:center;">
+          ${data.heroContent || `<div style="font-size:80px">${data.heroEmoji}</div>`}
+        </div>
+        <div class="exp-body" style="background:${data.color === '#c8f000' ? '#c8f000' : '#111'}">
+          <h2 style="color:${tc}">${data.title}</h2>
+          <div class="exp-meta" style="color:${tc === '#000' ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)'}">${metaHtml}</div>
+          ${data.body}
+        </div>
+      `;
+
+      // Scroll back to top
+      expandedContent.scrollTop = 0;
+      expandedContent.style.opacity = '1';
+      expandedContent.style.transition = 'opacity 0.22s ease';
+    }, 180);
+  });
+
+  // Escape key → close
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeCard();
+  });
+</script>
+</body>
+</html>

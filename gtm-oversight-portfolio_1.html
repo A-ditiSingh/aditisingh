@@ -24,6 +24,32 @@
   }
   .section-full .section-body { max-width: none; }
 
+  /* INLINE SLASH HEADER — "Label / Title" on one line */
+  .ss-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-bottom: 20px;
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-size: clamp(22px, 2.8vw, 36px);
+  }
+  .ss-head .ss-head-label { color: var(--mid); }
+  .ss-head .ss-head-sep {
+    color: var(--rule);
+    margin: 0 0.35em;
+    font-weight: 300;
+  }
+  .ss-head .ss-head-title { color: var(--ink); }
+  .ss-head.compact { font-size: clamp(22px, 2.8vw, 36px); margin-bottom: 16px; }
+  @media (max-width: 768px) {
+    .ss-head { font-size: clamp(20px, 5vw, 28px); }
+    .ss-head.compact { font-size: clamp(20px, 5vw, 28px); }
+  }
+
   /* HERO */
   .hero-title { margin-bottom: 16px; }
   .hero-desc { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 40px; }
@@ -239,7 +265,7 @@
 </nav>
 
 <div class="hero fade-in">
-  <h1 class="hero-title">Transforming fragmented data into insights</h1>
+  <h1 class="hero-title">Optimizing business initiatives by transforming fragmented data into insights</h1>
   <div class="badge-row">
     <span class="badge">Highspot</span>
     <span class="badge">0 to 1</span>
@@ -267,20 +293,54 @@
 
 <div class="content">
 
-  <!-- PROBLEM -->
+  <!-- CONTEXT -->
   <div class="section-full fade-in">
-    <div class="section-label">Problem</div>
-    <h2 class="section-title">Go-to-market teams have no visibility into whether their strategy is driving revenue</h2>
-    <div class="ss-signal-grid">
+    <h2 class="ss-head"><span class="ss-head-label">Context</span><span class="ss-head-sep">/</span><span class="ss-head-title">What is a business Initiative</span></h2>
+    <div class="section-body">
+      <p>A business initiative is a coordinated effort across sales, marketing, and enablement to bring a product, feature, or capability to market. It defines what the messaging should be, and how teams will execute together to drive adoption and revenue.</p>
+    </div>
+  </div>
+
+  <!-- USER PROBLEM -->
+  <div class="section-full fade-in">
+    <h2 class="ss-head"><span class="ss-head-label">User Problem</span><span class="ss-head-sep">/</span><span class="ss-head-title">What problems do initiative owners face</span></h2>
+    <div class="ss-signal-grid" style="grid-template-columns: 1fr;">
       <div class="signal-card">
-        <div class="t-num">User problem</div>
         <div class="t-title">Initiative owners cannot tell whether reps are executing or whether it is working</div>
         <div class="signal-row">Teams invest in plays, training, and content to run strategic initiatives — but have no way to track whether reps are following through or whether any of it is driving revenue.</div>
       </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS OPPORTUNITY -->
+  <div class="section-full fade-in">
+    <h2 class="ss-head"><span class="ss-head-label">Business Opportunity</span><span class="ss-head-sep">/</span><span class="ss-head-title">Why Highspot should solve the user problem</span></h2>
+    <div class="ss-signal-grid" style="grid-template-columns: 1fr;">
       <div class="signal-card">
-        <div class="t-num">Business opportunity</div>
         <div class="t-title">Closing this gap makes Highspot indispensable when companies are cutting costs</div>
         <div class="signal-row">When every software purchase needs to justify itself, a platform that connects rep activity to revenue outcomes is harder to cut. This moves Highspot from content management to a revenue optimization layer.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY ROLE -->
+  <div class="section-full fade-in">
+    <h2 class="ss-head"><span class="ss-head-label">My role</span><span class="ss-head-sep">/</span><span class="ss-head-title">What I did to help Highspot solve this problem</span></h2>
+    <div class="section-body">
+      <p>As the lead designer on the project, I partnered with my product manager to uncover the user insights that defined the experience, then drove the work end to end — from research, through alignment, to delivery.</p>
+    </div>
+    <div class="chain" style="margin-top: 24px;">
+      <div class="chain-item">
+        <div class="chain-num">01</div>
+        <div class="chain-text"><p><strong style="color:var(--ink);font-weight:500;">Uncovered user insights.</strong> Partnered with my product manager and conducted user feedback sessions to surface the insights that defined the experience.</p></div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num">02</div>
+        <div class="chain-text"><p><strong style="color:var(--ink);font-weight:500;">Drove alignment.</strong> Led the alignment sessions with partner crews and leadership to agree on what the product should measure and how.</p></div>
+      </div>
+      <div class="chain-item">
+        <div class="chain-num">03</div>
+        <div class="chain-text"><p><strong style="color:var(--ink);font-weight:500;">Ensured feasibility and quality.</strong> Coordinated with engineering to assess feasibility and ensure the final experience shipped at quality.</p></div>
       </div>
     </div>
   </div>
@@ -292,8 +352,7 @@
     <div style="margin-top: 80px;">
       <div class="reframe-grid">
         <div>
-          <div class="section-label">Zero to One — The Initiative Scorecard</div>
-          <h3 style="font-family: 'Lora', serif; font-size: 32px; font-weight: 400; line-height: 1.25; color: var(--ink); margin: 12px 0 20px;">Aligning GTM and leadership on what the scorecard should measure</h3>
+          <h3 class="ss-head"><span class="ss-head-label">Step 1</span><span class="ss-head-sep">/</span><span class="ss-head-title">Driving alignment on what the scorecard should measure</span></h3>
           <div class="section-body">
             <p>The scorecard was the most contested artefact in the product. I used low-fi designs as an alignment tool across GTM and leadership, driving agreement on three things: which metrics to include, how to track progress against a goal, and how to organize the metrics as a causal chain — Enablement → Engagement → Business Outcomes — so customers could trace rep behavior through to revenue impact.</p>
           </div>
@@ -312,8 +371,7 @@
 
     <!-- 03 The Three-Phase Model -->
     <div style="margin-top: 96px;">
-      <div class="section-label">Zero to One — End to End Flow</div>
-      <h3 style="font-family: 'Lora', serif; font-size: 32px; font-weight: 400; line-height: 1.25; color: var(--ink); margin: 12px 0 20px; max-width: 760px;">Creating a three-phase model for running a go-to-market initiative</h3>
+      <h3 class="ss-head" style="max-width: 900px;"><span class="ss-head-label">Step 2</span><span class="ss-head-sep">/</span><span class="ss-head-title">Designing the end-to-end flow for defining, configuring, and tracking initiatives</span></h3>
       <div class="section-body">
         <p>Three phases — Define, Configure, Track — connected through a single Initiative object. The case study below covers two pivots made after a 10-customer pilot.</p>
       </div>
@@ -325,7 +383,7 @@
               <span class="gtm-col-num">01</span>
               <h3 class="gtm-col-title">Define</h3>
             </div>
-            <p class="gtm-col-desc">Articulate the initiative and its strategic intent — the problem, the audience, the plays.</p>
+            <p class="gtm-col-desc">Articulate the initiative and its strategic intent: the problem, the audience, the plays.</p>
             <div class="gtm-col-img">
               <img src="Images/define.png" alt="Define — initiative setup">
             </div>
@@ -358,8 +416,7 @@
 
  <!-- CUSTOMER FEEDBACK SUMMARY -->
  <div class="section-full fade-in">
-  <div class="section-label">Design Pivots between pilot and launch</div>
-  <h2 class="section-title">Streamlining the creation experience & reframing the correlation metric</h2>
+  <h2 class="ss-head"><span class="ss-head-label">Early user feedback</span><span class="ss-head-sep">/</span><span class="ss-head-title">Initiatives are hard to create and the main metric is hard to understand</span></h2>
   <div class="section-body">
     <p>Pilot feedback from 10 customers surfaced two areas that needed substantial redesign before launch.</p>
   </div>
@@ -398,8 +455,7 @@
     </div>
   </div>
   <div class="section-text">
-    <div class="section-label">Pivot 01 — Revisiting the creation experience</div>
-    <h2 class="section-title">Reducing the barrier to entry for defining an initiative</h2>
+    <h2 class="ss-head compact"><span class="ss-head-label">Pivot 01</span><span class="ss-head-sep">/</span><span class="ss-head-title">Reducing the barrier to entry for defining an initiative</span></h2>
     <div class="section-body">
       <p>The creation experience was built on an existing WYSIWYG editor. Pilot feedback showed users were making formatting decisions instead of focusing on the strategic content of the initiative.</p>
     </div>
@@ -438,8 +494,7 @@
     <p class="img-caption">Business Outcomes section — original framing</p>
   </div>
   <div class="section-text">
-    <div class="section-label">Pivot 02 — Reframing the correlation metric</div>
-    <h2 class="section-title">Reframing the key metric for visibility and clarity</h2>
+    <h2 class="ss-head compact"><span class="ss-head-label">Pivot 02</span><span class="ss-head-sep">/</span><span class="ss-head-title">Reframing the main metric for visibility and clarity</span></h2>
     <div class="section-body">
       <p>The scorecard had a metric correlating activity completion with revenue outcomes. I placed it in the Business Outcomes section — but pilot customers couldn't understand it without explanation.</p>
     </div>
@@ -464,8 +519,7 @@
 <div class="section-full fade-in">
   <div class="reframe-grid">
     <div>
-      <div class="section-label">Reframe</div>
-      <h2 class="section-title">Renaming and reorganizing the sections to host the metric</h2>
+      <h2 class="ss-head compact"><span class="ss-head-label">Reframe</span><span class="ss-head-sep">/</span><span class="ss-head-title">Renaming and reorganizing the sections to host the metric</span></h2>
       <div class="section-body">
         <p>We created a dedicated "Business Drivers" section to host the metric, giving it the emphasis and framing it needed. The section makes explicit that these are the rep activities correlated with revenue outcomes.</p>
       </div>
@@ -485,8 +539,7 @@
 
 <!-- DOWNSTREAM IMPACT -->
 <div class="section-full fade-in">
-  <div class="section-label">Downstream impact of reframe</div>
-  <h2 class="section-title">Revisiting business drivers charts and configuration with an activity-first lens</h2>
+  <h2 class="ss-head"><span class="ss-head-label">Downstream impact</span><span class="ss-head-sep">/</span><span class="ss-head-title">Revisiting business drivers charts and configuration with an activity-first lens</span></h2>
   <div class="section-body">
   <p>Shifting to an activity-first lens required updating the chart framing and configuration flow for consistency.</p>
 </div>
@@ -525,8 +578,7 @@
 
   <!-- IMPACT -->
   <div class="section-full fade-in">
-    <div class="section-label">Results</div>
-    <h2 class="section-title">Initiatives had measurable impact across customer events, sales pipeline, and product adoption</h2>
+    <h2 class="ss-head"><span class="ss-head-label">Results</span><span class="ss-head-sep">/</span><span class="ss-head-title">Initiatives had measurable impact across customer events, sales pipeline, and product adoption</span></h2>
     <div class="chain" style="margin-top: 24px;">
       <div class="chain-item">
         <div class="chain-num" style="width:48px; white-space:nowrap;">Oct '25</div>

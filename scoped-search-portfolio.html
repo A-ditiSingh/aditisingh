@@ -41,6 +41,28 @@
     border-radius: 0;
   }
 
+  /* INLINE SLASH HEADER — "Label / Title" on one line */
+  .ss-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-bottom: 20px;
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-size: clamp(30px, 4vw, 52px);
+  }
+  .ss-head .ss-head-label { color: var(--mid); }
+  .ss-head .ss-head-sep { color: var(--rule); margin: 0 0.35em; font-weight: 300; }
+  .ss-head .ss-head-title { color: var(--ink); }
+  .ss-head.compact { font-size: clamp(22px, 2.8vw, 30px); margin-bottom: 16px; }
+  @media (max-width: 768px) {
+    .ss-head { font-size: clamp(26px, 7vw, 34px); }
+    .ss-head.compact { font-size: clamp(20px, 5vw, 26px); }
+  }
+
   /* CHAIN */
   .chain { margin-top: 20px; }
   .chain-item { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
@@ -221,8 +243,7 @@
 
 <!-- CONTEXT -->
 <div class="ss-problem-section fade-in">
-  <div class="section-label">Problem</div>
-  <h2 class="section-title" style="max-width: 100%;">Customers were dissatisfied with the search relevance and were at risk of churning</h2>
+  <h2 class="ss-head" style="max-width: 100%;"><span class="ss-head-label">Problem</span><span class="ss-head-sep">/</span><span class="ss-head-title">Customers were dissatisfied with the search relevance and were at risk of churning</span></h2>
   <div class="ss-signal-grid" style="margin-top: 40px;">
     <div class="signal-card">
       <div class="t-num">Business problem</div>
@@ -232,7 +253,7 @@
       <div class="signal-row">Search submission-to-click conversion rates in these accounts were lower than the average, indicating that users were not finding the items they searched for.</div>
     </div>
     <div class="signal-card">
-      <div class="t-num">User Needs</div>
+      <div class="t-num">User needs</div>
       <div class="t-title">Filtering facets did not match how reps thought about narrowing search results</div>
       <div class="signal-row">Sales reps wanted to filter by high-level organizational constructs such as sub-org, region, and product line.</div>
       <div class="signal-row">The system only supported more granular filtering facets that were tied to the spots and lists the items were added to.</div>
@@ -244,8 +265,7 @@
   <!-- FOUNDATIONAL WORK -->
   <div class="section-row fade-in">
     <div class="section-text">
-      <div class="section-label">Foundational work</div>
-      <h2 class="section-title">We needed a higher-level filtering construct to match how sellers search</h2>
+      <h2 class="ss-head compact"><span class="ss-head-label">Foundational work</span><span class="ss-head-sep">/</span><span class="ss-head-title">Introducing a new filtering category</span></h2>
       <div class="section-body">
         <p>Research showed a consistent rep behavior: when results weren't relevant, reps wanted to narrow by broad organizational areas — business units, regions, or product lines. The platform had no way to support this, so the filtering path didn't exist.</p>
       </div>
@@ -264,8 +284,7 @@
       </div>
     </div>
     <div class="section-text">
-      <div class="section-label">Content collection</div>
-      <h2 class="section-title">Designing a centralized method to tag content into groups that match how reps search</h2>
+      <h2 class="ss-head compact"><span class="ss-head-label">Content collection</span><span class="ss-head-sep">/</span><span class="ss-head-title">Designing a centralized method to tag content into groups that match how reps search</span></h2>
       <div class="chain">
         <div class="chain-item">
           <div class="chain-num">01</div>
@@ -318,8 +337,7 @@
       </div>
     </div>
     <div class="section-text">
-      <div class="section-label">The filtering experience</div>
-      <h2 class="section-title">Evaluating two interaction models for filtering</h2>
+      <h2 class="ss-head compact"><span class="ss-head-label">Exploration</span><span class="ss-head-sep">/</span><span class="ss-head-title">Evaluating two interaction models for filtering</span></h2>
       <div class="section-body">
         <p>I explored two models: <strong>scoping</strong> before submitting a query, and <strong>filtering</strong> post-search. Scoping in the dropdown offered quick discoverability, but designing it for the full range of use cases made the interaction complex. I used a working prototype to surface that complexity and align the team on two principles: scoping should stay quick and simple, and the search dropdown is high-value real estate that shouldn't be cluttered.</p>
       </div>
@@ -329,10 +347,9 @@
 
   <!-- FINDING -->
   <div class="ss-section fade-in">
-    <div class="section-label">Customer insight that shaped the design</div>
+    <h2 class="ss-head"><span class="ss-head-label">User Insight</span><span class="ss-head-sep">/</span><span class="ss-head-title">Promoting top 3 content collections will address most user scenarios</span></h2>
     <div class="ss-section-two-col">
       <div>
-        <h2 class="section-title">Returning to the users to simplify the interaction</h2>
         <div class="section-body">
           <p>To keep pre-submission scoping simple, my PM and I returned to users with a focused question: how many collections do reps actually access when searching? Even users with access to many consistently engaged with only 1–3. This established the core design principle: <strong>make frequent tasks easy, and less frequent tasks possible.</strong></p>
         </div>
@@ -348,8 +365,7 @@
 
   <!-- DESIGN IMPLICATION -->
   <div class="ss-section fade-in">
-    <div class="section-label">Design implication of the customer insight</div>
-    <h2 class="section-title">Designing the search dropdown for frequent tasks and filters for scalability</h2>
+    <h2 class="ss-head"><span class="ss-head-label">Design implication</span><span class="ss-head-sep">/</span><span class="ss-head-title">Designing the search dropdown for frequent tasks and filters for scalability</span></h2>
     <!-- Two-column: each with title, body, image -->
     <div class="ss-signal-grid" style="margin-top: 40px;">
       <div>
@@ -376,10 +392,9 @@
 
   <!-- SEARCH STATES — full width -->
   <div class="ss-section fade-in">
-    <div class="section-label">Scoping queries in the search dropdown</div>
+    <h2 class="ss-head"><span class="ss-head-label">Design advocacy</span><span class="ss-head-sep">/</span><span class="ss-head-title">Modernizing the search experience alongside the feature work</span></h2>
     <div class="ss-two-col ss-state-model-intro">
       <div>
-        <h2 class="section-title">Modernizing the search dropdown</h2>
         <div class="section-body">
           <p>The existing dropdown disappeared while suggestions loaded, breaking continuity. Adding scoping created an opportunity to rethink this. I mapped the interaction into four states and designed deliberate transitions between them so the dropdown feels responsive throughout.</p>
         </div>
@@ -425,8 +440,7 @@
 
 <!-- PROTOTYPE -->
 <div class="ss-problem-section fade-in">
-  <div class="section-label">Handoff</div>
-  <h2 class="section-title">Delivering microinteractions and state transitions through an interactive prototype</h2>
+  <h2 class="ss-head"><span class="ss-head-label">Engineering handoff</span><span class="ss-head-sep">/</span><span class="ss-head-title">Delivering microinteractions and state transitions through an interactive prototype</span></h2>
   <div class="section-body">
     <p>An interactive prototype was essential for communicating state transitions and microinteractions to engineering. The original was built in Figma; the embedded version below is a recreation built in Cursor.</p>
   </div>
@@ -450,10 +464,9 @@
 
 <!-- IMPACT -->
 <div class="takeaway-section fade-in">
-  <div class="section-label">Impact</div>
+  <h2 class="ss-head"><span class="ss-head-label">Impact</span><span class="ss-head-sep">/</span><span class="ss-head-title">Scoped the search to click conversion for sellers</span></h2>
   <div class="ss-section-two-col" style="margin-top: 0;">
     <div>
-      <h2 class="section-title">Increasing the search to click conversion for sellers</h2>
       <div class="section-body" style="margin-top: 24px;">
         <p>Not every search needs to be scoped — a rep searching by document name has no reason to narrow scope. The meaningful measure is whether scoping helps when reps choose to use it. In organizations with content collections configured, scoped searches produce <strong>15% more clicks on results</strong> than unscoped searches.</p>
       </div>
