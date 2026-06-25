@@ -182,7 +182,7 @@
 <div class="nav">
   <div class="nav-eyebrow">Deal Agent · Play Evaluation</div>
   <div class="nav-heading-row">
-    <div class="nav-heading">Suggested Improvements <span style="font-weight:400;">/ Options</span></div>
+    <div class="nav-heading" id="navHeading">Interaction models <span style="font-weight:400;">/ Options</span></div>
   </div>
   <div style="border-top:1px solid #E2E0DB;margin-bottom:16px;"></div>
 
@@ -1078,8 +1078,18 @@ function getActiveType() {
   return active ? active.getAttribute('data-type') : 'static';
 }
 
+function ensureNavHeading() {
+  var heading = document.getElementById('navHeading');
+  if (!heading) return;
+  heading.innerHTML = 'Interaction models <span style="font-weight:400;">/ Options</span>';
+}
+
 function updateContextUI(context) {
-  document.getElementById('contextTriggerLabel').textContent = context === 'editor' ? 'Smartpage editor' : 'Play viewer';
+  ensureNavHeading();
+  var label = document.getElementById('contextTriggerLabel');
+  if (label && label.id !== 'navHeading') {
+    label.textContent = context === 'editor' ? 'Smartpage editor' : 'Play viewer';
+  }
   document.querySelectorAll('.context-option').forEach(function(o) {
     o.classList.toggle('selected', o.getAttribute('data-value') === context);
   });
@@ -1206,6 +1216,7 @@ document.addEventListener('click', function() {
 });
 
 // show all viewer items and start on static
+ensureNavHeading();
 items.forEach(function(el) {
   if (el.getAttribute('data-context') === 'viewer') el.classList.add('visible');
 });
