@@ -34,27 +34,10 @@
     border-radius: 0;
   }
 
-  /* INLINE SLASH HEADER — "Label / Title" on one line */
-  .ss-head {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0;
-    margin-bottom: 20px;
-    font-family: 'Lora', serif;
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    font-size: clamp(22px, 2.8vw, 36px);
-  }
-  .ss-head .ss-head-label { color: var(--mid); }
-  .ss-head .ss-head-sep { color: var(--rule); margin: 0 0.35em; font-weight: 300; }
-  .ss-head .ss-head-title { color: var(--ink); }
-  .ss-head.compact { font-size: clamp(22px, 2.8vw, 36px); margin-bottom: 16px; }
-  @media (max-width: 768px) {
-    .ss-head { font-size: clamp(20px, 5vw, 28px); }
-    .ss-head.compact { font-size: clamp(20px, 5vw, 28px); }
-  }
+  /* SLASH SECTION TITLE — refined editorial: quiet lead, thin slash, headline carries weight */
+  .slash-title .lead { font-weight: 400; color: var(--mid); }
+  .slash-title .sep { color: var(--rule); font-weight: 300; margin: 0 8px; }
+  .slash-title .rest { font-weight: 400; color: var(--ink); }
 
   /* CHAIN */
   .chain { margin-top: 20px; }
@@ -213,7 +196,7 @@
 
 <!-- CONTEXT -->
 <div class="ss-problem-section fade-in">
-  <h2 class="ss-head" style="max-width: 100%;"><span class="ss-head-label">Problem</span><span class="ss-head-sep">/</span><span class="ss-head-title">Customers were dissatisfied with the search relevance and were at risk of churning</span></h2>
+  <h2 class="section-title slash-title" style="max-width: 100%;"><span class="lead">Problem</span><span class="sep">/</span><span class="rest">Customers were dissatisfied with the search relevance and were at risk of churning</span></h2>
   <div class="ss-signal-grid" style="margin-top: 40px;">
     <div class="signal-card">
       <div class="t-num">Business problem</div>
@@ -235,7 +218,7 @@
   <!-- FOUNDATIONAL WORK -->
   <div class="section-row fade-in">
     <div class="section-text">
-      <h2 class="ss-head compact"><span class="ss-head-label">Foundational work</span><span class="ss-head-sep">/</span><span class="ss-head-title">Introducing a new filtering category</span></h2>
+      <h2 class="section-title slash-title"><span class="lead">Foundational work</span><span class="sep">/</span><span class="rest">Introducing a new filtering category</span></h2>
       <div class="section-body">
         <p>Research showed a consistent rep behavior: when results weren't relevant, reps wanted to narrow by broad organizational areas — business units, regions, or product lines. The platform had no way to support this, so the filtering path didn't exist.</p>
       </div>
@@ -254,7 +237,7 @@
       </div>
     </div>
     <div class="section-text">
-      <h2 class="ss-head compact"><span class="ss-head-label">Content collection</span><span class="ss-head-sep">/</span><span class="ss-head-title">Designing a centralized method to tag content into groups that match how reps search</span></h2>
+      <h2 class="section-title slash-title"><span class="lead">Content collection</span><span class="sep">/</span><span class="rest">Designing a centralized method to tag content into groups that match how reps search</span></h2>
       <div class="chain">
         <div class="chain-item">
           <div class="chain-num">01</div>
@@ -307,7 +290,7 @@
       </div>
     </div>
     <div class="section-text">
-      <h2 class="ss-head compact"><span class="ss-head-label">Exploration</span><span class="ss-head-sep">/</span><span class="ss-head-title">Evaluating two interaction models for filtering</span></h2>
+      <h2 class="section-title slash-title"><span class="lead">Exploration</span><span class="sep">/</span><span class="rest">Evaluating two interaction models for filtering</span></h2>
       <div class="section-body">
         <p>I explored two models: <strong>scoping</strong> before submitting a query, and <strong>filtering</strong> post-search. Scoping in the dropdown offered quick discoverability, but designing it for the full range of use cases made the interaction complex. I used a working prototype to surface that complexity and align the team on two principles: scoping should stay quick and simple, and the search dropdown is high-value real estate that shouldn't be cluttered.</p>
       </div>
@@ -317,7 +300,7 @@
 
   <!-- FINDING -->
   <div class="ss-section fade-in">
-    <h2 class="ss-head"><span class="ss-head-label">User Insight</span><span class="ss-head-sep">/</span><span class="ss-head-title">Promoting top 3 content collections will address most user scenarios</span></h2>
+    <h2 class="section-title slash-title"><span class="lead">User Insight</span><span class="sep">/</span><span class="rest">Promoting top 3 content collections will address most user scenarios</span></h2>
     <div class="ss-section-two-col">
       <div>
         <div class="section-body">
@@ -335,7 +318,7 @@
 
   <!-- DESIGN IMPLICATION -->
   <div class="ss-section fade-in">
-    <h2 class="ss-head"><span class="ss-head-label">Design implication</span><span class="ss-head-sep">/</span><span class="ss-head-title">Designing the search dropdown for frequent tasks and filters for scalability</span></h2>
+    <h2 class="section-title slash-title"><span class="lead">Design implication</span><span class="sep">/</span><span class="rest">Designing the search dropdown for frequent tasks and filters for scalability</span></h2>
     <!-- Two-column: each with title, body, image -->
     <div class="ss-signal-grid" style="margin-top: 40px;">
       <div>
@@ -362,7 +345,7 @@
 
   <!-- SEARCH STATES — full width -->
   <div class="ss-section fade-in">
-    <h2 class="ss-head"><span class="ss-head-label">Design advocacy</span><span class="ss-head-sep">/</span><span class="ss-head-title">Modernizing the search experience alongside the feature work</span></h2>
+    <h2 class="section-title slash-title"><span class="lead">Design advocacy</span><span class="sep">/</span><span class="rest">Modernizing the search experience alongside the feature work</span></h2>
     <div class="ss-two-col ss-state-model-intro">
       <div>
         <div class="section-body">
@@ -410,7 +393,7 @@
 
 <!-- PROTOTYPE -->
 <div class="ss-problem-section fade-in">
-  <h2 class="ss-head"><span class="ss-head-label">Engineering handoff</span><span class="ss-head-sep">/</span><span class="ss-head-title">Delivering microinteractions and state transitions through an interactive prototype</span></h2>
+  <h2 class="section-title slash-title"><span class="lead">Engineering handoff</span><span class="sep">/</span><span class="rest">Delivering microinteractions and state transitions through an interactive prototype</span></h2>
   <div class="section-body">
     <p>An interactive prototype was essential for communicating state transitions and microinteractions to engineering. The original was built in Figma; the embedded version below is a recreation built in Cursor.</p>
   </div>
@@ -434,7 +417,7 @@
 
 <!-- IMPACT -->
 <div class="takeaway-section fade-in">
-  <h2 class="ss-head"><span class="ss-head-label">Impact</span><span class="ss-head-sep">/</span><span class="ss-head-title">Scoped the search to click conversion for sellers</span></h2>
+  <h2 class="section-title slash-title"><span class="lead">Impact</span><span class="sep">/</span><span class="rest">Scoped the search to click conversion for sellers</span></h2>
   <div class="ss-section-two-col" style="margin-top: 0;">
     <div>
       <div class="section-body" style="margin-top: 24px;">
