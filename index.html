@@ -22,29 +22,6 @@
     margin-bottom: 20px;
   }
 
-  .hero-name {
-    font-family: 'Gloock', serif;
-    font-size: clamp(48px, 7vw, 80px);
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    margin-bottom: 24px;
-    padding-bottom: 0.1em;
-    background: linear-gradient(135deg, #3a2436 0%, #8a4a4f 50%, #d9883f 100%);
-    background-size: 400% 400%;
-    background-position: 0% 50%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    transition: background-position 0.1s linear;
-  }
-
-  .hero-name em {
-    font-style: italic;
-    color: var(--mid);
-  }
-
   .hero h2 {
     font-family: 'Inter', sans-serif;
     font-size: clamp(15px, 2vw, 18px);
@@ -58,6 +35,24 @@
     color: var(--mid);
     line-height: 1.75;
     max-width: 600px;
+    margin-bottom: 28px;
+  }
+
+  .hero-lede {
+    font-family: 'Lora', serif;
+    font-size: clamp(22px, 2.8vw, 26px);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.5;
+    max-width: 620px;
+    margin-bottom: 20px;
+  }
+
+  .hero-detail {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 520px;
     margin-bottom: 28px;
   }
 
@@ -106,23 +101,30 @@
     align-items: center;
     padding: 40px;
     border-radius: 16px;
-    border: 1px solid transparent;
     margin-bottom: 12px;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.65s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1), backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.65s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .project-row.visible { opacity: 1; transform: translateY(0); }
-  .project-row:hover {
-    background: rgba(255,255,255,0.18);
-    -webkit-backdrop-filter: blur(8px) saturate(1.2);
-    backdrop-filter: blur(8px) saturate(1.2);
-    box-shadow: 0 12px 40px rgba(58,36,54,0.10);
-    border-color: rgba(255,255,255,0.5);
-    transform: translateY(-2px);
+
+  /* Spotlight bloom — soft warm light from inside the row on hover */
+  .project-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    pointer-events: none;
+    background: radial-gradient(120% 140% at 50% 0%, rgba(255,255,255,0.55) 0%, rgba(255,250,244,0.22) 40%, transparent 72%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
   }
-  .project-row:hover .project-card .img-slot img { transform: scale(1.04); }
+  .project-row:hover::before { opacity: 1; }
+  .project-row > * { position: relative; z-index: 1; }
+  .project-row:hover .project-card .img-slot img { transform: scale(1.05); }
 
   .project-row.image-right {
     grid-template-columns: 0.8fr 1.2fr;
@@ -313,11 +315,30 @@
       padding-right: 24px;
     }
     .project-row { grid-template-columns: 1fr; gap: 32px; }
-    .hero-name { font-size: 42px; }
   }
 
   /* Let gradient show through nav */
   nav { background: transparent !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .nav-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Gloock', serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .nav-name strong { font-weight: 400; }
+  .nav-name .nav-role {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--mid);
+    letter-spacing: 0.01em;
+  }
+  .nav-name .nav-sep { height: 18px; }
 
   /* ── CARD EXPAND OVERLAY ── */
   :root {
@@ -378,12 +399,8 @@
     gap: 6px;
     padding: 5px;
     border-radius: 999px;
-    /* Light glassy fill — frosted white panel carrying dark text/icons */
-    background: rgba(255, 255, 255, 0.42);
-    backdrop-filter: blur(18px) saturate(1.4);
-    -webkit-backdrop-filter: blur(18px) saturate(1.4);
-    border: 1px solid rgba(255,255,255,0.55);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.14);
+    /* Flat — no fill, blur, or shadow; buttons sit directly on the page */
+    background: transparent;
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -467,7 +484,7 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-name" href="#" style="font-family:'Fraunces',serif; font-weight:300; font-variation-settings:'opsz' 144,'SOFT' 100; font-size:22px; line-height:1;"><strong>as</strong></a>
+  <a class="nav-name" href="#"><strong>aditi singh</strong><span class="nav-sep" aria-hidden="true"></span><span class="nav-role">senior product designer</span></a>
   <ul class="nav-links">
     <li><a href="#" class="active">Work</a></li>
     <li><a href="Aditi_Singh_Resume.html">About</a></li>
@@ -479,8 +496,8 @@
 
 <!-- HERO -->
 <div class="hero hero-fade">
- <h1 class="hero-name">Aditi Singh</h1>
-  <p class="hero-summary">Product designer at Highspot, working on AI, analytics, and search. I design how sellers find content, how teams understand performance, and how AI surfaces answers people can act on.</p>
+  <p class="hero-lede">I craft experiences that drive strategy and vision conversations with product leaders, and that guide pixel-level execution with my engineering partners.</p>
+  <p class="hero-detail">For the past four years, I've focused on how the world's biggest companies go to market: designing how sellers find content, how teams understand business performance, and how AI surfaces insights that help optimize revenue outcomes.</p>
 </div>
 
 <!-- PROJECTS LABEL -->
@@ -608,15 +625,6 @@
 
   document.querySelector('a[href="Aditi_Singh_Resume.html"]')
     ?.addEventListener('click', () => sessionStorage.setItem('portfolio_nav', '1'));
-
-  // Shift hero name gradient on scroll
-  const heroName = document.querySelector('.hero-name');
-  if (heroName) {
-    window.addEventListener('scroll', () => {
-      const pos = Math.min(100, window.scrollY * 0.8);
-      heroName.style.backgroundPosition = `${pos}% ${pos}%`;
-    }, { passive: true });
-  }
 
   const fadeEls = document.querySelectorAll('.hero-fade, .project-row');
   const io = new IntersectionObserver((entries) => {
