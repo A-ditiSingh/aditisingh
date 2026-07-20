@@ -399,8 +399,11 @@
     gap: 6px;
     padding: 5px;
     border-radius: 999px;
-    /* Flat — no fill, blur, or shadow; buttons sit directly on the page */
-    background: transparent;
+    /* Frosted pill so page content never shows through the controls */
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -459,6 +462,11 @@
   /* Disable hover on rows while overlay is open */
   body.card-open .project-row { pointer-events: none; }
 
+  /* Lock page scroll while overlay is open — stops iframe overscroll from
+     chaining to index.html, keeps scrollbar space so layout doesn't shift */
+  html:has(body.card-open) { overflow: hidden; scrollbar-gutter: stable; }
+  body.card-open { overscroll-behavior: none; }
+
   /* DYNAMIC GRADIENT */
   #gradient-canvas {
     position: fixed;
@@ -509,7 +517,7 @@
 <div class="projects">
 
   <!-- PROJECT 1: GTM Initiatives -->
-  <div class="project-row btn-expand" data-src="gtm-oversight-portfolio_1.html">
+  <div class="project-row btn-expand" data-src="gtm-oversight-portfolio_1.html" data-slug="initiatives">
     <div class="project-card orange" style="background:#e8c9a8;">
       <div class="img-slot">
         <img src="Images/Cover_Initiative.png" alt="Go to market with Initiatives">
@@ -528,7 +536,7 @@
   </div>
 
   <!-- PROJECT 2: Play Evaluation -->
-  <div class="project-row image-right btn-expand" data-src="play-evaluation-portfolio.html">
+  <div class="project-row image-right btn-expand" data-src="play-evaluation-portfolio.html" data-slug="ai-plays">
     <div class="project-card sage">
       <div class="img-slot">
         <img src="Images/Cover_AIPlays.png" alt="AI Plays cover">
@@ -545,7 +553,7 @@
   </div>
 
   <!-- PROJECT 3: Scoped Search -->
-  <div class="project-row btn-expand" data-src="scoped-search-portfolio.html">
+  <div class="project-row btn-expand" data-src="scoped-search-portfolio.html" data-slug="scoped-search">
     <div class="project-card" style="background:#a8c4d8;">
       <div class="img-slot">
         <img src="Images/Cover_SS.png" alt="Scoped Search">
@@ -562,7 +570,7 @@
   </div>
 
   <!-- PROJECT 4: Our Shared Library -->
-  <div class="project-row image-right btn-expand" data-src="library-app-case-study.html">
+  <div class="project-row image-right btn-expand" data-src="library-app-case-study.html" data-slug="shared-library">
     <div class="project-card yellow">
       <div class="img-slot">
         <img src="Images/Cover_OSL.png" alt="Our Shared Library">
@@ -825,6 +833,22 @@
     // Ordered list of expandable project rows for prev/next navigation
     const rows = Array.from(document.querySelectorAll('.project-row.btn-expand'));
 
+    /* ── URL routing (history API) ── */
+    const bySlug = {};
+    rows.forEach(r => { bySlug[r.dataset.slug] = r; });
+    const baseTitle = document.title;
+
+    function setUrl(slug, replace) {
+      const url = slug ? '#' + slug : location.pathname + location.search;
+      history[replace ? 'replaceState' : 'pushState'](null, '', url);
+    }
+
+    function setTitle(row) {
+      document.title = row
+        ? row.querySelector('.project-title').textContent.trim() + ' — Aditi Singh'
+        : baseTitle;
+    }
+
     function updateNavState() {
       const i = rows.indexOf(activeRow);
       prevBtn.disabled = i <= 0;
@@ -844,6 +868,8 @@
         iframe.src = next.dataset.src;
         iframe.style.opacity = '1';
       }, 120);
+      setUrl(next.dataset.slug, true); // replace, so Back still closes the card
+      setTitle(next);
       updateNavState();
     }
 
@@ -853,10 +879,35 @@
       setTimeout(fn, DURATION);
     }
 
-    function openCard(row) {
+    function openCard(row, { push = true, instant = false } = {}) {
       if (isAnimating) return;
       isAnimating = true;
       activeRow = row;
+
+      if (push) setUrl(row.dataset.slug, false);
+      setTitle(row);
+
+      const gap = 12;
+
+      // Deep link / history navigation: open fullscreen immediately, no expand animation
+      if (instant) {
+        expand.style.transition = 'none';
+        expand.style.top    = gap + 'px';
+        expand.style.left   = gap + 'px';
+        expand.style.width  = `calc(100vw - ${gap * 2}px)`;
+        expand.style.height = `calc(100vh - ${gap * 2}px)`;
+        expand.style.borderRadius = '16px';
+        expand.classList.add('open');
+        expand.offsetHeight; // force reflow
+        expand.style.transition = '';
+        scrim.classList.add('active');
+        document.body.classList.add('card-open');
+        iframe.src = row.dataset.src;
+        controls.classList.add('visible');
+        updateNavState();
+        isAnimating = false;
+        return;
+      }
 
       const rect = row.getBoundingClientRect();
 
@@ -873,7 +924,6 @@
 
       // Animate to near-fullscreen
       expand.style.transition = '';
-      const gap = 12;
       expand.style.top    = gap + 'px';
       expand.style.left   = gap + 'px';
       expand.style.width  = `calc(100vw - ${gap * 2}px)`;
@@ -892,9 +942,12 @@
       });
     }
 
-    function closeCard() {
+    function closeCard({ push = true } = {}) {
       if (isAnimating || !activeRow) return;
       isAnimating = true;
+
+      if (push) setUrl(null, false);
+      setTitle(null);
 
       controls.classList.remove('visible');
       expand.classList.remove('open');
@@ -929,16 +982,39 @@
       });
     });
 
-    closeBtn.addEventListener('click', closeCard);
+    closeBtn.addEventListener('click', () => closeCard());
     prevBtn.addEventListener('click', () => goTo(-1));
     nextBtn.addEventListener('click', () => goTo(1));
-    scrim.addEventListener('click', closeCard);
+    scrim.addEventListener('click', () => closeCard());
     document.addEventListener('keydown', e => {
       if (!document.body.classList.contains('card-open')) return;
       if (e.key === 'Escape') closeCard();
       else if (e.key === 'ArrowLeft')  goTo(-1);
       else if (e.key === 'ArrowRight') goTo(1);
     });
+
+    // Browser Back / Forward — sync the overlay with the URL
+    window.addEventListener('popstate', () => {
+      const row = bySlug[location.hash.slice(1)];
+      if (row) {
+        if (document.body.classList.contains('card-open')) {
+          if (activeRow !== row) { // moving between projects
+            activeRow = row;
+            iframe.src = row.dataset.src;
+            setTitle(row);
+            updateNavState();
+          }
+        } else {
+          openCard(row, { push: false });
+        }
+      } else if (activeRow) {
+        closeCard({ push: false });
+      }
+    });
+
+    // Deep link: if the page loads with #slug, open that project immediately
+    const initialRow = bySlug[location.hash.slice(1)];
+    if (initialRow) openCard(initialRow, { push: false, instant: true });
   })();
 </script>
 </body>
