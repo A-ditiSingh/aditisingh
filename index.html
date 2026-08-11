@@ -72,6 +72,15 @@
   }
   .hero-sub a:hover { text-decoration-color: var(--ink); }
 
+  .projects-intro a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s;
+  }
+  .projects-intro a:hover { text-decoration-color: var(--ink); }
+
   /* SECTION LABEL */
   .section-label-row {
     max-width: 1400px;
@@ -84,6 +93,27 @@
     color: var(--mid);
     padding-bottom: 20px;
     border-bottom: 1px solid var(--rule);
+  }
+
+  .projects-label-split {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .projects-label-split .projects-label {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .projects-intro {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0;
   }
 
   /* PROJECT LIST */
@@ -125,12 +155,6 @@
   .project-row:hover::before { opacity: 1; }
   .project-row > * { position: relative; z-index: 1; }
   .project-row:hover .project-card .img-slot img { transform: scale(1.05); }
-
-  .project-row.image-right {
-    grid-template-columns: 0.8fr 1.2fr;
-  }
-  .project-row.image-right .project-text { order: 1; }
-  .project-row.image-right .project-card { order: 2; }
 
   /* IMAGE CARD */
   .project-card {
@@ -309,12 +333,17 @@
   .hero-fade.visible { opacity: 1; transform: translateY(0); }
   .no-anim .hero-fade { transition: none; }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .hero, .section-label-row, .projects {
       padding-left: 24px;
       padding-right: 24px;
     }
-    .project-row { grid-template-columns: 1fr; gap: 32px; }
+    .project-row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 24px 16px;
+    }
+    .project-desc { max-width: none; }
   }
 
   /* Let gradient show through nav */
@@ -505,12 +534,12 @@
 <!-- HERO -->
 <div class="hero hero-fade">
   <p class="hero-lede">I craft experiences that drive strategy and vision conversations with product leaders, and that guide pixel-level execution with my engineering partners.</p>
-  <p class="hero-detail">For the past four years, I've focused on how the world's biggest companies go to market: designing how sellers find content, how teams understand business performance, and how AI surfaces insights that help optimize revenue outcomes.</p>
+  <p class="hero-summary">For the past four years, I've focused on how the world's biggest companies go to market: designing how sellers find content, how teams understand business performance, and how AI surfaces insights that help optimize revenue outcomes.</p>
 </div>
 
 <!-- PROJECTS LABEL -->
 <div class="section-label-row hero-fade" style="transition-delay: 0.1s; margin-bottom: 20px;">
-  <div class="projects-label">Selected Work</div>
+  <span class="projects-label">Selected Work</span>
 </div>
 
 <!-- PROJECTS -->
@@ -536,7 +565,7 @@
   </div>
 
   <!-- PROJECT 2: Play Evaluation -->
-  <div class="project-row image-right btn-expand" data-src="play-evaluation-portfolio.html" data-slug="ai-plays">
+  <div class="project-row btn-expand" data-src="play-evaluation-portfolio.html" data-slug="ai-plays">
     <div class="project-card sage">
       <div class="img-slot">
         <img src="Images/Cover_AIPlays.png" alt="AI Plays cover">
@@ -570,7 +599,7 @@
   </div>
 
   <!-- PROJECT 4: Our Shared Library -->
-  <div class="project-row image-right btn-expand" data-src="library-app-case-study.html" data-slug="shared-library">
+  <div class="project-row btn-expand" data-src="library-app-case-study.html" data-slug="shared-library">
     <div class="project-card yellow">
       <div class="img-slot">
         <img src="Images/Cover_OSL.png" alt="Our Shared Library">
