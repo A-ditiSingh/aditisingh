@@ -9,11 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Prata&family=Gloock&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
+  /* FOCUSED LAYOUT — single narrow column, generous vertical rhythm.
+     Spacing inspired by charmiekapoor.com: one thing in view at a time,
+     quiet metadata labels, big gaps between sections instead of visual noise. */
+
+  :root { --measure: 640px; }
+
   /* HERO */
   .hero {
-    max-width: 1400px;
+    max-width: var(--measure);
     margin: 0 auto;
-    padding: 96px 60px 40px;
+    padding: 160px 24px 72px;
   }
 
   .hero-eyebrow {
@@ -22,83 +28,33 @@
     margin-bottom: 20px;
   }
 
-  .hero h2 {
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(15px, 2vw, 18px);
-    font-weight: 300;
-    color: var(--mid);
-    margin-bottom: 16px;
-  }
-
-  .hero-summary {
-    font-size: 15px;
-    color: var(--mid);
-    line-height: 1.75;
-    max-width: 600px;
-    margin-bottom: 28px;
-  }
-
   .hero-lede {
     font-family: 'Lora', serif;
-    font-size: clamp(22px, 2.8vw, 26px);
+    font-size: clamp(25px, 3.2vw, 30px);
     font-weight: 400;
     color: var(--ink);
     line-height: 1.5;
-    max-width: 620px;
-    margin-bottom: 20px;
   }
-
-  .hero-detail {
-    font-size: 14px;
-    color: var(--mid);
-    line-height: 1.7;
-    max-width: 520px;
-    margin-bottom: 28px;
-  }
-
-  .hero-sub {
-    font-size: 15px;
-    color: var(--mid);
-    line-height: 1.7;
-    max-width: 420px;
-  }
-
-  .hero-sub a {
-    color: var(--ink);
-    text-decoration: underline;
-    text-decoration-color: var(--rule);
-    text-underline-offset: 3px;
-    transition: text-decoration-color 0.15s;
-  }
-  .hero-sub a:hover { text-decoration-color: var(--ink); }
-
-  .projects-intro a {
-    color: var(--ink);
-    text-decoration: underline;
-    text-decoration-color: var(--rule);
-    text-underline-offset: 3px;
-    transition: text-decoration-color 0.15s;
-  }
-  .projects-intro a:hover { text-decoration-color: var(--ink); }
 
   /* SECTION LABEL */
   .section-label-row {
-    max-width: 1400px;
+    max-width: var(--measure);
     margin: 0 auto;
-    padding: 0 60px;
+    padding: 0 24px;
   }
 
   .projects-label {
-    font-size: 13px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--mid);
-    padding-bottom: 20px;
   }
 
   .projects-label-split {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding-top: 24px;
+    gap: 14px;
+    padding-top: 28px;
     border-top: 1px solid var(--rule);
   }
 
@@ -110,60 +66,75 @@
   .projects-intro {
     font-size: 14px;
     color: var(--mid);
-    line-height: 1.6;
-    max-width: 480px;
+    line-height: 1.7;
+    max-width: 100%;
     margin: 0;
   }
 
-  /* PROJECT LIST */
+  .projects-intro a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s;
+  }
+  .projects-intro a:hover { text-decoration-color: var(--ink); }
+
+  /* PROJECT LIST — single narrow column, big gaps, one project at a time */
   .projects {
-    max-width: 1400px;
+    max-width: var(--measure);
     margin: 0 auto;
-    padding: 0 60px;
+    padding: 0 24px;
   }
 
-  /* PROJECT ROW — the whole row is now a clickable card */
   .project-row {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 56px;
-    align-items: center;
-    padding: 40px;
-    border-radius: 16px;
-    margin-bottom: 12px;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 0;
+    border-radius: 0;
+    margin-bottom: 88px;
     cursor: pointer;
     position: relative;
-    overflow: hidden;
     opacity: 0;
-    transform: translateY(20px);
-    background: rgba(255, 255, 255, 0);
-    border: 1px solid transparent;
-    transition: opacity 0.65s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease, border-color 0.4s ease;
+    transform: translateY(16px);
+    transition: opacity 0.65s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
+  .project-row:last-child { margin-bottom: 0; }
   .project-row.visible { opacity: 1; transform: translateY(0); }
-  .project-row:hover {
-    background: rgba(255, 255, 255, 0.55);
-    border-color: #e5ded0;
-  }
 
-  /* Spotlight bloom — soft warm light from inside the row on hover */
-  .project-row::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    pointer-events: none;
-    background: radial-gradient(120% 140% at 50% 0%, rgba(255,255,255,0.55) 0%, rgba(255,250,244,0.22) 40%, transparent 72%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
+  /* image-right no longer changes order — one column throughout */
+  .project-row.image-right .project-text { order: unset; }
+  .project-row.image-right .project-card { order: unset; }
+
+  .project-row:hover .project-card .img-slot img { transform: scale(1.03); }
+  .project-row:hover .project-card .img-slot img.img-zoom { transform: scale(1.5); }
+
+  /* Crop tightly into the content-dense top of a screenshot that has a lot
+     of empty space below it, so it fills the frame like the other cards. */
+  .img-zoom { transform: scale(1.45); transform-origin: top center; }
+  .project-row:hover .project-title { color: var(--ink); }
+
+  /* SECONDARY / COMPACT ROW — image left, text right, smaller scale.
+     Used to visually de-emphasize a project relative to the full-width
+     ones above it (less space, quieter type = lower in the hierarchy). */
+  .project-row.compact {
+    grid-template-columns: 0.85fr 1fr;
+    align-items: center;
+    gap: 28px;
   }
-  .project-row:hover::before { opacity: 1; }
-  .project-row > * { position: relative; z-index: 1; }
-  .project-row:hover .project-card .img-slot img { transform: scale(1.05); }
+  .project-row.compact .project-card .img-slot { aspect-ratio: 4/3; }
+  .project-row.compact .project-title {
+    font-size: clamp(16px, 1.7vw, 18px);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .project-row.compact .badge-row { font-size: 10px; margin-bottom: 8px; }
+  .project-row.compact .project-desc { font-size: 13px; line-height: 1.65; margin-bottom: 10px; }
 
   /* IMAGE CARD */
   .project-card {
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
     position: relative;
   }
@@ -175,15 +146,10 @@
 
   .project-card .img-slot {
     background: transparent;
-    border-radius: 12px;
+    border-radius: 16px;
     aspect-ratio: 5/4;
     overflow: hidden;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
   }
   .project-card .img-slot img {
     position: absolute;
@@ -196,111 +162,53 @@
     transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  /* TL;DR */
-  .tldr {
-    padding: 16px 20px 18px;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .tldr-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .tldr-label {
-    font-size: 12px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    color: rgba(0,0,0,0.38);
-  }
-
-  .tldr-value {
-    font-size: 14px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    color: rgba(0,0,0,0.62);
-    line-height: 1.5;
-  }
-
-  .tldr-inline {
-    padding: 0;
-    margin-bottom: 24px;
-  }
-
-  .tldr-inline .tldr-label {
-    color: var(--mid);
-    opacity: 0.7;
-  }
-
-  .tldr-inline .tldr-value {
-    font-size: 16px;
-    color: var(--mid);
-  }
-
-  /* PROJECT TEXT */
-  .project-text { padding: 8px 0; }
+  /* PROJECT TEXT — quiet metadata line above a serif title, like a caption */
+  .project-text { padding: 0; }
 
   .badge-row {
     display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-
-  .badge {
-    display: inline-flex;
     align-items: center;
-    font-size: 10px;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-bottom: 10px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 500;
-    font-family: 'Inter', sans-serif;
-    padding: 4px 11px;
-    border-radius: 999px;
-    position: relative;
-    background: linear-gradient(135deg, rgba(247,182,129,0.32) 0%, rgba(190,210,213,0.36) 50%, rgba(239,213,213,0.32) 100%);
-    color: #6b6157;
-    border: 1px solid transparent;
-    background-clip: padding-box;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55), 0 1px 3px rgba(0,0,0,0.07);
-    backdrop-filter: blur(4px);
-    transition: box-shadow 0.2s;
+    letter-spacing: 0.08em;
+    color: var(--mid);
   }
-
-  .badge::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 999px;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(247,182,129,0.7), rgba(190,210,213,0.6), rgba(239,213,213,0.7));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
+  .badge {
+    display: inline;
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+  }
+  .badge:not(:last-child)::after {
+    content: '·';
+    margin: 0 8px;
+    color: var(--rule);
   }
 
   .project-title {
     font-family: 'Lora', serif;
-    font-size: clamp(22px, 2.8vw, 36px);
+    font-size: clamp(20px, 2.6vw, 25px);
     font-weight: 400;
-    line-height: 1.15;
+    line-height: 1.35;
     letter-spacing: -0.01em;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    transition: color 0.2s ease;
   }
 
   .project-desc {
     font-size: 14px;
     color: var(--mid);
     line-height: 1.75;
-    max-width: 380px;
-    margin-bottom: 24px;
+    max-width: 100%;
+    margin-bottom: 16px;
   }
 
-  /* Live link — sits above row click target */
   .link-secondary {
     font-size: 14px;
     color: var(--mid);
@@ -313,7 +221,6 @@
   }
   .link-secondary:hover { color: var(--ink); border-color: var(--ink); }
 
-  /* COPY BUTTON */
   .copy-btn {
     display: inline-flex;
     align-items: center;
@@ -338,17 +245,10 @@
   .hero-fade.visible { opacity: 1; transform: translateY(0); }
   .no-anim .hero-fade { transition: none; }
 
-  @media (max-width: 900px) {
-    .hero, .section-label-row, .projects {
-      padding-left: 24px;
-      padding-right: 24px;
-    }
-    .project-row {
-      grid-template-columns: 1fr;
-      gap: 24px;
-      padding: 24px 16px;
-    }
-    .project-desc { max-width: none; }
+  @media (max-width: 768px) {
+    .hero { padding: 96px 24px 56px; }
+    .project-row { margin-bottom: 64px; }
+    .project-row.compact { grid-template-columns: 1fr; }
   }
 
   /* Let gradient show through nav */
@@ -422,18 +322,16 @@
   }
   #card-expand.open iframe { opacity: 1; transition: opacity 0.2s ease 0.15s; }
 
-  /* Control cluster — Prev / Next / Close, pinned top-right INSIDE the overlay */
   #card-controls {
-    position: absolute;
+    position: fixed;
     z-index: 202;
-    top: 16px;
-    right: 16px;
+    top: 20px;
+    right: 20px;
     display: none;
     align-items: center;
     gap: 6px;
     padding: 5px;
     border-radius: 999px;
-    /* Frosted pill so page content never shows through the controls */
     background: rgba(255,255,255,0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -466,9 +364,6 @@
     padding: 0 16px;
     transition: background 0.15s ease, opacity 0.15s ease;
   }
-  /* All controls are icon-only — keep them circular */
-  #card-prev.card-ctrl,
-  #card-next.card-ctrl,
   #card-close.card-ctrl {
     width: 40px;
     padding: 0;
@@ -486,7 +381,6 @@
   }
   .card-ctrl:disabled:hover { background: transparent; }
 
-  /* Divider before the close button */
   #card-controls .ctrl-sep {
     width: 1px;
     height: 20px;
@@ -495,11 +389,7 @@
     flex-shrink: 0;
   }
 
-  /* Disable hover on rows while overlay is open */
   body.card-open .project-row { pointer-events: none; }
-
-  /* Lock page scroll while overlay is open — stops iframe overscroll from
-     chaining to index.html, keeps scrollbar space so layout doesn't shift */
   html:has(body.card-open) { overflow: hidden; scrollbar-gutter: stable; }
   body.card-open { overscroll-behavior: none; }
 
@@ -513,14 +403,6 @@
     opacity: 1;
   }
 </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WR6V9DTCJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-3WR6V9DTCJ');
-</script>
 </head>
 <body>
 
@@ -541,85 +423,121 @@
 <!-- HERO -->
 <div class="hero hero-fade">
   <p class="hero-lede">I craft experiences that drive strategy and vision conversations with product leaders, and that guide pixel-level execution with my engineering partners.</p>
-  <p class="hero-summary">For the past four years, I've focused on how the world's biggest companies go to market: designing how sellers find content, how teams understand business performance, and how AI surfaces insights that help optimize revenue outcomes.</p>
 </div>
 
 <!-- PROJECTS LABEL -->
-<div class="section-label-row hero-fade" style="transition-delay: 0.1s; margin-bottom: 20px;">
-  <span class="projects-label">Selected Work</span>
+<div class="section-label-row hero-fade" style="transition-delay: 0.1s; margin-bottom: 56px;">
+  <div class="projects-label-split">
+    <span class="projects-label">Recent work</span>
+    <p class="projects-intro">For the past four years, I have shipped features that help the world's biggest companies go to market — solving for how sellers find content, how teams understand business performance, and how AI surfaces insights that optimize revenue outcomes. The three projects below are highlights from my time at <a href="https://highspot.com" target="_blank" rel="noopener noreferrer">Highspot</a>.</p>
+  </div>
 </div>
 
 <!-- PROJECTS -->
 <div class="projects">
 
   <!-- PROJECT 1: GTM Initiatives -->
-  <div class="project-row btn-expand" data-src="gtm-oversight-portfolio_1.html" data-slug="initiatives" data-bg="#fdf9f5">
+  <div class="project-row btn-expand" data-src="gtm-oversight-portfolio_1.html" data-slug="initiatives">
     <div class="project-card orange" style="background:#e8c9a8;">
       <div class="img-slot">
         <img src="Images/Cover_Initiative.png" alt="Go to market with Initiatives">
       </div>
     </div>
     <div class="project-text">
-      <h2 class="project-title">Optimizing business initiatives by transforming fragmented data into insights</h2>
       <div class="badge-row">
         <span class="badge">Highspot</span>
         <span class="badge">0 to 1</span>
         <span class="badge">Analytics</span>
         <span class="badge">Dashboard</span>
       </div>
+      <h2 class="project-title">Optimizing business initiatives by transforming fragmented data into insights</h2>
       <p class="project-desc">Enablement and marketing teams invest in plays, training, and content to run business initiatives, but have no way to track whether reps are following through or whether any of it is driving revenue. I designed the end-to-end product to address this.</p>
     </div>
   </div>
 
   <!-- PROJECT 2: Play Evaluation -->
-  <div class="project-row btn-expand" data-src="play-evaluation-portfolio.html" data-slug="ai-plays" data-bg="#f7f9f7">
+  <div class="project-row btn-expand" data-src="play-evaluation-portfolio.html" data-slug="ai-plays">
     <div class="project-card sage">
       <div class="img-slot">
         <img src="Images/Cover_AIPlays.png" alt="AI Plays cover">
       </div>
     </div>
     <div class="project-text">
-      <h2 class="project-title">Improving the content behind AI-generated sales guidance</h2>
       <div class="badge-row">
         <span class="badge">Highspot</span>
         <span class="badge">AI-assisted workflow</span>
       </div>
+      <h2 class="project-title">Improving the content behind AI-generated sales guidance</h2>
       <p class="project-desc">When sellers ask the Agent for next steps, it pulls guidance from sales playbooks. When that content isn't actionable, the quality of recommendations suffers. I designed an evaluation system that helps authors improve their plays so actions are clear for both sellers and the agent.</p>
     </div>
   </div>
 
   <!-- PROJECT 3: Scoped Search -->
-  <div class="project-row btn-expand" data-src="scoped-search-portfolio.html" data-slug="scoped-search" data-bg="#f5f9fc">
+  <div class="project-row btn-expand" data-src="scoped-search-portfolio.html" data-slug="scoped-search">
     <div class="project-card" style="background:#a8c4d8;">
       <div class="img-slot">
         <img src="Images/Cover_SS.png" alt="Scoped Search">
       </div>
     </div>
     <div class="project-text">
-      <h2 class="project-title">Making content findable for sellers in large orgs</h2>
       <div class="badge-row">
         <span class="badge">Highspot</span>
         <span class="badge">Enterprise search</span>
       </div>
+      <h2 class="project-title">Making content findable for sellers in large orgs</h2>
       <p class="project-desc">Poor search relevance was the top reason enterprise customers rated Highspot negatively. I redesigned search to let reps scope results to content that's actually relevant to their role.</p>
     </div>
   </div>
 
+</div>
+
+<!-- BUILD LABEL -->
+<div class="section-label-row hero-fade" style="margin-top: 148px; margin-bottom: 56px;">
+  <div class="projects-label-split">
+    <span class="projects-label">Personal projects</span>
+    <p class="projects-intro">I've always loved hyper-personalizing things for my own needs — designing, building, and sewing physical objects to bring my ideas to life. With AI, building digital products has become possible too, and I've been learning by solving my own problems again.</p>
+  </div>
+</div>
+
+<!-- PROJECTS (BUILD) -->
+<div class="projects">
+
   <!-- PROJECT 4: Our Shared Library -->
-  <div class="project-row btn-expand" data-src="library-app-case-study.html" data-slug="shared-library" data-bg="#fef8f8">
+  <div class="project-row compact btn-expand" data-src="library-app-case-study.html" data-slug="shared-library">
     <div class="project-card yellow">
       <div class="img-slot">
         <img src="Images/Cover_OSL.png" alt="Our Shared Library">
       </div>
     </div>
     <div class="project-text">
-      <h2 class="project-title">Creating an online catalogue of books from photographs</h2>
       <div class="badge-row">
         <span class="badge">Personal project</span>
         <span class="badge">Vibe-coded</span>
       </div>
-      <p class="project-desc">After two failed attempts to manually catalogue our home library of 1,000+ books, I built an app that converts photos of my bookshelves into a searchable catalogue of books. I owned everything: the requirements, the design, and shipping a live product with auth, a real database, and AI enrichment.</p>
+      <h2 class="project-title">Our shared library</h2>
+      <p class="project-desc">Photos of our bookshelves at home translated into an online catalogue of books with a recommendation system.</p>
       <a href="https://our-library-nu.vercel.app/" class="link-secondary" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">
+        See it live
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 9L9 2M9 2H4.5M9 2V6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- PROJECT 5: Attention Planner -->
+  <div class="project-row compact">
+    <div class="project-card" style="background:#e9e6df;">
+      <div class="img-slot">
+        <img src="Images/Cover_Attention.png" alt="Attention planner" class="img-zoom">
+      </div>
+    </div>
+    <div class="project-text">
+      <div class="badge-row">
+        <span class="badge">Personal project</span>
+        <span class="badge">Vibe-coded</span>
+      </div>
+      <h2 class="project-title">Attention planner</h2>
+      <p class="project-desc">With the goal of managing what I pay attention to, I built a product that helps me externalize the thing I want to focus on in the moment, and catch everything else for later.</p>
+      <a href="https://our-library-nu.vercel.app/attention" class="link-secondary" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">
         See it live
         <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 9L9 2M9 2H4.5M9 2V6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -630,20 +548,22 @@
 
 <!-- CARD EXPAND OVERLAY -->
 <div id="card-scrim"></div>
+<div id="card-controls">
+  <button id="card-prev" class="card-ctrl" aria-label="Previous project">
+    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Previous project
+  </button>
+  <button id="card-next" class="card-ctrl" aria-label="Next project">
+    Next project
+    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <span class="ctrl-sep" aria-hidden="true"></span>
+  <button id="card-close" class="card-ctrl" aria-label="Close project">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+</div>
 <div id="card-expand">
   <iframe id="card-iframe" title="Project detail" src="about:blank"></iframe>
-  <div id="card-controls">
-    <button id="card-prev" class="card-ctrl" aria-label="Previous project">
-      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button id="card-next" class="card-ctrl" aria-label="Next project">
-      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <span class="ctrl-sep" aria-hidden="true"></span>
-    <button id="card-close" class="card-ctrl" aria-label="Close project">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
-  </div>
 </div>
 
 <!-- FOOTER -->
@@ -657,7 +577,6 @@
 </footer>
 
 <script>
-  // Skip hero animation when returning from Resume
   const returning = sessionStorage.getItem('portfolio_nav') === '1';
   if (returning) {
     document.body.classList.add('no-anim');
@@ -690,32 +609,13 @@
       }, 2000);
     });
   }
-
-  function loadImage(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const slot = input.closest('.img-slot');
-      const hint = slot.querySelector('.upload-hint');
-      if (hint) hint.style.display = 'none';
-      let img = slot.querySelector('img');
-      if (!img) { img = document.createElement('img'); slot.appendChild(img); }
-      img.src = ev.target.result;
-      slot.style.border = 'none';
-    };
-    reader.readAsDataURL(file);
-  }
-
 </script>
 
 <script>
-  // Dynamic gradient — soft orbs that drift slowly, tinted by project in view
   (function() {
     const canvas = document.getElementById('gradient-canvas');
     const ctx = canvas.getContext('2d');
 
-    // Default palette: warm cream base + accent orbs
     const defaultOrbs = [
       { x: 0.15, y: 0.2,  r: 0.55, color: [247, 182, 129], speed: 0.00018, phase: 0 },
       { x: 0.75, y: 0.15, r: 0.50, color: [190, 210, 213], speed: 0.00013, phase: 1.8 },
@@ -723,7 +623,6 @@
       { x: 0.85, y: 0.65, r: 0.45, color: [245, 240, 232], speed: 0.00020, phase: 0.9 },
     ];
 
-    // Per-project tint colours (from thumbnail fills)
     const projectTints = {
       'initiatives':    { base: [252, 246, 238], orbs: [[232, 180, 120], [240, 210, 175], [245, 225, 200], [250, 240, 225]] },
       'play-eval':      { base: [240, 245, 238], orbs: [[170, 195, 165], [195, 215, 190], [210, 225, 205], [230, 238, 228]] },
@@ -731,7 +630,6 @@
       'library':        { base: [252, 242, 242], orbs: [[220, 175, 175], [239, 200, 200], [245, 215, 215], [250, 230, 230]] },
     };
 
-    // Map project rows to tint keys
     const projectRows = [
       { el: null, key: 'initiatives' },
       { el: null, key: 'play-eval' },
@@ -743,12 +641,8 @@
       if (projectRows[i]) projectRows[i].el = el;
     });
 
-    // Current lerp state
-    let currentBase = [...defaultOrbs[0].color]; // unused directly but tracked
     let orbColors = defaultOrbs.map(o => [...o.color]);
     let baseColor = [245, 240, 232];
-
-    // Target state
     let targetBase = [...baseColor];
     let targetOrbColors = defaultOrbs.map(o => [...o.color]);
 
@@ -763,12 +657,8 @@
       }
     }
 
-    // IntersectionObserver — track most visible project
     let activeKey = null;
-    let hasScrolled = false;
-    window.addEventListener('scroll', () => { hasScrolled = true; }, { once: true });
     const observer = new IntersectionObserver(entries => {
-      // Find the most visible project row
       let best = null, bestRatio = 0;
       projectRows.forEach(({ el, key }) => {
         if (!el) return;
@@ -782,7 +672,6 @@
       if (newKey !== activeKey) {
         activeKey = newKey;
         setTarget(activeKey);
-        // in-focus no longer used (no separate img-slot from card)
       }
     }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
 
@@ -795,7 +684,6 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // Mouse tracking
     let mouseX = 0.5, mouseY = 0.3;
     let smoothX = 0.5, smoothY = 0.3;
     window.addEventListener('mousemove', e => {
@@ -803,7 +691,7 @@
       mouseY = e.clientY / window.innerHeight;
     });
 
-    const lerpSpeed = 0.018; // slow, smooth fade
+    const lerpSpeed = 0.018;
 
     function lerpArr(cur, tgt, k) {
       return cur.map((v, i) => v + (tgt[i] - v) * k);
@@ -817,16 +705,13 @@
       smoothX += (mouseX - smoothX) * 0.07;
       smoothY += (mouseY - smoothY) * 0.07;
 
-      // Lerp colours toward target
       baseColor = lerpArr(baseColor, targetBase, lerpSpeed);
       orbColors = orbColors.map((c, i) => lerpArr(c, targetOrbColors[i], lerpSpeed));
 
-      // Fill base
       const [br, bg, bb] = baseColor.map(Math.round);
       ctx.fillStyle = `rgb(${br},${bg},${bb})`;
       ctx.fillRect(0, 0, W, H);
 
-      // Draw orbs
       defaultOrbs.forEach((o, i) => {
         const drift = 0.12;
         const mouseInfluence = [0.45, 0.28, 0.18, 0.12][i];
@@ -851,7 +736,6 @@
   })();
 </script>
 <script>
-  /* ── Card expand animation ── */
   (function () {
     const expand   = document.getElementById('card-expand');
     const iframe   = document.getElementById('card-iframe');
@@ -860,16 +744,12 @@
     const closeBtn = document.getElementById('card-close');
     const prevBtn  = document.getElementById('card-prev');
     const nextBtn  = document.getElementById('card-next');
-    const DURATION = 380; // ms — must match --expand-duration
-    const OVERLAY_MAX_W = 1280; // px — matches the project list content width (.projects 1400px max-width − 2×60px padding)
+    const DURATION = 380;
     let isAnimating = false;
-    let sliding     = false;
-    let activeRow   = null; // remember which row opened so we can re-read its rect on close
+    let activeRow   = null;
 
-    // Ordered list of expandable project rows for prev/next navigation
     const rows = Array.from(document.querySelectorAll('.project-row.btn-expand'));
 
-    /* ── URL routing (history API) ── */
     const bySlug = {};
     rows.forEach(r => { bySlug[r.dataset.slug] = r; });
     const baseTitle = document.title;
@@ -891,69 +771,24 @@
       nextBtn.disabled = i < 0 || i >= rows.length - 1;
     }
 
-    // Swap the iframe to an adjacent project with a directional slide.
-    // One iframe can't show both projects at once, so it's a two-phase slide:
-    // current slides + fades out toward the travel direction, then the new
-    // project loads, is placed on the opposite side, and slides in to centre.
-    const SLIDE_MS = 300;   // transform (the subtle slide)
-    const FADE_IN_MS = 620; // incoming opacity — slower so the page dissolves in, no hard rectangle edge
     function goTo(delta) {
-      if (isAnimating || sliding || !activeRow) return;
+      if (isAnimating || !activeRow) return;
       const i = rows.indexOf(activeRow);
       const next = rows[i + delta];
       if (!next) return;
-      sliding = true;
-
-      // Paint a seamless surface behind the slide: a horizontal gradient from
-      // the outgoing project's background to the incoming one's, so the moment
-      // the iframe is mid-swap reads as one continuous surface, not a blank flash.
-      const fromBg = activeRow.dataset.bg || 'var(--bg)';
-      const toBg   = next.dataset.bg || 'var(--bg)';
-      const leftBg  = delta > 0 ? fromBg : toBg; // project on the left in travel order
-      const rightBg = delta > 0 ? toBg : fromBg;
-      expand.style.background = `linear-gradient(to right, ${leftBg} 0%, ${rightBg} 100%)`;
-
       activeRow = next;
-
-      const dist = 2.5; // % of overlay width — small, so the fade dominates and no rectangle edge shows
-      const outX = delta > 0 ? -dist : dist;  // Next: out to the left
-      const inX  = delta > 0 ? dist : -dist;   // Next: in from the right
-      const ease = 'var(--expand-easing)';
-
-      // Phase 1 — slide the current project out and fade it away
-      iframe.style.transition = `transform ${SLIDE_MS}ms ${ease}, opacity ${SLIDE_MS}ms ease-in-out`;
-      iframe.style.transform  = `translateX(${outX}%)`;
-      iframe.style.opacity    = '0';
-
-      const onLoad = () => {
-        iframe.removeEventListener('load', onLoad);
-        // Phase 2 — jump the freshly loaded project to the opposite side...
-        iframe.style.transition = 'none';
-        iframe.style.transform  = `translateX(${inX}%)`;
-        iframe.style.opacity    = '0';
-        iframe.offsetHeight; // force reflow so the jump isn't animated
-        // ...then ease it into centre while the page slowly fills in
-        iframe.style.transition = `transform ${SLIDE_MS}ms ${ease}, opacity ${FADE_IN_MS}ms ease-in-out`;
-        iframe.style.transform  = 'translateX(0)';
-        iframe.style.opacity    = '1';
-        // hold the gradient behind until the fill is fully complete, so the swap never shows
-        setTimeout(() => { sliding = false; expand.style.background = ''; }, FADE_IN_MS);
-      };
-
-      // Swap the source once the out-slide has played
+      iframe.style.transition = 'opacity 0.12s ease';
+      iframe.style.opacity = '0';
       setTimeout(() => {
-        iframe.addEventListener('load', onLoad);
         iframe.src = next.dataset.src;
-      }, SLIDE_MS);
-
-      setUrl(next.dataset.slug, true); // replace, so Back still closes the card
+        iframe.style.opacity = '1';
+      }, 120);
+      setUrl(next.dataset.slug, true);
       setTitle(next);
       updateNavState();
     }
 
     function afterTransition(fn) {
-      // Use a timeout equal to the CSS duration as a reliable fallback
-      // instead of relying on transitionend (which can silently not fire).
       setTimeout(fn, DURATION);
     }
 
@@ -967,17 +802,15 @@
 
       const gap = 12;
 
-      // Deep link / history navigation: open fullscreen immediately, no expand animation
       if (instant) {
         expand.style.transition = 'none';
         expand.style.top    = gap + 'px';
-        const _ow = Math.min(window.innerWidth - gap * 2, OVERLAY_MAX_W);
-        expand.style.left   = Math.round((window.innerWidth - _ow) / 2) + 'px';
-        expand.style.width  = _ow + 'px';
-        expand.style.height = `calc(100vh - ${gap}px)`; // flush to bottom edge — "cropped" look
-        expand.style.borderRadius = '16px 16px 0 0'; // round the top only
+        expand.style.left   = gap + 'px';
+        expand.style.width  = `calc(100vw - ${gap * 2}px)`;
+        expand.style.height = `calc(100vh - ${gap * 2}px)`;
+        expand.style.borderRadius = '16px';
         expand.classList.add('open');
-        expand.offsetHeight; // force reflow
+        expand.offsetHeight;
         expand.style.transition = '';
         scrim.classList.add('active');
         document.body.classList.add('card-open');
@@ -990,7 +823,6 @@
 
       const rect = row.getBoundingClientRect();
 
-      // Snap to row position, no transition
       expand.style.transition = 'none';
       expand.style.top    = rect.top    + 'px';
       expand.style.left   = rect.left   + 'px';
@@ -999,16 +831,13 @@
       expand.style.borderRadius = '16px';
       expand.classList.add('animating');
 
-      expand.offsetHeight; // force reflow
+      expand.offsetHeight;
 
-      // Animate to near-fullscreen
       expand.style.transition = '';
       expand.style.top    = gap + 'px';
-      const _ow = Math.min(window.innerWidth - gap * 2, OVERLAY_MAX_W);
-      expand.style.left   = Math.round((window.innerWidth - _ow) / 2) + 'px';
-      expand.style.width  = _ow + 'px';
-      expand.style.height = `calc(100vh - ${gap}px)`; // flush to bottom edge — "cropped" look
-      expand.style.borderRadius = '16px 16px 0 0'; // round the top only
+      expand.style.left   = gap + 'px';
+      expand.style.width  = `calc(100vw - ${gap * 2}px)`;
+      expand.style.height = `calc(100vh - ${gap * 2}px)`;
 
       scrim.classList.add('active');
       document.body.classList.add('card-open');
@@ -1034,7 +863,6 @@
       expand.classList.remove('open');
       scrim.classList.remove('active');
 
-      // Re-read the row's current position (scroll may have changed)
       const rect = activeRow.getBoundingClientRect();
       expand.style.top    = rect.top    + 'px';
       expand.style.left   = rect.left   + 'px';
@@ -1048,16 +876,12 @@
         iframe.src = 'about:blank';
         iframe.style.transition = '';
         iframe.style.opacity = '';
-        iframe.style.transform = '';
-        expand.style.background = '';
-        sliding = false;
         document.body.classList.remove('card-open');
         activeRow   = null;
         isAnimating = false;
       });
     }
 
-    // The whole row is the click target; let the "See it live" link through
     document.querySelectorAll('.project-row.btn-expand').forEach(row => {
       row.addEventListener('click', e => {
         if (e.target.closest('.link-secondary')) return;
@@ -1077,21 +901,11 @@
       else if (e.key === 'ArrowRight') goTo(1);
     });
 
-    // Keep the expanded overlay centered and within its max width on resize
-    window.addEventListener('resize', () => {
-      if (isAnimating || !document.body.classList.contains('card-open')) return;
-      const gap = 12;
-      const w = Math.min(window.innerWidth - gap * 2, OVERLAY_MAX_W);
-      expand.style.left  = Math.round((window.innerWidth - w) / 2) + 'px';
-      expand.style.width = w + 'px';
-    });
-
-    // Browser Back / Forward — sync the overlay with the URL
     window.addEventListener('popstate', () => {
       const row = bySlug[location.hash.slice(1)];
       if (row) {
         if (document.body.classList.contains('card-open')) {
-          if (activeRow !== row) { // moving between projects
+          if (activeRow !== row) {
             activeRow = row;
             iframe.src = row.dataset.src;
             setTitle(row);
@@ -1105,7 +919,6 @@
       }
     });
 
-    // Deep link: if the page loads with #slug, open that project immediately
     const initialRow = bySlug[location.hash.slice(1)];
     if (initialRow) openCard(initialRow, { push: false, instant: true });
   })();

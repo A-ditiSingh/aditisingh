@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="Images/favicon.svg">
+<title>AI Transparency — Aditi Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=Prata&family=Gloock&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  :root {
+    --bg:     #f5f0e8;
+    --ink:    #1a1a1a;
+    --mid:    #6b6560;
+    --rule:   #ddd8ce;
+    --white:  #ffffff;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* NAV */
+  nav {
+    padding: 28px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg);
+    z-index: 50;
+  }
+  .nav-back {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--mid);
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .nav-back:hover { color: var(--ink); }
+  .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+  .nav-links a { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--ink); font-weight: 500; }
+  .nav-sep { width: 1px; height: 13px; background: var(--rule); display: inline-block; margin: 0 4px; flex-shrink: 0; }
+
+  /* PAGE */
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+  .page > * {
+    max-width: 900px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 56px 0 40px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mid);
+    margin-bottom: 20px;
+  }
+
+  .hero-name {
+    font-family: 'Gloock', serif;
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+
+  .hero-summary {
+    font-size: 15px;
+    color: var(--mid);
+    line-height: 1.75;
+    max-width: 600px;
+  }
+
+  .no-anim .hero,
+  .no-anim .section-row { animation: none; opacity: 1; transform: none; }
+
+  /* SECTION ROW */
+  .section-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    align-items: start;
+    padding: 40px 0;
+    border-top: 1px solid var(--rule);
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .section-row:nth-child(2) { animation-delay: 0.1s; }
+  .section-row:nth-child(3) { animation-delay: 0.18s; }
+
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mid);
+    padding-top: 4px;
+    position: sticky;
+    top: 80px;
+  }
+
+  .section-body { width: 100%; }
+
+  .section-body p {
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.8;
+    max-width: 600px;
+  }
+  .section-body p + p { margin-top: 10px; }
+  .section-body p a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: border-color 0.15s;
+  }
+  .section-body p a:hover { border-color: var(--ink); }
+
+  footer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 60px 64px;
+    border-top: 1px solid var(--rule);
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .footer-links { display: flex; gap: 28px; list-style: none; }
+  .footer-links a { font-size: 13px; color: var(--mid); text-decoration: none; transition: color 0.15s; }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-copy { font-size: 12px; color: var(--mid); }
+
+  @media (max-width: 768px) {
+    nav, .page, footer { padding-left: 24px; padding-right: 24px; }
+    .section-row { grid-template-columns: 1fr; gap: 24px; }
+    .section-label { position: static; }
+    footer { flex-direction: column; gap: 16px; }
+  }
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WR6V9DTCJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3WR6V9DTCJ');
+</script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="Aditi_Singh_Resume.html">About</a></li>
+    <li><a href="ai-transparency.html" class="active">AI Transparency</a></li>
+    <li><span class="nav-sep" aria-hidden="true"></span></li>
+    <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href="https://github.com/A-ditiSingh" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-eyebrow">A note on AI</div>
+    <h1 class="hero-name">How AI factors into this site</h1>
+    <p class="hero-summary">I use AI as part of how I work, and I want to be clear about where it's involved on this site.</p>
+  </div>
+
+  <!-- WRITING -->
+  <div class="section-row">
+    <div class="section-label">Writing</div>
+    <div class="section-body">
+      <p>All of the words on this site are mine. The case studies, project descriptions, and this page are written by me, based on my own work and decisions.</p>
+    </div>
+  </div>
+
+  <!-- DEVELOPMENT -->
+  <div class="section-row">
+    <div class="section-label">Development</div>
+    <div class="section-body">
+      <p>The web development for this site is done by AI. I use AI coding tools to write and maintain the HTML, CSS, and JavaScript behind these pages, working from my own layout and design decisions.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <ul class="footer-links">
+    <li><a href="mailto:aditisingh.design@gmail.com">Email</a></li>
+    <li><a href="https://linkedin.com/in/aditising" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href="index.html">Work</a></li>
+  </ul>
+  <span class="footer-copy">Aditi Singh · Ontario, Canada</span>
+</footer>
+
+<script>
+  if (sessionStorage.getItem('portfolio_nav') === '1') {
+    document.body.classList.add('no-anim');
+    sessionStorage.removeItem('portfolio_nav');
+  }
+  document.querySelectorAll('a[href="index.html"]')
+    .forEach(a => a.addEventListener('click', () => sessionStorage.setItem('portfolio_nav', '1')));
+</script>
+
+</body>
+</html>

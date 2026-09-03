@@ -174,6 +174,22 @@
     .frame-wrap{flex:none;width:100%;padding:0 16px 24px;}
     .frame-shell{width:100%;height:100vh;align-self:auto;margin-top:0;}
   }
+
+  /* ═══ TOP-STEPS LAYOUT — steps on top, prototype full-width below ═══ */
+  body{flex-direction:column !important;height:100vh !important;min-height:0 !important;overflow:hidden !important;}
+  .nav{width:100% !important;flex:0 0 auto !important;height:auto !important;padding:28px 44px 0 !important;overflow:visible !important;}
+  .nav-sub{max-width:720px;margin-bottom:14px;}
+  .nav-context{max-width:260px;margin-bottom:14px;}
+  .nav-options-label{display:none !important;}
+  .nav-group{flex-direction:row !important;flex-wrap:nowrap !important;gap:12px !important;margin-bottom:0 !important;overflow-x:auto !important;padding-bottom:2px;}
+  .nav-group .nav-item{flex:1 1 0 !important;min-width:190px !important;}
+  .nav-cards-wide{display:none !important;}
+  .cards-strip{display:block !important;width:100% !important;flex:0 0 auto !important;padding:12px 44px 0 !important;}
+  .cards-strip-row{display:flex !important;flex-direction:row !important;gap:12px !important;overflow-x:auto !important;padding-bottom:2px;}
+  .cards-strip-row .nav-item{flex:1 1 0 !important;min-width:190px !important;}
+  .frame-wrap{flex:1 1 auto !important;min-height:0 !important;width:100% !important;padding:18px 44px 32px !important;}
+  .frame-shell{flex:1 1 auto !important;width:100% !important;height:auto !important;align-self:stretch !important;margin-top:0 !important;}
+
 </style>
 </head>
 <body>

@@ -57,7 +57,7 @@
 
   /* PROTOTYPE FRAME */
   .proto-frame { width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid var(--rule); box-shadow: 0 4px 24px rgba(0,0,0,0.08); background: #fff; margin-top: 32px; }
-  .proto-frame iframe { width: 100%; height: 700px; border: none; display: block; }
+  .proto-frame iframe { width: 100%; height: 1040px; border: none; display: block; }
 
   /* DECISION TABLE */
   .compare-wrap { margin-top: 24px; overflow-x: auto; }
@@ -83,7 +83,7 @@
     .options-grid { grid-template-columns: 1fr; }
     .takeaway-grid { grid-template-columns: 1fr; }
     .pivot-card-grid { grid-template-columns: 1fr; }
-    .proto-frame iframe { height: 400px; }
+    .proto-frame iframe { height: 620px; }
   }
 </style>
 <!-- Google tag (gtag.js) -->
@@ -173,7 +173,7 @@
     </div>
     <div style="margin-top:32px;padding:0 72px;box-sizing:border-box;position:relative;left:50%;right:50%;width:100vw;margin-left:-50vw;margin-right:-50vw;">
       <div class="proto-frame" style="max-width:1400px;margin:0 auto;">
-        <iframe src="play-action-edit.html" title="Play action edit prototype" style="width:100%;height:700px;border:none;display:block;"></iframe>
+        <iframe src="play-action-edit.html" title="Play action edit prototype" style="width:100%;height:1040px;border:none;display:block;"></iframe>
       </div>
     </div>
     <p class="img-caption" style="margin-top:12px;">Prototype — editing extracted action items from the playbook</p>
@@ -201,7 +201,7 @@
     </div>
     <div style="margin-top:32px;padding:0 72px;box-sizing:border-box;position:relative;left:50%;right:50%;width:100vw;margin-left:-50vw;margin-right:-50vw;">
       <div class="proto-frame" style="max-width:1400px;margin:0 auto;">
-        <iframe src="play-evaluation-proposals.html" title="Play evaluation proposals prototype" style="width:100%;height:700px;border:none;display:block;"></iframe>
+        <iframe src="play-evaluation-proposals.html" title="Play evaluation proposals prototype" style="width:100%;height:1040px;border:none;display:block;"></iframe>
       </div>
     </div>
     <p class="img-caption" style="margin-top:12px;">Prototype — three proposal options for surfacing improvement suggestions</p>
@@ -214,6 +214,40 @@
     <div class="section-body">
       <p>Multi-turn chat was ruled out — the engineering complexity wasn't justified, and building a conversational editor would have moved the product toward a page builder, which wasn't the right direction. The decision was to ship static suggestions first to validate that authors engage with the feedback, then evolve to single-turn cards once that's confirmed.</p>
     </div>
+  </div>
+
+  <!-- VERSION 1 -->
+  <div class="section-full fade-in">
+    <div class="section-label">Version 1 — Static suggestions</div>
+    <h2 class="section-title">Shipping static suggestions within the constraints of the existing authoring experience</h2>
+    <div class="section-body">
+      <p>The suggestions had to work within what the current content authoring experience allowed, so I explored a few placements and formats to weigh the trade-offs of each. We shipped static suggestions to a small set of customers to validate whether authors engaged with the feedback before investing in a more interactive format.</p>
+    </div>
+    <div style="margin-top:32px;padding:0 72px;box-sizing:border-box;position:relative;left:50%;right:50%;width:100vw;margin-left:-50vw;margin-right:-50vw;">
+      <div class="proto-frame" style="max-width:1400px;margin:0 auto;">
+        <iframe src="AI%20Plays%20-%20static%20suggestions.html" title="Static suggestions prototype" style="width:100%;height:1040px;border:none;display:block;"></iframe>
+      </div>
+    </div>
+    <p class="img-caption" style="margin-top:12px;">Prototype — static improvement suggestions in the content viewer</p>
+    <div class="discovery" style="margin-top: 28px;">
+      <div class="d-label">Feedback from customers</div>
+      <p>Customers found the suggestions too high-level and open-ended. They wanted bite-sized, actionable suggestions they could act on directly, rather than broad direction that still left them to work out the specific change.</p>
+    </div>
+  </div>
+
+  <!-- VERSION 2 -->
+  <div class="section-full fade-in">
+    <div class="section-label">Version 2 — Single-turn cards</div>
+    <h2 class="section-title">Pivoting to single-turn cards that accommodate the play's text formatting</h2>
+    <div class="section-body">
+      <p>In response, we pivoted to single-turn cards. I explored designs that accommodated the range of text formatting a play could contain, so each suggestion could map to a specific, editable change in the source content rather than a general note the author had to interpret.</p>
+    </div>
+    <div style="margin-top:32px;padding:0 72px;box-sizing:border-box;position:relative;left:50%;right:50%;width:100vw;margin-left:-50vw;margin-right:-50vw;">
+      <div class="proto-frame" style="max-width:1400px;margin:0 auto;">
+        <iframe src="ai%20plays%20-%20single%20turn%20final.html" title="Single-turn cards prototype" style="width:100%;height:1040px;border:none;display:block;"></iframe>
+      </div>
+    </div>
+    <p class="img-caption" style="margin-top:12px;">Prototype — single-turn improvement cards in the content viewer</p>
   </div>
 
   <!-- TAKEAWAYS -->

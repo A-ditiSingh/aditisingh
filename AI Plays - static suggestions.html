@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Play Evaluation — Editor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F5F3EE 0%,#F7DDD0 60%,#E8E2F0 100%);height:100vh;display:flex;overflow:hidden;color:#1A1A2E;}
+
+  /* ── LEFT NAV ── */
+  .nav{
+    width:264px;flex-shrink:0;
+    padding:40px 24px;
+    display:flex;flex-direction:column;gap:8px;
+    overflow-y:auto;
+  }
+  .nav-eyebrow{
+    font-size:10px;font-weight:700;letter-spacing:0.13em;
+    text-transform:uppercase;color:#9A9690;margin-bottom:6px;
+  }
+  .nav-heading{
+    font-size:22px;font-weight:600;color:#1A1A2E;line-height:1.25;
+    margin-bottom:4px;
+  }
+  .nav-heading-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px;}
+  .nav-heading-row .nav-heading{margin-bottom:0;}
+  .nav-settings{position:relative;flex-shrink:0;}
+  .nav-sub{
+    font-size:12px;color:#6B6760;line-height:1.6;margin-bottom:20px;
+  }
+  .nav-item{
+    background:rgba(255,255,255,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    border:1.5px solid rgba(255,255,255,0.7);border-radius:10px;
+    padding:14px 16px;cursor:pointer;
+    transition:border-color 0.15s,box-shadow 0.15s;
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .nav-item:hover{border-color:#AEAAA4;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+  .nav-item.active{border-color:#1A1A2E;background:rgba(255,255,255,0.75);box-shadow:0 2px 12px rgba(0,0,0,0.10);}
+  .nav-num{
+    width:22px;height:22px;border-radius:50%;
+    background:#F0EEE9;color:#6B6760;
+    font-size:10px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    margin-top:1px;transition:background 0.15s,color 0.15s;
+  }
+  .nav-item.active .nav-num{background:#1A1A2E;color:#fff;}
+  .nav-text{}
+  .nav-title{font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:3px;}
+  .nav-desc{font-size:11px;color:#9A9690;line-height:1.5;}
+  .nav-group{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+  .nav-group:last-child{margin-bottom:0;}
+
+  /* ── NAV SETTINGS ── */
+  .settings-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid #E2E0DB;background:rgba(255,255,255,0.55);color:#9A9690;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color 0.15s,color 0.15s,background 0.15s;}
+  .settings-btn:hover{border-color:#AEAAA4;color:#6B6760;background:rgba(255,255,255,0.75);}
+  .settings-flyout{position:absolute;top:calc(100% + 6px);right:0;width:280px;background:#fff;border:1px solid #E2E0DB;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.10);padding:14px 16px;display:none;z-index:30;}
+  .settings-flyout.open{display:block;}
+  .settings-row{display:flex;align-items:flex-start;gap:12px;justify-content:space-between;}
+  .settings-label{font-size:13px;font-weight:600;color:#1A1A2E;margin-bottom:4px;}
+  .settings-desc{font-size:11px;color:#9A9690;line-height:1.5;}
+  .toggle{position:relative;width:36px;height:20px;flex-shrink:0;margin-top:2px;}
+  .toggle input{opacity:0;width:0;height:0;position:absolute;}
+  .toggle-track{position:absolute;inset:0;background:#D8D4CE;border-radius:100px;cursor:pointer;transition:background 0.2s;}
+  .toggle-track::after{content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+  .toggle input:checked + .toggle-track{background:#006DC7;}
+  .toggle input:checked + .toggle-track::after{transform:translateX(16px);}
+
+  /* ── CONTEXT DROPDOWN ── */
+  .nav-context{margin-bottom:14px;}
+  .nav-context-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#C0BCB5;margin-bottom:6px;}
+  .context-dropdown{position:relative;width:100%;min-width:0;}
+  .context-trigger{width:100%;padding:9px 12px;border:1.5px solid #E2E0DB;border-radius:8px;background:rgba(255,255,255,0.55);font-family:inherit;font-size:12px;font-weight:500;color:#1A1A2E;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:border-color 0.15s,box-shadow 0.15s;}
+  .context-trigger:hover{border-color:#AEAAA4;}
+  .context-dropdown.open .context-trigger{border-color:#1A1A2E;box-shadow:0 0 0 3px rgba(26,26,46,0.08);}
+  .context-caret{color:#9A9690;flex-shrink:0;transition:transform 0.15s;}
+  .context-dropdown.open .context-caret{transform:rotate(180deg);}
+  .context-flyout{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1px solid #E2E0DB;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.10);padding:6px;display:none;z-index:30;}
+  .context-dropdown.open .context-flyout{display:block;}
+  .context-option{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border:none;background:none;border-radius:6px;font-family:inherit;font-size:12px;font-weight:500;color:#1A1A2E;cursor:pointer;text-align:left;transition:background 0.12s,color 0.12s;}
+  .context-option:hover{background:#F5F4F1;}
+  .context-option.selected{color:#006DC7;}
+  .context-check{flex-shrink:0;opacity:0;}
+  .context-option.selected .context-check{opacity:1;}
+
+  /* ── RIGHT FRAME ── */
+  .frame-wrap{
+    flex:1;min-width:0;
+    display:flex;flex-direction:column;
+    padding:20px 56px 28px 0;
+  }
+  .frame-shell{
+    flex:0 1 auto;
+    height:98%;
+    width:94%;
+    align-self:flex-end;
+    margin-top:auto;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid #D8D4CE;
+    box-shadow:0 4px 24px rgba(0,0,0,0.10);
+    background:#fff;
+  }
+  .frame-shell iframe{
+    width:100%;height:100%;border:none;display:block;
+  }
+
+  /* ═══ TOP-STEPS LAYOUT — steps on top, prototype full-width below ═══ */
+  body{flex-direction:column !important;height:100vh !important;min-height:0 !important;overflow:hidden !important;}
+  .nav{width:100% !important;flex:0 0 auto !important;height:auto !important;padding:28px 44px 0 !important;overflow:visible !important;}
+  .nav-sub{max-width:720px;margin-bottom:14px;}
+  .nav-context{max-width:260px;margin-bottom:14px;}
+  .nav-options-label{display:none !important;}
+  .nav-group{flex-direction:row !important;flex-wrap:nowrap !important;gap:12px !important;margin-bottom:0 !important;overflow-x:auto !important;padding-bottom:2px;}
+  .nav-group .nav-item{flex:1 1 0 !important;min-width:190px !important;}
+  .nav-cards-wide{display:none !important;}
+  .cards-strip{display:block !important;width:100% !important;flex:0 0 auto !important;padding:12px 44px 0 !important;}
+  .cards-strip-row{display:flex !important;flex-direction:row !important;gap:12px !important;overflow-x:auto !important;padding-bottom:2px;}
+  .cards-strip-row .nav-item{flex:1 1 0 !important;min-width:190px !important;}
+  .frame-wrap{flex:1 1 auto !important;min-height:0 !important;width:100% !important;padding:18px 44px 32px !important;}
+  .frame-shell{flex:1 1 auto !important;width:100% !important;height:auto !important;align-self:stretch !important;margin-top:0 !important;}
+
+</style>
+</head>
+<body>
+
+<!-- LEFT NAV -->
+<div class="nav">
+  <div class="nav-eyebrow">Deal Agent · Play Evaluation</div>
+  <div class="nav-heading">Static Suggestions <span style="font-weight:400;">/ Options</span></div>
+  <div style="border-top:1px solid #E2E0DB;margin-bottom:20px;margin-top:8px;"></div>
+
+  <div class="nav-context">
+    <div class="nav-context-label">Options</div>
+    <div class="context-dropdown" id="displayDropdown">
+      <button class="context-trigger" type="button" onclick="toggleDisplayFlyout(event)" aria-haspopup="true">
+        <span id="displayTriggerLabel">Side block</span>
+        <svg class="context-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
+      </button>
+      <div class="context-flyout" id="displayFlyout" onclick="event.stopPropagation()">
+        <button class="context-option selected" type="button" data-value="sideblock" onclick="onDisplayChange('sideblock')">
+          <span>Side block</span>
+          <svg class="context-check" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,7 5.5,10.5 11,3.5"/></svg>
+        </button>
+        <button class="context-option" type="button" data-value="dialog" onclick="onDisplayChange('dialog')">
+          <span>Dialog</span>
+          <svg class="context-check" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,7 5.5,10.5 11,3.5"/></svg>
+        </button>
+        <button class="context-option" type="button" data-value="overlay" onclick="onDisplayChange('overlay')">
+          <span>Overlay</span>
+          <svg class="context-check" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,7 5.5,10.5 11,3.5"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-item active" onclick="setState(0)" id="navItem0">
+      <div class="nav-num" id="navNum0">1</div>
+      <div class="nav-text">
+        <div class="nav-title">Play is blank</div>
+        <div class="nav-desc">Editor is empty — no blocks added yet.</div>
+      </div>
+    </div>
+    <div class="nav-item" onclick="setState(1)" id="navItem1">
+      <div class="nav-num" id="navNum1">2</div>
+      <div class="nav-text">
+        <div class="nav-title">Content added</div>
+        <div class="nav-desc">Minimum content in place — agent panel is visible.</div>
+      </div>
+    </div>
+    <div class="nav-item" onclick="setState(2)" id="navItem2">
+      <div class="nav-num" id="navNum2">3</div>
+      <div class="nav-text">
+        <div class="nav-title">Evaluate</div>
+        <div class="nav-desc">User clicks Evaluate — suggestions expand in the panel.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT FRAME -->
+<div class="frame-wrap">
+  <div class="frame-shell" id="frame-shell">
+    <iframe id="preview-frame" srcdoc=""></iframe>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   SHARED PIECES
+══════════════════════════════════════════ */
+
+var LOFI_HEADER = `
+  <div style="padding:10px 20px;border-bottom:1px solid #E2E0DB;display:flex;align-items:center;gap:5px;background:#fff;position:sticky;top:0;z-index:10;">
+    <div style="display:flex;align-items:center;gap:5px;">
+      <div class="lofi" style="width:18px;height:18px;border-radius:3px;"></div>
+      <div class="lofi" style="width:18px;height:18px;border-radius:3px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:72px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:36px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:110px;height:10px;border-radius:10px;"></div>
+      <div class="lofi" style="width:4px;height:4px;border-radius:50%;margin:0 1px;"></div>
+      <div class="lofi" style="width:60px;height:10px;border-radius:10px;"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;margin-left:auto;">
+      <div class="lofi" style="width:80px;height:22px;border-radius:4px;"></div>
+      <div class="lofi" style="width:22px;height:22px;border-radius:4px;"></div>
+      <div class="lofi" style="width:22px;height:22px;border-radius:4px;"></div>
+    </div>
+  </div>`;
+
+var LOFI_DOC_BODY = `
+    <div style="display:flex;gap:20px;padding:24px 28px 20px;align-items:flex-start;">
+      <div class="lofi" style="width:180px;height:110px;border-radius:6px;flex-shrink:0;"></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:10px;padding-top:8px;">
+        <div class="lofi" style="width:70%;height:13px;border-radius:3px;"></div>
+        <div class="lofi" style="width:90%;height:10px;border-radius:3px;"></div>
+        <div class="lofi" style="width:80%;height:10px;border-radius:3px;"></div>
+        <div class="lofi" style="width:55%;height:10px;border-radius:3px;"></div>
+      </div>
+    </div>
+    <div style="background:#EBF2FF;padding:14px 28px;">
+      <div class="lofi" style="width:120px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto 14px;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:400px;margin:0 auto;">
+        <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+        <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+        <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+        <div class="lofi" style="height:30px;border-radius:4px;background:#D0DFF5;"></div>
+      </div>
+    </div>
+    <div style="border-top:2px solid #D0DFF5;">
+      <div style="background:#EBF2FF;padding:10px 28px;"><div class="lofi" style="width:100px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto;"></div></div>
+      <div style="display:flex;gap:24px;padding:18px 28px;">
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+          <div class="lofi" style="width:100px;height:10px;border-radius:3px;background:#C8D8EE;"></div>
+          <div class="lofi" style="width:95%;height:9px;border-radius:3px;"></div>
+          <div class="lofi" style="width:88%;height:9px;border-radius:3px;"></div>
+          <div class="lofi" style="width:75%;height:9px;border-radius:3px;"></div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+          <div class="lofi" style="width:110px;height:10px;border-radius:3px;background:#C8D8EE;"></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div class="lofi" style="width:52px;height:52px;border-radius:4px;flex-shrink:0;"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:7px;padding-top:2px;">
+              <div class="lofi" style="width:90%;height:9px;border-radius:3px;background:#C8D8EE;"></div>
+              <div class="lofi" style="width:40px;height:14px;border-radius:10px;background:#3A9E5F;"></div>
+              <div class="lofi" style="width:85%;height:9px;border-radius:3px;"></div>
+              <div class="lofi" style="width:70%;height:9px;border-radius:3px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:2px solid #D0DFF5;">
+      <div style="background:#EBF2FF;padding:10px 28px;"><div class="lofi" style="width:90px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto;"></div></div>
+      <div style="padding:16px 28px;display:flex;flex-direction:column;gap:10px;">
+        <div class="lofi" style="width:100px;height:11px;border-radius:3px;margin:0 auto;"></div>
+        <div class="lofi" style="width:100%;height:34px;border-radius:4px;"></div>
+        <div class="lofi" style="width:75%;height:9px;border-radius:3px;margin:0 auto;"></div>
+        <div style="display:flex;gap:12px;margin-top:4px;">
+          <div style="flex:1;display:flex;justify-content:center;"><div class="lofi" style="width:80%;height:10px;border-radius:3px;"></div></div>
+          <div style="flex:1;display:flex;justify-content:center;"><div class="lofi" style="width:80%;height:10px;border-radius:3px;"></div></div>
+        </div>
+      </div>
+    </div>`;
+
+var SHARED_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:#F2F4F7;height:100vh;display:flex;overflow:hidden;font-size:13px;color:#1A1A2E;}
+  .lofi{background:#E5EAF2;border-radius:3px;display:inline-block;}
+  .main{flex:1;overflow-y:auto;background:#fff;border-right:1px solid #E2E0DB;min-width:0;}
+  .panel{width:320px;flex-shrink:0;background:#fff;border-left:1px solid #E2E0DB;display:flex;flex-direction:column;font-family:'Source Sans Pro',sans-serif;}
+  .agent-header{padding:14px 16px;border-bottom:1px solid #E2E0DB;background:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .agent-header h2{font-size:14px;font-weight:500;color:#3A3830;}
+  .agent-header-actions{display:flex;align-items:center;gap:6px;}
+  .agent-icon-btn{width:28px;height:28px;border:1px solid #E2E0DB;border-radius:4px;background:#FAFAF8;color:#6B6760;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s,border-color 0.15s;padding:0;}
+  .agent-icon-btn:hover{background:#F0EEE9;border-color:#C0BCB5;}
+  .panel-score{padding:12px 14px 13px;background:#fff;border-bottom:1px solid #E2E0DB;flex-shrink:0;}
+  .score-context{font-size:11px;color:#6B6760;line-height:1.55;margin-bottom:10px;}
+  .score-context strong{color:#1A1A2E;}
+  .score-bar-wrap{display:flex;align-items:center;gap:9px;}
+  .score-bar-bg{flex:1;height:7px;background:#E8E5DF;border-radius:100px;overflow:hidden;}
+  .score-bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#E05C2A,#F0A500);transition:width 0.8s cubic-bezier(.16,1,.3,1);}
+  .score-number{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:#E05C2A;min-width:30px;text-align:right;}
+  .score-threshold{font-size:10px;color:#9A9690;margin-top:4px;}
+  .score-updated{font-size:10px;color:#5A9E6F;text-align:right;margin-top:3px;opacity:0;transition:opacity 0.3s;}
+  .score-updated.visible{opacity:1;}
+  .panel-cards{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;}
+  .card{background:#fff;border:1px solid #E2E0DB;border-radius:7px;transition:border-color 0.3s,background 0.3s,box-shadow 0.2s;}
+  .card:hover{box-shadow:0 1px 6px rgba(0,0,0,0.07);}
+  .card.accepted{border-color:#5A9E6F;background:#F4FAF6;}
+  .card.dismissed{max-height:0!important;opacity:0!important;margin-bottom:0!important;overflow:hidden!important;border:none!important;pointer-events:none;}
+  .card-top{padding:10px 10px 7px;}
+  .card-type-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;letter-spacing:0.07em;padding:2px 7px;border-radius:100px;margin-bottom:5px;text-transform:uppercase;}
+  .badge-replace{background:#FFF0E8;color:#C44A2C;}
+  .badge-add{background:#EBF2FF;color:#2E5EAA;}
+  .card-title{font-size:11.5px;font-weight:600;color:#1A1A2E;line-height:1.4;}
+  .card-top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;}
+  .card-dismiss{background:none;border:none;cursor:pointer;color:#C0BCB5;padding:0;flex-shrink:0;display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;transition:color 0.15s,background 0.15s;}
+  .card-dismiss:hover{color:#6B6760;background:#F0EEE9;}
+  .card-divider{height:1px;background:#F0EEE9;}
+  .card-body{padding:9px 10px 11px;}
+  .field-label{font-size:9px;font-weight:700;letter-spacing:0.08em;color:#9A9690;text-transform:uppercase;margin-bottom:4px;margin-top:8px;}
+  .field-label:first-child{margin-top:0;}
+  .field-quote{font-size:11px;color:#6B6760;background:#FAFAF8;border:1px solid #E8E5DF;border-radius:4px;padding:5px 8px;line-height:1.5;font-style:italic;}
+  .field-text{font-size:11px;color:#3A3830;line-height:1.6;}
+  .card-question{font-size:11px;color:#3A3830;line-height:1.6;margin-bottom:6px;}
+  .answer-textarea{width:100%;border:1px solid #D8D4CE;border-radius:5px;padding:6px 8px;font-family:inherit;font-size:11px;color:#1A1A2E;background:#FAFAF8;resize:vertical;outline:none;line-height:1.5;transition:border-color 0.15s;min-height:56px;}
+  .answer-textarea:focus{border-color:#2E5EAA;background:#fff;}
+  .answer-textarea.error{border-color:#E05C2A;}
+  .card-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:9px;}
+  .btn-primary{background:#006DC7;color:#fff;border:none;padding:5px 13px;border-radius:5px;font-family:inherit;font-size:11px;font-weight:500;cursor:pointer;transition:background 0.15s;}
+  .btn-primary:hover{background:#0056A8;}
+  .btn-secondary{background:none;color:#6B6760;border:1px solid #D8D4CE;padding:5px 10px;border-radius:5px;font-family:inherit;font-size:11px;cursor:pointer;}
+  .btn-secondary:hover{border-color:#9A9690;color:#3A3830;}
+  .state-tag{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;}
+  .state-tag.loading{color:#9A9690;padding:2px 0;}
+  .state-tag.accepted,.state-tag.submitted{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:2px 7px;border-radius:100px;}
+  .state-tag.accepted{background:#FFF0E8;color:#C44A2C;}
+  .state-tag.submitted{background:#EBF2FF;color:#2E5EAA;}
+  .state-tag .spinner-sm{width:13px;height:13px;border:1.5px solid #E2E0DB;border-top-color:#9A9690;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
+  .panel-empty{text-align:center;padding:36px 18px;color:#9A9690;font-size:11.5px;line-height:1.7;}
+  .icon-rail{width:44px;background:#FAFAF8;border-left:1px solid #E2E0DB;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:10px;flex-shrink:0;}
+  .rail-active-wrap{position:relative;width:100%;display:flex;justify-content:center;align-items:center;padding:2px 0;}
+  .rail-active-wrap::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:24px;background:#00A99D;border-radius:0 2px 2px 0;}
+  .rail-star{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#00A99D;flex-shrink:0;}
+  .rail-skel{width:24px;height:24px;border-radius:6px;background:#EDEAE4;flex-shrink:0;}
+  .rail-divider{width:28px;height:1px;background:#E2E0DB;flex-shrink:0;margin:2px 0;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .spinner{width:16px;height:16px;border:2px solid #E2E0DB;border-top-color:#1A1A2E;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
+  .suggestion-card{background:#fff;border:1px solid #E2E0DB;border-radius:7px;padding:12px 13px;font-size:11.5px;color:#3A3830;line-height:1.65;}
+  .suggestion-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;}
+  .type-replace{color:#C44A2C;}
+  .type-add{color:#2E5EAA;}`;
+
+var PANEL_HEADER = `
+  <div class="agent-header">
+    <h2>Get ready for Deal Agent</h2>
+    <div class="agent-header-actions">
+      <button class="agent-icon-btn" type="button" title="Reset">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      </button>
+      <button class="agent-icon-btn" type="button" title="Expand">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+      </button>
+      <button class="agent-icon-btn" type="button" onclick="closePanel()" title="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>`;
+
+var PANEL_DEFAULT = `
+  <div id="evalDefault" style="padding:16px 14px;display:flex;flex-direction:column;gap:14px;">
+    <div style="font-size:12px;color:#3A3830;line-height:1.6;">Is your Play ready for execution? Let's run a quick check to ensure your sales reps get the best recommendations in the Deal Agent.</div>
+    <button onclick="runEvaluate()" style="background:#006DC7;color:#fff;border:none;padding:9px 14px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;width:fit-content;align-self:flex-start;transition:background 0.15s;" onmouseover="this.style.background='#0056A8'" onmouseout="this.style.background='#006DC7'">Evaluate play</button>
+  </div>`;
+
+var PANEL_LOADING = `
+  <div id="evalLoading" style="display:none;padding:20px 14px;flex-direction:column;gap:12px;align-items:flex-start;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="spinner"></div>
+      <div style="font-size:12px;color:#3A3830;font-weight:500;">Evaluating your Play…</div>
+    </div>
+    <div style="font-size:11px;color:#9A9690;line-height:1.6;">Checking against the Know-Say-Show-Do framework.</div>
+    <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+      <div style="height:8px;border-radius:100px;background:#EDEAE4;width:90%;"></div>
+      <div style="height:8px;border-radius:100px;background:#EDEAE4;width:70%;"></div>
+      <div style="height:8px;border-radius:100px;background:#EDEAE4;width:80%;"></div>
+    </div>
+  </div>`;
+
+var PANEL_CARDS = `
+  <div id="evalResults" style="display:none;flex:1;overflow:hidden;flex-direction:column;">
+    <div class="panel-score">
+      <div class="score-context">How your play scores against <strong>Know-Say-Show-Do</strong>. A score of at least <strong>80</strong> is needed to surface in Deals.</div>
+      <div class="score-bar-wrap">
+        <div class="score-bar-bg"><div class="score-bar-fill" id="scoreBarFill" style="width:0%;"></div></div>
+        <div class="score-number" id="scoreNumber">—</div>
+      </div>
+      <div class="score-threshold">Minimum to surface in Deals: 80</div>
+      <div class="score-updated" id="scoreUpdated">↑ Score updated</div>
+    </div>
+    <div class="panel-cards" id="panelCards">
+      <div class="card" id="card1">
+        <div class="card-top">
+          <div class="card-top-row">
+            <div class="card-type-badge badge-replace">✶ Replace text</div>
+            <button class="card-dismiss" onclick="dismissCard('card1')" title="Dismiss"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg></button>
+          </div>
+          <div class="card-title">Sharpen the competitive differentiation claim</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-body" id="body1">
+          <div class="field-label">Current text</div>
+          <div class="field-quote">"Aggressive sales culture with heavy involvement from their exec team &amp; board"</div>
+          <div class="field-label">Replace with</div>
+          <div class="field-text">A specific, evidence-backed claim from a recent competitive win — e.g. how Highspot's analytics depth outperformed Seismic in a live deal.</div>
+          <div class="card-actions">
+            <button class="btn-secondary" onclick="dismissCard('card1')">Dismiss</button>
+            <button class="btn-primary" onclick="acceptCard('card1')">Accept</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="card2">
+        <div class="card-top">
+          <div class="card-top-row">
+            <div class="card-type-badge badge-add">+ Add information</div>
+            <button class="card-dismiss" onclick="dismissCard('card2')" title="Dismiss"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg></button>
+          </div>
+          <div class="card-title">Add Seismic's recent pricing changes</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-body" id="body2">
+          <div class="card-question">What changes has Seismic made to their pricing model in the past 6 months?</div>
+          <textarea class="answer-textarea" id="ans2" placeholder="e.g. Seismic moved to seat-based pricing in Q1 2025…" rows="3"></textarea>
+          <div class="card-actions">
+            <button class="btn-secondary" onclick="dismissCard('card2')">Dismiss</button>
+            <button class="btn-primary" onclick="submitAnswer('card2','ans2')">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="card3">
+        <div class="card-top">
+          <div class="card-top-row">
+            <div class="card-type-badge badge-add">+ Add information</div>
+            <button class="card-dismiss" onclick="dismissCard('card3')" title="Dismiss"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg></button>
+          </div>
+          <div class="card-title">Add a champion enablement talk track</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-body" id="body3">
+          <div class="card-question">What specific language can a champion use to justify Highspot over Seismic internally?</div>
+          <textarea class="answer-textarea" id="ans3" placeholder="e.g. 'Highspot gives me one place to see what content is actually moving deals…'" rows="3"></textarea>
+          <div class="card-actions">
+            <button class="btn-secondary" onclick="dismissCard('card3')">Dismiss</button>
+            <button class="btn-primary" onclick="submitAnswer('card3','ans3')">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="card4">
+        <div class="card-top">
+          <div class="card-top-row">
+            <div class="card-type-badge badge-replace">✶ Replace text</div>
+            <button class="card-dismiss" onclick="dismissCard('card4')" title="Dismiss"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg></button>
+          </div>
+          <div class="card-title">Make the intro action-oriented</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-body" id="body4">
+          <div class="field-label">Current text</div>
+          <div class="field-quote">"If you feel something is missing — send feedback!"</div>
+          <div class="field-label">Replace with</div>
+          <div class="field-text">A concrete first action: "Start with the Land Early Differentiation talk track, then work through the objection handlers below."</div>
+          <div class="card-actions">
+            <button class="btn-secondary" onclick="dismissCard('card4')">Dismiss</button>
+            <button class="btn-primary" onclick="acceptCard('card4')">Accept</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+var PANEL_PLAIN = `
+  <div id="evalResults" style="display:none;flex:1;overflow-y:auto;flex-direction:column;padding:12px;gap:8px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9A9690;margin-bottom:4px;">Suggestions</div>
+    <div class="suggestion-card"><div class="suggestion-type type-replace">⚠ Sharpen your differentiation</div>Replace "aggressive sales culture" with a specific, evidence-backed win story that shows how Highspot's analytics depth beat Seismic in a live deal.</div>
+    <div class="suggestion-card"><div class="suggestion-type type-add">+ Add pricing context</div>Include Seismic's recent move to seat-based pricing so reps can counter "they're cheaper now" directly instead of deflecting to TCO.</div>
+    <div class="suggestion-card"><div class="suggestion-type type-add">+ Add champion talk track</div>Give champions specific language to justify Highspot internally — a "say this to your CFO" script would directly improve deal progression.</div>
+    <div class="suggestion-card"><div class="suggestion-type type-replace">⚠ Make the intro actionable</div>Start with a concrete first step — e.g. "Open with the Land Early Differentiation talk track" — so reps know exactly what to do in the first 30 seconds.</div>
+  </div>`;
+
+var ICON_RAIL = `
+  <div class="icon-rail">
+    <div class="rail-active-wrap">
+      <div class="rail-star">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2.5L13.4 10.1L21 12L13.4 13.9L12 21.5L10.6 13.9L3 12L10.6 10.1L12 2.5Z"/>
+        </svg>
+      </div>
+    </div>
+    <div class="rail-skel"></div>
+    <div class="rail-skel"></div>
+    <div class="rail-skel"></div>
+    <div class="rail-divider"></div>
+    <div class="rail-skel"></div>
+  </div>`;
+
+var JS_CARDS = `
+  var score=58;
+  function updateScore(d){
+    score=Math.min(100,score+d);
+    var f=document.getElementById('scoreBarFill'),n=document.getElementById('scoreNumber'),u=document.getElementById('scoreUpdated');
+    f.style.width=score+'%';n.textContent=score;
+    if(score>=80){n.style.color='#5A9E6F';f.style.background='linear-gradient(90deg,#3A9E5F,#5AC47A)';}
+    u.classList.add('visible');setTimeout(function(){u.classList.remove('visible');},2400);
+  }
+  var CHECK_SVG='<svg width="11" height="11" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,7 5.5,10.5 11,3.5"/></svg>';
+  function acceptCard(id){
+    var n=id.replace('card','');
+    var body=document.getElementById('body'+n);
+    body.innerHTML='<div class="state-tag loading"><span class="spinner-sm"></span>Updating play…</div>';
+    setTimeout(function(){
+      body.innerHTML='<div class="state-tag accepted">'+CHECK_SVG+' Play updated</div>';
+      document.getElementById(id).classList.add('accepted');updateScore(8);
+    },1800);
+  }
+  function submitAnswer(cid,iid){
+    var ta=document.getElementById(iid);
+    if(!ta.value.trim()){ta.classList.add('error');ta.placeholder='Please add an answer before submitting';return;}
+    var n=cid.replace('card','');
+    var body=document.getElementById('body'+n);
+    body.innerHTML='<div class="state-tag loading"><span class="spinner-sm"></span>Updating play…</div>';
+    setTimeout(function(){
+      body.innerHTML='<div class="state-tag submitted">'+CHECK_SVG+' Play updated</div>';
+      document.getElementById(cid).classList.add('accepted');updateScore(10);
+    },1800);
+  }
+  function dismissCard(id){
+    var c=document.getElementById(id),h=c.scrollHeight;
+    c.style.maxHeight=h+'px';c.style.overflow='hidden';c.style.opacity='1';c.style.transition='none';
+    c.getBoundingClientRect();
+    c.style.transition='max-height 0.38s ease,opacity 0.28s ease,margin-bottom 0.35s ease';
+    c.style.maxHeight='0';c.style.opacity='0';c.style.marginBottom='0';
+    setTimeout(function(){c.classList.add('dismissed');checkAllDone();},400);
+  }
+  function checkAllDone(){
+    var all=document.querySelectorAll('#panelCards .card');
+    var gone=Array.prototype.every.call(all,function(c){return c.classList.contains('dismissed');});
+    if(gone)setTimeout(function(){document.getElementById('panelCards').innerHTML='<div class="panel-empty">✓ <strong>All improvements reviewed</strong><br>No more suggestions right now.</div>';},100);
+  }`;
+
+var JS_EVALUATE_CARDS = `
+  function runEvaluate(){
+    document.getElementById('evalDefault').style.display='none';
+    document.getElementById('evalLoading').style.display='flex';
+    setTimeout(function(){
+      document.getElementById('evalLoading').style.display='none';
+      var r=document.getElementById('evalResults');r.style.display='flex';
+      setTimeout(function(){
+        document.getElementById('scoreBarFill').style.width='58%';
+        document.getElementById('scoreNumber').textContent='58';
+      },150);
+    },3500);
+  }
+  function closePanel(){
+    if(window.__manualTrigger){
+      document.getElementById('evalDefault').style.display='flex';
+      document.getElementById('evalLoading').style.display='none';
+      document.getElementById('evalResults').style.display='none';
+      document.getElementById('scoreBarFill').style.width='0%';
+      document.getElementById('scoreNumber').textContent='—';
+    }else{
+      document.getElementById('evalDefault').style.display='none';
+      document.getElementById('evalLoading').style.display='none';
+      var r=document.getElementById('evalResults');r.style.display='flex';r.style.flexDirection='column';
+      document.getElementById('scoreBarFill').style.width='58%';
+      document.getElementById('scoreNumber').textContent='58';
+    }
+  }`;
+
+var JS_EVALUATE_PLAIN = `
+  function runEvaluate(){
+    document.getElementById('evalDefault').style.display='none';
+    document.getElementById('evalLoading').style.display='flex';
+    setTimeout(function(){
+      document.getElementById('evalLoading').style.display='none';
+      var r=document.getElementById('evalResults');r.style.display='flex';r.style.flexDirection='column';
+    },3500);
+  }
+  function closePanel(){
+    if(window.__manualTrigger){
+      document.getElementById('evalDefault').style.display='flex';
+      document.getElementById('evalLoading').style.display='none';
+      document.getElementById('evalResults').style.display='none';
+    }else{
+      document.getElementById('evalDefault').style.display='none';
+      document.getElementById('evalLoading').style.display='none';
+      var r=document.getElementById('evalResults');r.style.display='flex';r.style.flexDirection='column';
+    }
+  }`;
+
+/* ── EDITOR shell pieces ── */
+var EDITOR_CSS = `
+  .editor-header-primary{padding:14px 16px 14px 20px;background:#fff;border-bottom:1px solid #E5E8ED;display:flex;align-items:center;gap:16px;flex-shrink:0;}
+  .editor-header-left{display:flex;flex-direction:column;gap:8px;min-width:0;}
+  .editor-header-meta{display:flex;align-items:center;gap:6px;}
+  .editor-header-actions{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0;}
+  .editor-skel-btn{background:#EEF2F8;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid #D8DFE9;}
+  .editor-skel-save{display:flex;border-radius:6px;overflow:hidden;flex-shrink:0;background:#EEF2F8;border:1px solid #D8DFE9;}
+  .editor-skel-save-main{display:flex;align-items:center;justify-content:center;border-right:1px solid #D8DFE9;}
+  .editor-skel-save-caret{display:flex;align-items:center;justify-content:center;background:#1159A8;}
+  .editor-skel-share{background:#1159A8;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .editor-skel-share .lofi{background:rgba(255,255,255,0.75);}
+  .editor-skel-close{background:#EEF2F8;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid #D8DFE9;}
+  .editor-header-secondary{padding:8px 16px;background:#fff;border-bottom:1px solid #E5E8ED;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+  .editor-skel-pill-outline{background:#fff;border:1px solid #C8D4E4;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .editor-skel-pill-outline .lofi{background:#D8E2EE;}
+  .blocks-panel{width:200px;flex-shrink:0;background:#fff;border-right:1px solid #E5E8ED;padding:16px 12px;overflow-y:auto;}
+  .block-section{font-size:11px;font-weight:600;letter-spacing:0.03em;color:#1A1A2E;margin-bottom:10px;margin-top:18px;}
+  .block-section:first-child{margin-top:0;}
+  .block-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+  .block-item{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 6px;border-radius:6px;border:1px solid #E5E8ED;background:#fff;cursor:pointer;}
+  .block-item:hover{border-color:#B0BFCF;background:#F5F8FC;}
+  .block-icon{width:28px;height:28px;border-radius:5px;background:#EEF2FB;display:flex;align-items:center;justify-content:center;font-size:14px;color:#1159A8;}
+  .block-label{font-size:10px;color:#3A4A5C;font-weight:500;}
+  .editor-canvas{flex:1;overflow-y:auto;background:#F2F4F7;padding:16px;}
+  .canvas-inner{background:#fff;border-radius:4px;overflow:hidden;min-height:100%;}
+  .canvas-float{width:100%;background:#fff;border:1px solid #D8DFE9;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.07);font-family:'DM Sans',sans-serif;}
+  .cf-header{padding:14px 16px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .cf-title{font-size:14px;font-weight:700;color:#1A1A2E;}
+  .cf-close{background:none;border:none;cursor:pointer;color:#9AAFBF;padding:2px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:color 0.15s;}
+  .cf-close:hover{color:#3A4A5C;}
+  .cf-intro{padding:10px 16px 14px;font-size:12px;color:#4A5A6A;line-height:1.6;border-bottom:1px solid #EEF2F8;}
+  .cf-actions{padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+  .cf-btn{background:#fff;border:1px solid #C8D4E4;border-radius:6px;padding:9px 14px;font-family:inherit;font-size:12px;font-weight:500;color:#1A2A3A;cursor:pointer;text-align:left;transition:border-color 0.15s,background 0.15s,color 0.15s;display:flex;align-items:center;gap:8px;}
+  .cf-btn:hover{border-color:#1159A8;color:#1159A8;background:#F5F8FC;}
+  .cf-btn:disabled{color:#9AAFBF;border-color:#E5E8ED;background:#fff;cursor:not-allowed;}
+  .cf-btn:disabled:hover{color:#9AAFBF;border-color:#E5E8ED;background:#fff;}
+  .cf-btn-primary{background:#1159A8;color:#fff;border-color:#1159A8;}
+  .cf-btn-primary:hover{background:#0D4A8A;border-color:#0D4A8A;color:#fff;}
+  .cf-btn-primary:disabled{background:#C8D4E4;border-color:#C8D4E4;color:#fff;cursor:not-allowed;opacity:1;}
+  .cf-btn-primary:disabled:hover{background:#C8D4E4;border-color:#C8D4E4;color:#fff;}
+  .cf-loading{padding:20px 16px;display:flex;align-items:center;gap:10px;display:none;}
+  .cf-loading-text{font-size:12px;color:#4A5A6A;}
+  .cf-suggestions{display:none;flex-direction:column;}
+  .cf-collapse-header{cursor:pointer;user-select:none;}
+  .cf-caret{display:flex;align-items:center;justify-content:center;color:#5A7A9A;transition:transform 0.2s;}
+  .cf-suggestions.collapsed .cf-caret{transform:rotate(-90deg);}
+  .cf-suggestions.collapsed #cfSugBody{display:none;}
+  #cfIntro.collapsed .cf-caret{transform:rotate(-90deg);}
+  #cfIntro.collapsed #cfIntroBody{display:none;}
+  #cfIntro.collapsed .cf-collapse-header{padding-bottom:14px;}
+  .cf-back{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:#1159A8;font-family:inherit;font-size:13px;font-weight:600;padding:10px 16px;text-align:left;transition:color 0.15s;}
+  .cf-back:hover{color:#0D4A8A;}
+  .cf-sug-header{padding:10px 16px 8px;display:flex;align-items:center;justify-content:space-between;}
+  .cf-sug-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8A9AB0;}
+  .cf-cards{padding:12px 10px;display:flex;flex-direction:column;gap:8px;}
+  .cf-card{background:#fff;border:1px solid #E5E8ED;border-radius:8px;padding:14px 16px;}
+  .cf-card-type{font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:5px;}
+  .cf-type-replace{color:#C44A2C;}
+  .cf-type-add{color:#1159A8;}
+  .cf-pill{display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:100px;margin-bottom:10px;}
+  .cf-pill-rec{background:#E4EEFB;color:#1159A8;}
+  .cf-pill-sug{background:#EDEAE4;color:#4A5A6A;}
+  .cf-card-heading{font-size:15px;font-weight:700;color:#1A1A2E;line-height:1.3;margin-bottom:8px;}
+  .cf-card-text{font-size:13px;color:#3A4A5C;line-height:1.6;}
+  .add-row{display:flex;align-items:center;gap:8px;padding:3px 0;}
+  .add-row-line{flex:1;height:1px;background:#D8DFE9;}
+  .add-btn{width:16px;height:16px;border-radius:50%;border:1px solid #B0BFCF;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:#7A8FA8;cursor:pointer;flex-shrink:0;}
+  .crm-overlay{position:fixed;inset:0;background:rgba(20,30,45,0.45);display:none;align-items:center;justify-content:center;z-index:100;}
+  .crm-overlay.open{display:flex;}
+  .crm-modal{width:680px;max-width:92%;max-height:90%;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.28);display:flex;flex-direction:column;font-family:'DM Sans',sans-serif;}
+  .crm-modal-header{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;background:#F2F4F7;border-bottom:1px solid #E5E8ED;flex-shrink:0;}
+  .crm-modal-title{font-size:18px;font-weight:700;color:#1A1A2E;}
+  .crm-modal-x{width:32px;height:32px;border:1px solid #D8DFE9;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#5A7A9A;transition:background 0.15s;}
+  .crm-modal-x:hover{background:#F0EEE9;}
+  .crm-modal-body{padding:20px;flex:1;overflow-y:auto;}
+  .crm-modal-body h3{font-size:14px;font-weight:700;color:#1A1A2E;margin-bottom:8px;}
+  .crm-modal-desc{font-size:13px;color:#4A5A6A;line-height:1.65;margin-bottom:22px;}
+  .crm-link{color:#1159A8;font-weight:600;cursor:pointer;}
+  .crm-link:hover{text-decoration:underline;}
+  .crm-filter-label{font-size:13px;color:#3A4A5C;margin-bottom:10px;}
+  .crm-filter-row{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+  .crm-select{height:44px;border:1px solid #C8D4E4;border-radius:6px;display:flex;align-items:center;padding:0 14px;font-size:14px;color:#1A1A2E;background:#fff;cursor:pointer;gap:8px;}
+  .crm-select:hover{border-color:#1159A8;}
+  .crm-select.placeholder{color:#9AAFBF;}
+  .crm-select svg{margin-left:auto;color:#5A7A9A;flex-shrink:0;}
+  .crm-trash{width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:#5A7A9A;cursor:pointer;border-radius:6px;flex-shrink:0;transition:background 0.15s,color 0.15s;}
+  .crm-trash:hover{background:#F8E8E4;color:#C44A2C;}
+  .crm-add-filter{display:inline-flex;align-items:center;gap:8px;background:#F2F4F7;border:1px solid #D8DFE9;border-radius:6px;padding:10px 16px;font-family:inherit;font-size:14px;font-weight:500;color:#1A1A2E;cursor:pointer;transition:background 0.15s;}
+  .crm-add-filter:hover{background:#E8ECF2;}
+  .crm-modal-footer{display:flex;justify-content:flex-end;gap:10px;padding:15px 20px;background:#F2F4F7;border-top:1px solid #E5E8ED;flex-shrink:0;}
+  .crm-btn-cancel{padding:9px 18px;border:1px solid #C8D4E4;border-radius:6px;background:#fff;font-family:inherit;font-size:14px;font-weight:500;color:#1A1A2E;cursor:pointer;transition:background 0.15s;}
+  .crm-btn-cancel:hover{background:#F0EEE9;}
+  .crm-btn-apply{padding:9px 22px;border:none;border-radius:6px;background:#1159A8;font-family:inherit;font-size:14px;font-weight:500;color:#fff;cursor:pointer;transition:background 0.15s;}
+  .crm-btn-apply:hover{background:#0D4A8A;}
+  .sel-block{position:relative;border:2px solid #2E9E94 !important;}
+  .sel-toolbar{position:absolute;top:6px;right:6px;display:flex;gap:4px;z-index:6;}
+  .sel-tool{width:26px;height:26px;border:none;border-radius:5px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+  .sel-tool-blue{background:#1159A8;}
+  .sel-tool-blue:hover{background:#0D4A8A;}
+  .sel-tool-red{background:#C0392B;}
+  .sel-tool-red:hover{background:#A5301F;}
+  .fmt-panel{margin-top:14px;background:#fff;border:1px solid #D8DFE9;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.07);font-family:'DM Sans',sans-serif;}
+  .fmt-header{background:#1159A8;color:#fff;padding:12px 14px;display:flex;align-items:center;gap:8px;}
+  .fmt-header-title{font-size:15px;font-weight:700;flex:1;}
+  .fmt-info{opacity:0.85;}
+  .fmt-body{padding:14px;}
+  .fmt-title{font-size:14px;font-weight:700;color:#1159A8;margin-bottom:12px;}
+  .fmt-field{margin-bottom:13px;}
+  .fmt-field:last-child{margin-bottom:0;}
+  .fmt-label{font-size:12px;font-weight:600;color:#1A1A2E;margin-bottom:6px;}
+  .fmt-color-row{display:flex;align-items:stretch;gap:8px;}
+  .fmt-swatch{display:flex;align-items:center;gap:5px;border:1px solid #C8D4E4;border-radius:6px;padding:5px 7px;background:#fff;cursor:pointer;}
+  .fmt-chip{width:22px;height:18px;border-radius:3px;border:1px solid rgba(0,0,0,0.12);display:block;}
+  .fmt-chip-none{background:#fff;background-image:linear-gradient(to top right,transparent calc(50% - 1px),#E05C2A,transparent calc(50% + 1px));}
+  .fmt-input{flex:1;min-width:0;border:1px solid #C8D4E4;border-radius:6px;padding:6px 8px;font-family:inherit;font-size:12px;color:#3A4A5C;background:#fff;outline:none;}
+  .fmt-opt-row{display:flex;gap:8px;}
+  .fmt-opt{width:44px;height:38px;border:1px solid #C8D4E4;border-radius:6px;background:#fff;color:#1159A8;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color 0.15s,background 0.15s;}
+  .fmt-opt:hover{border-color:#1159A8;}
+  .fmt-opt.selected{background:#2E9E94;border-color:#2E9E94;color:#fff;}
+  .da-options-btn{display:flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid #C8D4E4;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#1159A8;cursor:pointer;flex-shrink:0;transition:background 0.15s,border-color 0.15s;}
+  .da-options-btn:hover{background:#F5F8FC;border-color:#1159A8;}
+  .da-options-btn:disabled{color:#9AAFBF;border-color:#E5E8ED;background:#fff;cursor:not-allowed;}
+  .da-options-btn:disabled:hover{background:#fff;border-color:#E5E8ED;}
+  .da-overlay{position:fixed;inset:0;background:rgba(20,30,45,0.45);display:none;align-items:center;justify-content:center;z-index:90;padding:24px;}
+  .da-overlay.open{display:flex;}
+  .da-settings{width:760px;max-width:100%;max-height:92%;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.28);display:flex;flex-direction:column;font-family:'DM Sans',sans-serif;}
+  .da-settings-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #E5E8ED;flex-shrink:0;}
+  .da-settings-title{font-size:18px;font-weight:700;color:#1A1A2E;}
+  .da-settings-x{width:36px;height:36px;border:1px solid #E5E8ED;border-radius:8px;background:#F2F4F7;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#5A6573;transition:background 0.15s,color 0.15s;}
+  .da-settings-x:hover{background:#E8ECF2;color:#1A1A2E;}
+  .da-settings-body{flex:1;display:flex;min-height:0;}
+  .da-settings-nav{width:230px;flex-shrink:0;border-right:1px solid #E5E8ED;padding:18px 14px;display:flex;flex-direction:column;gap:4px;}
+  .da-nav-item{position:relative;width:100%;text-align:left;border:none;background:none;border-radius:6px;padding:10px 14px;font-family:inherit;font-size:14px;font-weight:500;color:#1A1A2E;cursor:pointer;transition:background 0.12s,color 0.12s;}
+  .da-nav-item:hover{background:#F5F4F1;}
+  .da-nav-item.active{background:#E4EEFB;color:#1159A8;font-weight:600;}
+  .da-settings-content{flex:1;min-width:0;overflow-y:auto;padding:22px 26px;}
+  .da-content-title{font-size:16px;font-weight:700;color:#1A1A2E;margin-bottom:8px;}
+  .da-eval-intro{font-size:14px;color:#3A4A5C;line-height:1.6;margin-bottom:16px;}
+  .da-eval-btn{display:inline-flex;align-items:center;gap:8px;background:#1159A8;color:#fff;border:none;padding:10px 16px;border-radius:6px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.15s;}
+  .da-eval-btn:hover{background:#0D4A8A;}
+  .da-eval-loading{display:flex;align-items:center;gap:10px;padding:6px 0;}
+  .da-eval-loading-text{font-size:13px;color:#3A4A5C;}
+  .da-sug{padding:16px 2px;border-bottom:1px solid #EEF2F8;}
+  .da-sug:last-child{border-bottom:none;}
+  .da-sug-heading{font-size:14px;font-weight:700;color:#1A1A2E;margin-bottom:6px;}
+  .da-sug-text{font-size:13px;color:#3A4A5C;line-height:1.6;}
+  .da-settings-footer{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;background:#F2F4F7;border-top:1px solid #E5E8ED;flex-shrink:0;}
+  .da-btn-cancel{padding:9px 18px;border:1px solid #C8D4E4;border-radius:6px;background:#fff;font-family:inherit;font-size:14px;font-weight:500;color:#1A1A2E;cursor:pointer;transition:background 0.15s;}
+  .da-btn-cancel:hover{background:#F0EEE9;}
+  .da-btn-apply{padding:9px 22px;border:none;border-radius:6px;background:#1159A8;font-family:inherit;font-size:14px;font-weight:500;color:#fff;cursor:pointer;transition:background 0.15s;}
+  .da-btn-apply:hover{background:#0D4A8A;}
+  /* ── Improve Play bar button + popover (overlay) ── */
+  .ip-wrap{position:relative;margin-left:auto;flex-shrink:0;}
+  .ip-bar-btn{display:flex;align-items:center;gap:8px;height:36px;width:160px;padding:0 12px;border:1px solid transparent;border-radius:6px;background:#F2F2F2;font-family:'Source Sans Pro',sans-serif;font-size:14px;font-weight:400;color:#2E2E2E;cursor:pointer;transition:background 0.15s;}
+  .ip-bar-btn:hover{background:#E8E8E8;}
+  .ip-bar-btn .ip-spark{flex-shrink:0;color:#1A1A2E;display:flex;}
+  .ip-bar-btn .ip-label{flex:1;text-align:left;white-space:nowrap;}
+  .ip-bar-btn .ip-caret{flex-shrink:0;color:#5A5A5A;display:flex;transition:transform 0.2s;}
+  .ip-wrap.open .ip-bar-btn .ip-caret{transform:rotate(180deg);}
+  .ip-bar-btn:disabled{color:#9AAFBF;cursor:not-allowed;background:#F2F2F2;}
+  .ip-bar-btn:disabled .ip-spark{color:#B8C2CE;}
+  .ip-bar-btn:disabled:hover{background:#F2F2F2;}
+  .ip-popover{position:absolute;top:calc(100% + 8px);right:0;width:282px;display:none;z-index:60;}
+  .ip-wrap.open .ip-popover{display:block;}
+  .ip-pop-caret{position:absolute;top:-6px;right:73px;width:14px;height:14px;background:#fff;transform:rotate(45deg);border-radius:2px;box-shadow:-1px -1px 2px rgba(53,53,53,0.06);}
+  .ip-pop-card{position:relative;background:#fff;border-radius:8px;padding:16px;box-shadow:0 12px 12px rgba(53,53,53,0.18),0 0 1px rgba(53,53,53,0.3);display:flex;flex-direction:column;gap:8px;font-family:'DM Sans',sans-serif;}
+  .ip-pop-title{font-size:15px;font-weight:700;color:#1A1A2E;line-height:1.3;}
+  .ip-pop-body{font-size:13px;color:#4A5A6A;line-height:1.5;}
+  .ip-gen-btn{position:relative;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:4px;height:36px;padding:0 16px;border-radius:7px;border:1.5px solid transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(95deg,#00B3C8,#1159A8 55%,#7B61FF) border-box;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#1A1A2E;cursor:pointer;transition:box-shadow 0.15s;}
+  .ip-gen-btn:hover{box-shadow:0 2px 8px rgba(17,89,168,0.18);}
+  .ip-gen-btn .ip-spark{flex-shrink:0;color:#1159A8;display:flex;}
+  .ip-regen-btn{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:2px;height:34px;padding:0 14px;border-radius:7px;border:1.5px solid transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(95deg,#00B3C8,#1159A8 55%,#7B61FF) border-box;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#1A1A2E;cursor:pointer;transition:box-shadow 0.15s;}
+  .ip-regen-btn:hover{box-shadow:0 2px 8px rgba(17,89,168,0.18);}
+  .ip-regen-btn .ip-spark{flex-shrink:0;color:#1159A8;display:flex;}
+  .ip-pop-loading{display:flex;align-items:center;gap:12px;padding:4px 0 2px;}
+  .ip-pop-loading-text{font-size:14px;color:#4A5A6A;}
+  .ip-stop-btn{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 16px;border-radius:7px;border:1.5px solid #2DBFD0;background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#1A1A2E;cursor:pointer;transition:border-color 0.15s,background 0.15s;}
+  .ip-stop-btn:hover{background:#FAFBFC;}
+  .ip-stop-icon{flex-shrink:0;color:#1A1A2E;display:flex;}
+  .ip-pop-suggestions{display:flex;flex-direction:column;gap:8px;max-height:330px;overflow-y:auto;margin-top:2px;margin-right:-4px;padding-right:4px;}
+  .ip-sug-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8A9AB0;}
+  .ip-sug-card{background:#fff;border:1px solid #E5E8ED;border-radius:8px;padding:11px 12px;}
+  .ip-sug-pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;margin-bottom:7px;}
+  .ip-sug-pill-rec{background:#E4EEFB;color:#1159A8;}
+  .ip-sug-pill-sug{background:#EDEAE4;color:#4A5A6A;}
+  .ip-sug-heading{font-size:13px;font-weight:700;color:#1A1A2E;line-height:1.3;margin-bottom:5px;}
+  .ip-sug-text{font-size:12px;color:#3A4A5C;line-height:1.55;}`;
+
+var DA_OPTIONS_BTN = `<button class="da-options-btn" id="daSettingsBtn" type="button" onclick="daOpen()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        Settings
+      </button>`;
+
+var IP_SPARK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5L13.4 10.1L21 12L13.4 13.9L12 21.5L10.6 13.9L3 12L10.6 10.1L12 2.5Z"/></svg>';
+
+var IP_POPOVER = `
+    <div class="ip-popover" id="ipPopover">
+      <div class="ip-pop-caret"></div>
+      <div class="ip-pop-card">
+        <!-- intro -->
+        <div id="ipIntro" style="display:flex;flex-direction:column;gap:8px;">
+          <div class="ip-pop-title">Ask AI to suggest improvements</div>
+          <div class="ip-pop-body">The suggestions will be focussed to improving the actions for related deals</div>
+          <button class="ip-gen-btn" type="button" onclick="ipGenerate()">
+            <span class="ip-spark">` + IP_SPARK + `</span>
+            Generate Suggestions
+          </button>
+        </div>
+        <!-- loading -->
+        <div id="ipLoading" style="display:none;flex-direction:column;gap:8px;">
+          <div class="ip-pop-title">Ask AI to suggest improvements</div>
+          <div class="ip-pop-body">The suggestions will be focussed to improving the actions for related deals</div>
+          <div class="ip-pop-loading">
+            <button class="ip-stop-btn" type="button" onclick="ipStop()">
+              <span class="ip-stop-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg></span>
+              Stop
+            </button>
+            <span class="ip-pop-loading-text">Generating…</span>
+          </div>
+        </div>
+        <!-- suggestions -->
+        <div id="ipSuggestions" style="display:none;flex-direction:column;gap:8px;">
+          <div class="ip-pop-title">Ask AI to suggest improvements</div>
+          <div class="ip-pop-body">The suggestions are focussed to improving the actions for related deals</div>
+          <button class="ip-regen-btn" type="button" onclick="ipRegenerate()">
+            <span class="ip-spark">` + IP_SPARK + `</span>
+            Regenerate
+          </button>
+          <div class="ip-pop-suggestions">
+            <div class="ip-sug-card">
+              <span class="ip-sug-pill ip-sug-pill-rec">Highly recommended</span>
+              <div class="ip-sug-heading">Sharpen your differentiation</div>
+              <div class="ip-sug-text">Replace "aggressive sales culture" with a specific, evidence-backed win story that shows how Highspot's analytics depth beat Seismic in a live deal.</div>
+            </div>
+            <div class="ip-sug-card">
+              <span class="ip-sug-pill ip-sug-pill-rec">Highly recommended</span>
+              <div class="ip-sug-heading">Make the intro actionable</div>
+              <div class="ip-sug-text">Start with a concrete first step — e.g. "Open with the Land Early Differentiation talk track" — so reps know exactly what to do in the first 30 seconds.</div>
+            </div>
+            <div class="ip-sug-card">
+              <span class="ip-sug-pill ip-sug-pill-sug">Suggested</span>
+              <div class="ip-sug-heading">Add pricing context</div>
+              <div class="ip-sug-text">Include Seismic's recent move to seat-based pricing so reps can counter "they're cheaper now" directly instead of deflecting to TCO.</div>
+            </div>
+            <div class="ip-sug-card">
+              <span class="ip-sug-pill ip-sug-pill-sug">Suggested</span>
+              <div class="ip-sug-heading">Add champion talk track</div>
+              <div class="ip-sug-text">Give champions specific language to justify Highspot internally — a "say this to your CFO" script would directly improve deal progression.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+function buildImprovePlay(state) {
+  var disabled = state === 0 ? ' disabled' : '';
+  return `
+    <div class="ip-wrap` + (state === 2 ? ' open' : '') + `" id="ipWrap">
+      <button class="ip-bar-btn" id="ipBarBtn" type="button"` + disabled + ` onclick="ipToggle()">
+        <span class="ip-spark">` + IP_SPARK + `</span>
+        <span class="ip-label">Improve Play</span>
+        <span class="ip-caret"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>` + IP_POPOVER + `
+    </div>`;
+}
+
+function buildHeader(display, state) {
+  var dialog = display === 'dialog';
+  var overlay = display === 'overlay'; return `
+  <div class="editor-header-primary">
+    <div class="editor-header-left">
+      <div style="font-size:14px;font-weight:600;color:#1A1A2E;">Unnamed</div>
+      <div class="editor-header-meta">
+        <div class="lofi" style="width:14px;height:14px;border-radius:3px;background:#D0DCEE;"></div>
+        <div style="font-size:11px;color:#5A7A9A;margin-left:2px;">Play</div>
+        <div style="width:1px;height:10px;background:#D8DFE9;flex-shrink:0;margin:0 4px;"></div>
+        <div style="font-size:11px;color:#9AAFBF;">Not yet saved</div>
+      </div>
+    </div>
+    <div class="editor-header-actions">
+      ${dialog ? DA_OPTIONS_BTN : `<div class="editor-skel-btn" style="width:94px;height:32px;gap:6px;padding:0 12px;">
+        <div style="width:14px;height:14px;border-radius:50%;background:#D0DCEE;flex-shrink:0;"></div>
+        <div class="lofi" style="width:50px;height:8px;border-radius:10px;background:#C8D4E4;"></div>
+      </div>`}
+      <div class="editor-skel-btn" style="width:88px;height:32px;gap:6px;padding:0 12px;border-radius:100px;">
+        <div style="width:12px;height:12px;border-radius:50%;border:2px solid #1159A8;flex-shrink:0;"></div>
+        <div class="lofi" style="width:44px;height:8px;border-radius:10px;background:#C8D4E4;"></div>
+      </div>
+      <div class="editor-skel-save" style="height:32px;">
+        <div class="editor-skel-save-main" style="width:72px;height:32px;gap:6px;padding:0 12px;">
+          <div style="width:14px;height:14px;border-radius:3px;background:#D0DCEE;flex-shrink:0;"></div>
+          <div class="lofi" style="width:32px;height:8px;border-radius:10px;background:#C8D4E4;"></div>
+        </div>
+        <div class="editor-skel-save-caret" style="width:28px;height:32px;"><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #fff;"></div></div>
+      </div>
+      <div class="editor-skel-close" style="width:32px;height:32px;">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#5A7A9A" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="editor-header-secondary">
+    <div class="editor-skel-pill-outline" style="width:72px;height:28px;gap:5px;padding:0 10px;">
+      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="#5A7A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 4,1 7,4"/><path d="M4 1v9a3 3 0 0 0 3 3h6"/></svg>
+      <div class="lofi" style="width:28px;height:7px;border-radius:10px;background:#C8D4E4;"></div>
+    </div>
+    <div class="editor-skel-pill-outline" style="width:72px;height:28px;gap:5px;padding:0 10px;">
+      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="#5A7A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13,4 10,1 7,4"/><path d="M10 1v9a3 3 0 0 1-3 3H1"/></svg>
+      <div class="lofi" style="width:28px;height:7px;border-radius:10px;background:#C8D4E4;"></div>
+    </div>
+    <div class="editor-skel-pill-outline" style="width:138px;height:28px;gap:5px;padding:0 12px;border-radius:100px;border-color:#1159A8;">
+      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,4 7,1 12,4"/><polyline points="2,10 7,13 12,10"/></svg>
+      <div class="lofi" style="width:84px;height:7px;border-radius:10px;background:#C8D4E4;"></div>
+    </div>
+    ` + (overlay ? buildImprovePlay(state) : '') + `
+  </div>`; }
+
+var BLOCKS_PANEL = `
+  <div class="blocks-panel">
+    <div style="font-size:13px;font-weight:700;color:#1A1A2E;margin-bottom:14px;">Blocks</div>
+    <div class="block-section">Basic</div>
+    <div class="block-grid">
+      <div class="block-item">
+        <div class="block-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="5" rx="1"/><line x1="3" y1="12" x2="21" y2="12"/></svg></div>
+        <div class="block-label">Header</div>
+      </div>
+      <div class="block-item">
+        <div class="block-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4z" fill="#EEF2FB"/><path d="M4 4h16v4H4z"/><line x1="4" y1="12" x2="20" y2="12"/></svg></div>
+        <div class="block-label">Banner</div>
+      </div>
+      <div class="block-item">
+        <div class="block-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg></div>
+        <div class="block-label">Text</div>
+      </div>
+      <div class="block-item">
+        <div class="block-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="block-label">Image</div>
+      </div>
+      <div class="block-item">
+        <div class="block-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="2" rx="1"/><circle cx="7" cy="12" r="1" fill="#1159A8"/><circle cx="12" cy="12" r="1" fill="#1159A8"/><circle cx="17" cy="12" r="1" fill="#1159A8"/></svg></div>
+        <div class="block-label">Navigation</div>
+      </div>
+      <div class="block-item">
+        <div class="block-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/></svg></div>
+        <div class="block-label">Divider</div>
+      </div>
+      <div class="block-item" style="grid-column:1/-1;">
+        <div class="block-icon" style="width:44px;border-radius:4px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
+        <div class="block-label">Spacer</div>
+      </div>
+    </div>
+    <div class="block-section">Dynamic</div>
+    <div class="block-grid">
+      <div class="block-item">
+        <div class="block-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div>
+        <div class="block-label">Content</div>
+      </div>
+      <div class="block-item">
+        <div class="block-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 2"/></svg></div>
+        <div class="block-label">Spots</div>
+      </div>
+      <div class="block-item" style="grid-column:1/-1;">
+        <div class="block-icon" style="width:44px;border-radius:4px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="block-label">People</div>
+      </div>
+    </div>
+    <div class="block-section">Advanced</div>
+    <div class="block-grid">
+      <div class="block-item" style="grid-column:1/-1;">
+        <div class="block-icon" style="width:44px;border-radius:4px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1159A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
+        <div class="block-label">Rich Text</div>
+      </div>
+    </div>
+  </div>`;
+
+var EDITOR_CANVAS_FLOAT = `
+  <div class="canvas-float" id="canvasFloat">
+
+    <!-- STATE 1: intro -->
+    <div id="cfIntro">
+      <div class="cf-header cf-collapse-header" onclick="cfToggleIntro()">
+        <div class="cf-title">Get ready for deal agent</div>
+        <span class="cf-caret" id="cfIntroCaret">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </div>
+      <div id="cfIntroBody">
+        <div class="cf-intro">Is your Play ready for execution? Run a quick check to ensure your sales reps get the best recommendations in the Deal Agent.</div>
+        <div id="cfNudge" style="display:none;margin:0 16px 12px;background:#FFF8EC;border:1px solid #F0D080;border-radius:6px;padding:9px 12px;font-size:11.5px;color:#7A5800;line-height:1.5;">
+          <strong style="display:block;margin-bottom:2px;">Add content first</strong>
+          Add at least one block to your Play before running an evaluation.
+        </div>
+        <div class="cf-actions">
+          <button class="cf-btn cf-btn-primary" id="cfEvalBtn" type="button" onclick="cfRunEval()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Evaluate Play
+          </button>
+          <div id="cfEvalLoading" style="display:none;align-items:center;gap:10px;padding:5px 2px;">
+            <div class="spinner" style="width:16px;height:16px;border-width:1.5px;flex-shrink:0;"></div>
+            <span style="font-size:13px;color:#1A1A2E;">Evaluating your Play…</span>
+          </div>
+          <button class="cf-btn" id="cfConnectBtn" type="button" onclick="crmOpen()">Connect deals to this Play</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATE 2: loading -->
+    <div id="cfLoading" style="display:none;padding:18px 16px;align-items:center;gap:10px;">
+      <div class="spinner" style="width:14px;height:14px;border-width:1.5px;flex-shrink:0;"></div>
+      <div style="font-size:12px;color:#4A5A6A;">Evaluating your Play…</div>
+    </div>
+
+    <!-- STATE 3: suggestions -->
+    <div id="cfSuggestions" class="cf-suggestions">
+      <div class="cf-header cf-collapse-header" style="padding-bottom:10px;" onclick="cfToggleCollapse()">
+        <div class="cf-title">Get ready for Deal Agent</div>
+        <span class="cf-caret" id="cfCaret">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </div>
+      <div id="cfSugBody">
+      <div style="border-top:1px solid #EEF2F8;"></div>
+      <button type="button" class="cf-back" onclick="cfBack()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Play check
+      </button>
+      <div style="border-top:1px solid #EEF2F8;"></div>
+      <div class="cf-cards">
+
+        <div class="cf-card">
+          <span class="cf-pill cf-pill-rec">Highly recommended</span>
+          <div class="cf-card-heading">Sharpen your differentiation</div>
+          <div class="cf-card-text">Replace "aggressive sales culture" with a specific, evidence-backed win story that shows how Highspot's analytics depth beat Seismic in a live deal.</div>
+        </div>
+        <div class="cf-card">
+          <span class="cf-pill cf-pill-rec">Highly recommended</span>
+          <div class="cf-card-heading">Make the intro actionable</div>
+          <div class="cf-card-text">Start with a concrete first step — e.g. "Open with the Land Early Differentiation talk track" — so reps know exactly what to do in the first 30 seconds.</div>
+        </div>
+        <div class="cf-card">
+          <span class="cf-pill cf-pill-sug">Suggested</span>
+          <div class="cf-card-heading">Add pricing context</div>
+          <div class="cf-card-text">Include Seismic's recent move to seat-based pricing so reps can counter "they're cheaper now" directly instead of deflecting to TCO.</div>
+        </div>
+        <div class="cf-card">
+          <span class="cf-pill cf-pill-sug">Suggested</span>
+          <div class="cf-card-heading">Add champion talk track</div>
+          <div class="cf-card-text">Give champions specific language to justify Highspot internally — a "say this to your CFO" script would directly improve deal progression.</div>
+        </div>
+
+      </div>
+      </div>
+    </div>
+
+  </div>`;
+
+var SUGGESTIONS_LIST = `
+  <div class="da-sug">
+    <div class="da-sug-heading">Sharpen your differentiation</div>
+    <div class="da-sug-text">Replace "aggressive sales culture" with a specific, evidence-backed win story that shows how Highspot's analytics depth beat Seismic in a live deal.</div>
+  </div>
+  <div class="da-sug">
+    <div class="da-sug-heading">Make the intro actionable</div>
+    <div class="da-sug-text">Start with a concrete first step — e.g. "Open with the Land Early Differentiation talk track" — so reps know exactly what to do in the first 30 seconds.</div>
+  </div>
+  <div class="da-sug">
+    <div class="da-sug-heading">Add pricing context</div>
+    <div class="da-sug-text">Include Seismic's recent move to seat-based pricing so reps can counter "they're cheaper now" directly instead of deflecting to TCO.</div>
+  </div>
+  <div class="da-sug">
+    <div class="da-sug-heading">Add champion talk track</div>
+    <div class="da-sug-text">Give champions specific language to justify Highspot internally — a "say this to your CFO" script would directly improve deal progression.</div>
+  </div>`;
+
+var CRM_BODY = `
+        <h3>CRM filters</h3>
+        <div class="crm-modal-desc">Use the CRM filters to associate opportunities with your Play. If you do not have a CRM integration configured, your Administrators can set up the CRM integration for your domain through <span class="crm-link">Company Settings → Integrations.</span></div>
+        <div class="crm-filter-label">Filtered to [x] opportunities</div>
+        <div class="crm-filter-row">
+          <div class="crm-select" style="flex:1.3;">Opportunity <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="crm-select" style="flex:1;">is any of <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="crm-select placeholder" style="flex:1.4;">Select… <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="crm-trash" title="Remove filter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
+        </div>
+        <button class="crm-add-filter" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Filter</button>`;
+
+var DA_DIALOG = `
+  <div class="da-overlay" id="daOverlay" onclick="if(event.target===this)daClose()">
+    <div class="da-settings">
+      <div class="da-settings-header">
+        <div class="da-settings-title">Settings</div>
+        <button class="da-settings-x" type="button" onclick="daClose()" title="Close">
+          <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+        </button>
+      </div>
+      <div class="da-settings-body">
+        <div class="da-settings-nav">
+          <button class="da-nav-item active" id="daNavImprove" type="button" onclick="daTab('improve')">Improve Play</button>
+          <button class="da-nav-item" id="daNavCrm" type="button" onclick="daTab('crm')">CRM</button>
+        </div>
+        <div class="da-settings-content">
+          <div id="daTabImprove">
+            <div id="daEvalDefault">
+              <div class="da-eval-intro">Is your Play ready for execution? Run a quick check to ensure your sales reps get the best recommendations in the Deal Agent.</div>
+              <button class="da-eval-btn" id="daEvalBtn" type="button" onclick="daEvaluate()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Evaluate Play
+              </button>
+            </div>
+            <div id="daEvalLoading" class="da-eval-loading" style="display:none;">
+              <div class="spinner" style="width:16px;height:16px;border-width:1.5px;flex-shrink:0;"></div>
+              <span class="da-eval-loading-text">Evaluating your Play…</span>
+            </div>
+            <div id="daEvalResults" style="display:none;">
+              <div class="da-content-title">Suggestions</div>
+              ` + SUGGESTIONS_LIST + `
+            </div>
+          </div>
+          <div id="daTabCrm" style="display:none;">` + CRM_BODY + `</div>
+        </div>
+      </div>
+      <div class="da-settings-footer">
+        <button class="da-btn-cancel" type="button" onclick="daClose()">Cancel</button>
+        <button class="da-btn-apply" type="button" onclick="daClose()">Apply</button>
+      </div>
+    </div>
+  </div>`;
+
+var CRM_MODAL = `
+  <div class="crm-overlay" id="crmOverlay">
+    <div class="crm-modal">
+      <div class="crm-modal-header">
+        <div class="crm-modal-title">CRM filters</div>
+        <button class="crm-modal-x" type="button" onclick="crmClose()" title="Close">
+          <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+        </button>
+      </div>
+      <div class="crm-modal-body">` + CRM_BODY + `</div>
+      <div class="crm-modal-footer">
+        <button class="crm-btn-cancel" type="button" onclick="crmClose()">Cancel</button>
+        <button class="crm-btn-apply" type="button" onclick="crmClose()">Apply</button>
+      </div>
+    </div>
+  </div>`;
+
+var CF_JS = `
+  function cfSetBlank(isBlank){
+    var btn=document.getElementById('cfEvalBtn');
+    var nudge=document.getElementById('cfNudge');
+    if(isBlank){
+      btn.disabled=true;
+      nudge.style.display='block';
+    } else {
+      btn.disabled=false;
+      nudge.style.display='none';
+    }
+  }
+  function cfRunEval(){
+    var btn=document.getElementById('cfEvalBtn');
+    if(btn.disabled) return;
+    btn.style.display='none';
+    document.getElementById('cfEvalLoading').style.display='flex';
+    var connect=document.getElementById('cfConnectBtn');
+    if(connect)connect.disabled=true;
+    setTimeout(function(){
+      if(window.parent && window.parent.setState){ window.parent.setState(2); return; }
+      document.getElementById('cfIntro').style.display='none';
+      document.getElementById('cfSuggestions').style.display='flex';
+      document.getElementById('cfSuggestions').style.flexDirection='column';
+    }, 2800);
+  }
+  function cfReset(){
+    document.getElementById('cfSuggestions').style.display='none';
+    document.getElementById('cfLoading').style.display='none';
+    document.getElementById('cfIntro').style.display='block';
+    document.getElementById('canvasFloat').style.display='';
+  }
+  function cfBack(){
+    if(window.parent && window.parent.setState){ window.parent.setState(1); }
+    else { cfReset(); }
+  }
+  function cfToggleCollapse(){ document.getElementById('cfSuggestions').classList.toggle('collapsed'); }
+  function cfToggleIntro(){ document.getElementById('cfIntro').classList.toggle('collapsed'); }
+  function crmOpen(){ document.getElementById('crmOverlay').classList.add('open'); }
+  function crmClose(){ document.getElementById('crmOverlay').classList.remove('open'); }
+  function daOpen(){ var o=document.getElementById('daOverlay'); if(o)o.classList.add('open'); }
+  function daClose(){ var o=document.getElementById('daOverlay'); if(o)o.classList.remove('open'); }
+  function daTab(t){
+    var imp=document.getElementById('daTabImprove'), crm=document.getElementById('daTabCrm');
+    var ni=document.getElementById('daNavImprove'), nc=document.getElementById('daNavCrm');
+    if(t==='crm'){ imp.style.display='none'; crm.style.display='block'; ni.classList.remove('active'); nc.classList.add('active'); }
+    else { imp.style.display='block'; crm.style.display='none'; nc.classList.remove('active'); ni.classList.add('active'); }
+  }
+  function daSetBlank(isBlank){
+    var btn=document.getElementById('daSettingsBtn');
+    if(btn) btn.disabled=!!isBlank;
+  }
+  function daEvaluate(){
+    document.getElementById('daEvalDefault').style.display='none';
+    document.getElementById('daEvalLoading').style.display='flex';
+    setTimeout(function(){
+      document.getElementById('daEvalLoading').style.display='none';
+      document.getElementById('daEvalResults').style.display='block';
+    }, 2800);
+  }
+  function ipToggle(){
+    var btn=document.getElementById('ipBarBtn'); if(btn.disabled) return;
+    var wrap=document.getElementById('ipWrap');
+    var isOpen=wrap.classList.contains('open');
+    if(window.parent && window.parent.setState){ window.parent.setState(isOpen?1:2); return; }
+    wrap.classList.toggle('open');
+  }
+  var ipGenTimer=null;
+  function ipGenerate(){
+    document.getElementById('ipIntro').style.display='none';
+    document.getElementById('ipLoading').style.display='flex';
+    ipGenTimer=setTimeout(function(){
+      ipGenTimer=null;
+      document.getElementById('ipLoading').style.display='none';
+      document.getElementById('ipSuggestions').style.display='flex';
+    }, 2800);
+  }
+  function ipShowSuggestions(){
+    document.getElementById('ipIntro').style.display='none';
+    document.getElementById('ipLoading').style.display='none';
+    document.getElementById('ipSuggestions').style.display='flex';
+  }
+  function ipRegenerate(){
+    document.getElementById('ipSuggestions').style.display='none';
+    document.getElementById('ipIntro').style.display='none';
+    document.getElementById('ipLoading').style.display='flex';
+    ipGenTimer=setTimeout(function(){
+      ipGenTimer=null;
+      document.getElementById('ipLoading').style.display='none';
+      document.getElementById('ipSuggestions').style.display='flex';
+    }, 2200);
+  }
+  function ipStop(){
+    if(ipGenTimer){ clearTimeout(ipGenTimer); ipGenTimer=null; }
+    document.getElementById('ipLoading').style.display='none';
+    document.getElementById('ipSuggestions').style.display='none';
+    document.getElementById('ipIntro').style.display='flex';
+  }
+`;
+
+var EDITOR_CANVAS = `
+  <div class="editor-canvas">
+    <div class="canvas-inner">
+      <div style="background:#D4E2F5;padding:10px 16px;font-size:11px;color:#1A4A8A;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:13px;">📈</span>
+        <span>Plays include analytics reports called Play Scorecards</span>
+        <span style="color:#1159A8;font-weight:600;margin-left:4px;cursor:pointer;">Learn More</span>
+        <span style="margin-left:auto;cursor:pointer;color:#5A7A9A;font-size:14px;">×</span>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;margin:0;padding:16px 0 0;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;margin-bottom:0;padding:0 0 6px;border-bottom:1px dashed #C8D4E0;position:relative;">
+          <span style="background:#fff;padding:0 8px;position:relative;z-index:1;">Section 1: <em>General</em></span>
+        </div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;margin:0;padding:0;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:6px 0;border-bottom:1px dashed #C8D4E0;position:relative;">
+          <span style="background:#fff;padding:0 8px;position:relative;z-index:1;">Section 2: <em>Know</em></span>
+        </div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;margin:0;padding:0;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:6px 0;border-bottom:1px dashed #C8D4E0;position:relative;">
+          <span style="background:#fff;padding:0 8px;position:relative;z-index:1;">Section 3: <em>Say</em></span>
+        </div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;margin:0;padding:0;background:#F8F9FA;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:6px 0;border-bottom:1px dashed #C8D4E0;position:relative;">
+          <span style="background:#F8F9FA;padding:0 8px;position:relative;z-index:1;">Section 4: <em>Show</em></span>
+        </div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;margin:0;padding:0;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:6px 0;border-bottom:1px dashed #C8D4E0;position:relative;">
+          <span style="background:#fff;padding:0 8px;position:relative;z-index:1;">Section 5: <em>Do</em></span>
+        </div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+    </div>
+  </div>`;
+
+/* ══════════════════════════════════════════
+   BUILD EDITOR SRCDOCS
+══════════════════════════════════════════ */
+
+var CANVAS_BLANK = `
+  <div class="editor-canvas">
+    <div class="canvas-inner">
+      <div style="border-top:1px dashed #C8D4E0;padding:16px 0 0;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:0 0 6px;border-bottom:1px dashed #C8D4E0;position:relative;"><span style="background:#fff;padding:0 8px;position:relative;z-index:1;">Section 1: <em>General</em></span></div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:6px 0;border-bottom:1px dashed #C8D4E0;position:relative;"><span style="background:#fff;padding:0 8px;position:relative;z-index:1;">Section 2: <em>Know</em></span></div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:6px 0;border-bottom:1px dashed #C8D4E0;position:relative;"><span style="background:#fff;padding:0 8px;position:relative;z-index:1;">Section 3: <em>Say</em></span></div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;background:#F8F9FA;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:6px 0;border-bottom:1px dashed #C8D4E0;position:relative;"><span style="background:#F8F9FA;padding:0 8px;position:relative;z-index:1;">Section 4: <em>Show</em></span></div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+      <div style="border-top:1px dashed #C8D4E0;">
+        <div style="text-align:center;font-size:11px;color:#8A9AB0;padding:6px 0;border-bottom:1px dashed #C8D4E0;position:relative;"><span style="background:#fff;padding:0 8px;position:relative;z-index:1;">Section 5: <em>Do</em></span></div>
+        <div style="padding:28px 20px;text-align:center;color:#A0AFBF;font-style:italic;font-size:12px;">Drag a block here to start this section</div>
+      </div>
+    </div>
+  </div>`;
+
+var CANVAS_CONTENT = `
+  <div class="editor-canvas">
+    <div class="canvas-inner">
+      <!-- add row -->
+      <div class="add-row"><div class="add-row-line"></div><div class="add-btn">+</div><div class="add-row-line"></div></div>
+      <!-- hero block -->
+      <div style="display:flex;gap:0;border:1px dashed #C8D4E8;margin:0 2px;">
+        <div style="width:220px;flex-shrink:0;background:#F5F8FF;display:flex;align-items:center;justify-content:center;padding:20px;">
+          <div class="lofi" style="width:140px;height:70px;border-radius:4px;"></div>
+        </div>
+        <div style="flex:1;padding:20px;display:flex;flex-direction:column;gap:8px;">
+          <div class="lofi" style="width:80%;height:14px;border-radius:3px;"></div>
+          <div class="lofi" style="width:95%;height:10px;border-radius:3px;"></div>
+          <div class="lofi" style="width:85%;height:10px;border-radius:3px;"></div>
+          <div class="lofi" style="width:60%;height:10px;border-radius:3px;"></div>
+        </div>
+      </div>
+      <div class="add-row"><div class="add-row-line"></div><div class="add-btn">+</div><div class="add-row-line"></div></div>
+      <!-- quick links block -->
+      <div style="border:1px dashed #C8D4E8;margin:0 2px;background:#EBF2FF;padding:14px 20px;">
+        <div class="lofi" style="width:100px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto 12px;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:360px;margin:0 auto;">
+          <div class="lofi" style="height:28px;border-radius:4px;background:#D0DFF5;"></div>
+          <div class="lofi" style="height:28px;border-radius:4px;background:#D0DFF5;"></div>
+          <div class="lofi" style="height:28px;border-radius:4px;background:#D0DFF5;"></div>
+          <div class="lofi" style="height:28px;border-radius:4px;background:#D0DFF5;"></div>
+        </div>
+      </div>
+      <div class="add-row"><div class="add-row-line"></div><div class="add-btn">+</div><div class="add-row-line"></div></div>
+      <!-- what to know -->
+      <div id="knowBlock" style="border:1px dashed #C8D4E8;margin:0 2px;">
+        <div style="background:#EBF2FF;padding:9px 20px;"><div class="lofi" style="width:90px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto;"></div></div>
+        <div style="display:flex;gap:20px;padding:16px 20px;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:7px;">
+            <div class="lofi" style="width:90px;height:10px;border-radius:3px;background:#C8D8EE;"></div>
+            <div class="lofi" style="width:95%;height:8px;border-radius:3px;"></div>
+            <div class="lofi" style="width:85%;height:8px;border-radius:3px;"></div>
+            <div class="lofi" style="width:72%;height:8px;border-radius:3px;"></div>
+          </div>
+          <div style="flex:1;display:flex;gap:10px;align-items:flex-start;">
+            <div class="lofi" style="width:48px;height:48px;border-radius:4px;flex-shrink:0;"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+              <div class="lofi" style="width:90%;height:9px;border-radius:3px;background:#C8D8EE;"></div>
+              <div class="lofi" style="width:36px;height:13px;border-radius:10px;background:#3A9E5F;"></div>
+              <div class="lofi" style="width:80%;height:8px;border-radius:3px;"></div>
+              <div class="lofi" style="width:65%;height:8px;border-radius:3px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="add-row"><div class="add-row-line"></div><div class="add-btn">+</div><div class="add-row-line"></div></div>
+      <!-- what to do -->
+      <div style="border:1px dashed #C8D4E8;margin:0 2px;">
+        <div style="background:#EBF2FF;padding:9px 20px;"><div class="lofi" style="width:80px;height:11px;border-radius:3px;background:#D0DFF5;margin:0 auto;"></div></div>
+        <div style="padding:14px 20px;display:flex;flex-direction:column;gap:8px;">
+          <div class="lofi" style="width:90px;height:11px;border-radius:3px;margin:0 auto;"></div>
+          <div class="lofi" style="width:100%;height:32px;border-radius:4px;"></div>
+          <div class="lofi" style="width:70%;height:8px;border-radius:3px;margin:0 auto;"></div>
+        </div>
+      </div>
+      <div class="add-row"><div class="add-row-line"></div><div class="add-btn">+</div><div class="add-row-line"></div></div>
+    </div>
+  </div>`;
+
+var SEL_TOOLBAR = `
+  <div class="sel-toolbar">
+    <button class="sel-tool sel-tool-blue" type="button" title="Duplicate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+    <button class="sel-tool sel-tool-red" type="button" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+    <button class="sel-tool sel-tool-blue" type="button" title="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+  </div>`;
+
+var FORMATTING_PANEL = `
+  <div class="fmt-panel">
+    <div class="fmt-header">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span class="fmt-header-title">Text</span>
+      <svg class="fmt-info" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    </div>
+    <div class="fmt-body">
+      <div class="fmt-title">Formatting</div>
+      <div class="fmt-field">
+        <div class="fmt-label">Heading Font Color</div>
+        <div class="fmt-color-row">
+          <div class="fmt-swatch"><span class="fmt-chip" style="background:#006DC7;"></span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5A7A9A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <input class="fmt-input" value="#006DC7" readonly/>
+        </div>
+      </div>
+      <div class="fmt-field">
+        <div class="fmt-label">Paragraph Font Color</div>
+        <div class="fmt-color-row">
+          <div class="fmt-swatch"><span class="fmt-chip" style="background:#202020;"></span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5A7A9A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <input class="fmt-input" value="#202020" readonly/>
+        </div>
+      </div>
+      <div class="fmt-field">
+        <div class="fmt-label">Link Font Color</div>
+        <div class="fmt-color-row">
+          <div class="fmt-swatch"><span class="fmt-chip" style="background:#006DC7;"></span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5A7A9A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <input class="fmt-input" value="#006DC7" readonly/>
+        </div>
+      </div>
+      <div class="fmt-field">
+        <div class="fmt-label">Background Color</div>
+        <div class="fmt-color-row">
+          <div class="fmt-swatch"><span class="fmt-chip fmt-chip-none"></span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5A7A9A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <input class="fmt-input" value="No Color" readonly/>
+        </div>
+      </div>
+      <div class="fmt-field">
+        <div class="fmt-label">Border Color</div>
+        <div class="fmt-color-row">
+          <div class="fmt-swatch"><span class="fmt-chip fmt-chip-none"></span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5A7A9A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <input class="fmt-input" value="No Color" readonly/>
+        </div>
+      </div>
+      <div class="fmt-field">
+        <div class="fmt-label">Corners</div>
+        <div class="fmt-opt-row">
+          <button class="fmt-opt" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="0"/></svg></button>
+          <button class="fmt-opt selected" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="5"/></svg></button>
+          <button class="fmt-opt" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="9"/></svg></button>
+        </div>
+      </div>
+      <div class="fmt-field">
+        <div class="fmt-label">Padding</div>
+        <div class="fmt-opt-row">
+          <button class="fmt-opt" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></button>
+          <button class="fmt-opt selected" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="8" y="8" width="8" height="8" rx="1" fill="currentColor" stroke="none"/></svg></button>
+          <button class="fmt-opt" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor" stroke="none"/></svg></button>
+          <button class="fmt-opt" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" stroke="none"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+function buildEditor(state, display) {
+  display = display || currentDisplay;
+  var dialog = display === 'dialog';
+  var overlay = display === 'overlay';
+  var canvas = state === 0 ? CANVAS_BLANK : CANVAS_CONTENT;
+  // The text-block toggle selects the block + shows the formatting panel.
+  // It applies whenever it's on and the Play isn't blank.
+  var showText = textBlockOn && state !== 0;
+  var extraInit;
+  if (dialog) {
+    extraInit = "daSetBlank(" + (state === 0) + ");";
+  } else if (overlay) {
+    extraInit = (state === 3 ? "ipShowSuggestions();" : "");
+  } else if (state === 0) {
+    extraInit = "cfSetBlank(true);document.getElementById('cfIntro').classList.add('collapsed');";
+  } else if (state === 2) {
+    extraInit = "cfSetBlank(false);document.getElementById('cfIntro').style.display='none';document.getElementById('cfSuggestions').style.display='flex';document.getElementById('cfSuggestions').style.flexDirection='column';";
+  } else {
+    extraInit = "cfSetBlank(false);" + (showText ? "document.getElementById('cfIntro').classList.add('collapsed');" : "");
+  }
+  // Select the block in the canvas when the toggle is on.
+  if (showText) {
+    extraInit +=
+      "var __b=document.getElementById('knowBlock');" +
+      "if(__b){__b.classList.add('sel-block');__b.insertAdjacentHTML('afterbegin'," + JSON.stringify(SEL_TOOLBAR) + ");}";
+  }
+  // Right column: sideblock has the agent panel; overlay has only the formatting panel (when toggled).
+  var rightColumn = '';
+  if (!dialog && !overlay) {
+    var rightPanel = EDITOR_CANVAS_FLOAT + (showText ? FORMATTING_PANEL : '');
+    rightColumn = '<div style="width:300px;flex-shrink:0;padding:20px 16px 20px 0;overflow-y:auto;background:#F2F4F7;">' + rightPanel + '</div>';
+  } else if (overlay && showText) {
+    rightColumn = '<div style="width:300px;flex-shrink:0;padding:20px 16px 20px 0;overflow-y:auto;background:#F2F4F7;">' + FORMATTING_PANEL + '</div>';
+  }
+  var dialogOverlay = dialog ? DA_DIALOG : '';
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>' + SHARED_CSS + EDITOR_CSS + '\nbody{flex-direction:column;}\n.editor-body{flex:1;display:flex;overflow:hidden;}\n</style></head><body>' +
+    buildHeader(display, state) +
+    '<div class="editor-body">' +
+    BLOCKS_PANEL +
+    canvas +
+    rightColumn +
+    '</div>' +
+    CRM_MODAL +
+    dialogOverlay +
+    '<script>' + CF_JS + extraInit + '<\/script></body></html>';
+}
+
+var currentState = 0;
+var currentDisplay = 'sideblock';
+var textBlockOn = false;
+
+function toggleTextBlock(on) {
+  textBlockOn = on;
+  setState(currentState);
+}
+
+function setState(s) {
+  currentState = s;
+  document.getElementById('preview-frame').srcdoc = buildEditor(s);
+  [0,1,2].forEach(function(i){
+    document.getElementById('navItem'+i).classList.toggle('active', i===s);
+    document.getElementById('navNum'+i).style.background = i===s ? '#1A1A2E' : '';
+    document.getElementById('navNum'+i).style.color = i===s ? '#fff' : '';
+  });
+}
+
+// ── Display dropdown ──
+var DISPLAY_LABELS = { dialog: 'Dialog', sideblock: 'Side block', overlay: 'Overlay' };
+
+function toggleDisplayFlyout(e) {
+  e.stopPropagation();
+  document.getElementById('displayDropdown').classList.toggle('open');
+}
+
+function onDisplayChange(value) {
+  document.getElementById('displayDropdown').classList.remove('open');
+  document.getElementById('displayTriggerLabel').textContent = DISPLAY_LABELS[value];
+  document.querySelectorAll('#displayFlyout .context-option').forEach(function(o) {
+    o.classList.toggle('selected', o.getAttribute('data-value') === value);
+  });
+  currentDisplay = value;
+  var dlg = value === 'dialog';
+  // Dialog layout only has "Play is blank" and "Content added" — no Evaluate step
+  document.getElementById('navItem2').style.display = dlg ? 'none' : '';
+  var s = currentState;
+  if (dlg && s === 2) s = 1;
+  setState(s);
+}
+
+document.addEventListener('click', function() {
+  document.getElementById('displayDropdown').classList.remove('open');
+});
+
+// Start on the Evaluate step (suggestions expanded)
+setState(2);
+</script>
+</body>
+</html>

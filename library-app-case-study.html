@@ -70,7 +70,7 @@ nav {
 }
 .hero-title {
   font-family: 'Lora', serif;
-  font-size: clamp(32px, 4.5vw, 54px);
+  font-size: clamp(26px, 3.2vw, 40px);
   line-height: 1.08;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -322,9 +322,8 @@ footer {
 
 <!-- HERO -->
 <div class="hero fade-in">
-  <div class="hero-tag">Personal Project · Vibe-coded</div>
   <h1 class="hero-title">Creating an online catalogue of books from photographs</h1>
-  <p class="hero-desc">After two failed attempts to manually catalogue our home library of 1,000+ books, I built an app that converts photos of my bookshelves into a searchable catalogue of books. I owned everything: the requirements, the design, and shipping a live product with auth, a real database, and AI enrichment.</p>
+  <p class="hero-desc">After two failed attempts to manually catalogue our home library of 1,000+ books, I built an app that converts photos of my bookshelves into a searchable catalogue. I owned the requirements, the design, and the build: a live product with auth, a real database, and AI enrichment.</p>
   <dl class="hero-meta">
     <div class="meta-block"><dt>My Role</dt><dd>Product Designer + Builder</dd></div>
     <div class="meta-block"><dt>Tools</dt><dd>Claude, Cursor, Supabase, Vercel</dd></div>
@@ -351,7 +350,7 @@ footer {
       <div class="section-label">01 · The Problem</div>
       <h2 class="section-title">We needed a searchable catalogue of the books in our home library</h2>
       <div class="section-body">
-        <p>We have a home collection of 1,000+ books and wanted a way to search through it — mainly to check what we already own when we're out at used bookstores. Doing this manually was tedious, and we tried and failed twice before building an app.</p>
+        <p>We have a home collection of 1,000+ books and wanted a way to search through it, mainly to check what we already own when we're at used bookstores. Doing this manually was tedious, and we tried and failed twice before building an app.</p>
       </div>
     </div>
     <div class="section-image-card clay">
@@ -371,7 +370,7 @@ footer {
         <p>We downloaded Libib, a solid library cataloguing app, and started scanning books one by one. We made it to fifty before giving up and never opening the app again.</p>
         <div class="insight">
           <div class="i-label">Why it failed</div>
-          <p>Slow and tedious for a large collection. The effort to get 1,000 books in was too high to ever finish.</p>
+          <p>Cataloguing 1,000 books one barcode at a time was too slow to ever finish.</p>
         </div>
       </div>
     </div>
@@ -379,10 +378,10 @@ footer {
       <div class="section-label">03 · Attempt Two · 2023</div>
       <h2 class="section-title">Translating pictures into an excel sheet</h2>
       <div class="section-body">
-        <p>We leveled up. Using ChatGPT's image processing, we photographed our shelves and pulled book titles and authors straight into a spreadsheet. Getting the data in was quick but we couldn't easily access it on the go.</p>
+        <p>For the second attempt, we used ChatGPT's image processing to photograph our shelves and pull book titles and authors straight into a spreadsheet. Getting the data in was quick, but we couldn't easily access it on the go.</p>
         <div class="insight">
           <div class="i-label">Why it failed</div>
-          <p>Fast to build but not accessible in the moment.</p>
+          <p>The spreadsheet lived on a laptop, with no fast way to search it from a bookstore aisle.</p>
         </div>
       </div>
     </div>
@@ -401,11 +400,11 @@ footer {
       </div>
     </div>
     <ul class="needs-list">
-      <li><strong>Bulk import from photos</strong> — use image processing to get 1,000 books in fast</li>
-      <li><strong>Search and filter on mobile</strong> — fast enough to use mid-bookstore</li>
-      <li><strong>Quick single-book entry</strong> — adding a new book should take seconds</li>
-      <li><strong>Per-person read/unread tracking</strong> — each household member tracks their own status</li>
-      <li><strong>Find a Book</strong> — filter-based mode to surface something to read next from our own shelves</li>
+      <li><strong>Bulk import from photos</strong>:use image processing to get 1,000 books in fast</li>
+      <li><strong>Search and filter on mobile</strong>:fast enough to use mid-bookstore</li>
+      <li><strong>Quick single-book entry</strong>:adding a new book should take seconds</li>
+      <li><strong>Per-person read/unread tracking</strong>:each household member tracks their own status</li>
+      <li><strong>Find a Book</strong>:filter-based mode to surface something to read next from our own shelves</li>
     </ul>
   </div>
 </div>
@@ -424,14 +423,14 @@ footer {
           <div class="step-tool">Claude</div>
           <div class="step-body">
             <h4>HTML prototype with random books</h4>
-            <p>Started with a working proof of concept — search, filter, a book grid. Enough to know the idea was right.</p>
+            <p>Started with a working proof of concept: search, filter, and a book grid, enough to confirm the idea worked.</p>
           </div>
         </div>
         <div class="build-step">
           <div class="step-tool">Cursor</div>
           <div class="step-body">
             <h4>React app with real features</h4>
-            <p>Turned the prototype into a proper React app. Added bulk editing to mark books as read, and wired up the Open Library API so adding a new book feels instant — no manual metadata.</p>
+            <p>Turned the prototype into a proper React app. Added bulk editing to mark books as read, and wired up the Open Library API so adding a new book pulls its metadata automatically instead of by hand.</p>
           </div>
         </div>
         <div class="build-step">
@@ -472,7 +471,7 @@ footer {
       <div class="section-label">04b · Feature Highlight</div>
       <h2 class="section-title">Find a Book</h2>
       <div class="section-body">
-        <p>When one of us finishes a book, we browse the shelves together to decide what to read next — filtering by mood, genre, and how much of a commitment we're up for. Find a Book is a filter-based mode that replicates that process in the app. Each book is enriched with additional metadata that makes the filters more meaningful than title and author alone.</p>
+        <p>When one of us finishes a book, we browse the shelves together to decide what to read next, filtering by mood, genre, and how much of a commitment we want. Find a Book is a filter-based mode that replicates that process in the app. Each book is enriched with additional metadata that makes the filters more meaningful than title and author alone.</p>
       </div>
     </div>
   </div>
@@ -490,9 +489,9 @@ footer {
         <div class="t-body">Two failed attempts produced a specific, well-tested set of requirements before I wrote a line of code. Designing for a problem you've experienced directly removes a lot of ambiguity from the brief.</div>
       </div>
       <div class="takeaway-card">
-        <div class="t-num">End-to-end ownership</div>
+        <div class="t-num">Full ownership</div>
         <div class="t-title">From requirements to a deployed product</div>
-        <div class="t-body">I defined the problem, designed the solution, and shipped a product with real infrastructure — auth, a database, and a live URL. Building what you design gives you a more accurate understanding of the constraints engineers work within.</div>
+        <div class="t-body">I defined the problem, designed the solution, and shipped a product with real infrastructure: auth, a database, and a live URL. Building what you design gives you a more accurate understanding of the constraints engineers work within.</div>
       </div>
     </div>
   </div>
